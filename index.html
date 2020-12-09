@@ -10,8 +10,8 @@
 </head>
 <body>
   <nav>
-    <a href="https://throwx.cn">🐮🐮 Throwable's Blog</a>
-    <a href="https://spring.throwx.cn">❤️❤️ Spring专栏</a>
+    <a href="https://shushuo.me">🐮 其他分享</a>
+    <a href="https://shushuo.me/contact">❤️ 联系我</a>
   </nav>
   <div id="app">加载中...</div>
   <script>
@@ -27,27 +27,34 @@
       maxLevel: 4,
       // 侧边栏，配合 ./_sidebar.md
       loadSidebar: true,
+      // 设置别名，避免回退问题，否则进入其他文件夹时会报错“找不到当前目录的_sidebar.md”
+      alias: {
+        '/.*/_sidebar.md': '/_sidebar.md',
+        '/.*/_navbar.md': '/_navbar.md'
+      },
       // 自定义侧边栏后默认不会再生成目录，设置生成目录的最大层级，建议配置为1或者2
       subMaxLevel: 2,
       // 仓库地址，点击右上角的Github章鱼猫头像会跳转到此地址
-      repo: 'https://github.com/zjcscut/docsify-demo',
-    }
-  </script>
-  <script>
-    // 搜索配置
-    window.$docsify = {
+      repo: 'https://github.com/JunfengHan/docs',
       search: {
         maxAge: 86400000,
-        paths: auto,
         placeholder: '搜索',
         noData: '找不到结果',
         depth: 4,
         hideOtherSidebarContent: false,
         namespace: 'legendBlog',
-      }
+      },
+      // disqus评论系统
+      // disqus: 'shortname'
     }
   </script>
   <!-- Docsify v4 -->
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <!-- 图片放大缩小支持 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+  <!-- 搜索功能支持 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+  <!-- disqus评论系统 -->
+  <!-- <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/disqus.min.js"></script> -->
 </body>
 </html>
