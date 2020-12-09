@@ -4,4 +4,4 @@
  * [JS事件 event](/js/events.md "Javascript js 事件")
 
 * [React](/react/ "react 学习 教程 源码")
- * [React源码学习（一）](/react/code1.md "react 源码")
+ * [React源码学习（一）React 理念](/react/code1.md "react 源码")
