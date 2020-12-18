@@ -10,7 +10,7 @@
 
 ```js
 // 我会用React了
-// import React from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 
 function App () {
@@ -67,11 +67,14 @@ import {
 
 -> 到ReactDOMLegacy 看看
 
-<details>
-  <summary>查看源码 💻</summary>
-
 ```js
 // packages/react-dom/src/client/ReactDOMLegacy.js
+
+/*
+* 参数：
+* element: ‘<App></App>’，即 React.CreateElement 的返回值，就是一个“React 元素”
+* container: 根结点 “id=root” 的 dom 元素
+*/
 export function render(
   element: React$Element<any>,
   container: Container,
@@ -88,17 +91,23 @@ export function render(
 }
 ```
 
-</details>
-
 一通乱找，发现render方法返回了 legacyRenderSubtreeIntoContainer 方法的返回值。
 
 我们看下这个方法的源码：
 
 <details>
-  <summary>查看源码 💻</summary>
+  <summary>查看源码 ✍️</summary>
 
 ```js
 // packages/react-dom/src/client/ReactDOMLegacy.js
+
+/*
+* 第一次调用时的参数：
+* parentComponent: null
+* children: ‘<App></App>’，即 React.CreateElement 的返回值，就是一个“React 元素”
+* container: 根结点 “id=root” 的 dom 元素
+* forceHydrate: false
+*/
 function legacyRenderSubtreeIntoContainer(
   parentComponent: ?React$Component<any, any>,
   children: ReactNodeList,
@@ -107,14 +116,20 @@ function legacyRenderSubtreeIntoContainer(
   callback: ?Function,
 ) {
   ...
+  // 初始化挂载时 container 为普通dom 节点，无_reactRootContainer属性
+  // 所以 root = undefined
   let root: RootType = (container._reactRootContainer: any);
   let fiberRoot;
+  // 进入判断，做初始化
   if (!root) {
     // Initial mount
+    // 沿着下文的“第1路”可以看到
+    // 初始化挂载，root = container._reactRootContainer = ReactDOMBlockingRoot 实例，
     root = container._reactRootContainer = legacyCreateRootFromDOMContainer(
       container,
       forceHydrate,
     );
+    // fiberRoot = root._internalRoot 为 FiberNote 实例
     fiberRoot = root._internalRoot;
     if (typeof callback === 'function') {
       const originalCallback = callback;
@@ -125,6 +140,8 @@ function legacyRenderSubtreeIntoContainer(
     }
     // Initial mount should not be batched.
     unbatchedUpdates(() => {
+      // 开启“第2路”，调用 react-reconciler updateContainer ，传入 FiberRoot 和 ReactElement
+      // 进入 react-reconciler 的掌控范围
       updateContainer(children, fiberRoot, parentComponent, callback);
     });
   } else {
@@ -151,40 +168,106 @@ function legacyRenderSubtreeIntoContainer(
 
 函数名称起的也很直白，直译过来就是“传统的渲染子树到容器中”。
 
-图2中也可以看到，legacyRenderSubtreeIntoContainer 方法中分别调用了 legacyCreateRootFromDOMContainer 和 unbatchedUpdates 这两个方法。
+图2中也可以看到，legacyRenderSubtreeIntoContainer 方法中分别调用了 legacyCreateRootFromDOMContainer 和 updateContainer 这两个方法。
 
 所以我们兵分两路往下看。
 
-### 第1路： legacyCreateRootFromDOMContainer
+___
+
+总结一下ReactDOM.render 逻辑：
+
+- <span style="color: #ff0000; font-size: 16px;">创建了一个 ReactDOMBlockingRoot 类型的实例 root，记录到挂载节点的 _reactRootContainer 属性上，往后根据这个属性判断是否已有 React 应用挂载</span>
+
+- <span style="color: #ff0000; font-size: 16px;">root 实例的 _internalRoot 属性是由 react-reconciler createContainer函数创建的 FiberRoot 实例 </span>
+
+- <span style="color: #ff0000; font-size: 16px;">调用 react-reconciler updateContainer ，传入 FiberRoot 和 ReactElement</span>
+
+- <span style="color: #ff0000; font-size: 16px;">进入 react-reconciler 的掌控范围，生成 Fiber 树，遍历优化，生成组件实例/原生节点，渲染到挂载节点上，做性能优化等</span>
+
+代码可以简化为：
+
+```js
+function FiberNode(
+  tag: WorkTag,
+  pendingProps: mixed,
+  key: null | string,
+  mode: TypeOfMode,
+) {
+  // Instance
+  // Fiber
+  this.ref = null;
+  ...
+}
+
+class ReactDOMBlockingRoot {
+  _internalRoot: FiberRoot,
+  render () {
+    updateContainer()
+  }
+  // 卸载
+  unmount () {
+    updateContainer(null, root, null, () => {
+        unmarkContainerAsRoot(container);
+    });
+  }
+}
+
+function legacyRenderSubtreeIntoContainer(
+  parentComponent: ?React$Component<any, any>,
+  children: ReactNodeList,
+  container: Container,
+  forceHydrate: boolean,
+  callback: ?Function,
+) {
+  const root = container._reactRootContainer = new ReactDOMBlockingRoot(container, LegacyRoot, options); 
+  fiberRoot = root._internalRoot;
+  unbatchedUpdates(() => {
+    updateContainer(children, fiberRoot, parentComponent, callback);
+  });
+```
+
+___
+
+## 第1路： legacyCreateRootFromDOMContainer
+
+### 创建 fiberRoot
 
 > 函数名直译过来是“传统的从DOMContainer创建Root”,这个Root是什么？
 
 分解上面的legacyRenderSubtreeIntoContainer方法，看下这个代码片段：
 
 <details>
-  <summary>查看源码 💻</summary>
+  <summary>查看源码 ✍️</summary>
 
 ```js
-let root: RootType = (container._reactRootContainer: any);
-let fiberRoot;
-if (!root) {
-  // Initial mount
-  root = container._reactRootContainer = legacyCreateRootFromDOMContainer(
-    container,
-    forceHydrate,
-  );
-  fiberRoot = root._internalRoot;
-  if (typeof callback === 'function') {
-    const originalCallback = callback;
-    callback = function() {
-      const instance = getPublicRootInstance(fiberRoot);
-      originalCallback.call(instance);
-    };
+function legacyRenderSubtreeIntoContainer(
+  parentComponent: ?React$Component<any, any>,
+  children: ReactNodeList,
+  container: Container,
+  forceHydrate: boolean,
+  callback: ?Function,
+) {
+  let root: RootType = (container._reactRootContainer: any);
+  let fiberRoot;
+  if (!root) {
+    // Initial mount
+    root = container._reactRootContainer = legacyCreateRootFromDOMContainer(
+      container,
+      forceHydrate,
+    );
+    fiberRoot = root._internalRoot;
+    if (typeof callback === 'function') {
+      const originalCallback = callback;
+      callback = function() {
+        const instance = getPublicRootInstance(fiberRoot);
+        originalCallback.call(instance);
+      };
+    }
+    // Initial mount should not be batched.
+    unbatchedUpdates(() => {
+      updateContainer(children, fiberRoot, parentComponent, callback);
+    });
   }
-  // Initial mount should not be batched.
-  unbatchedUpdates(() => {
-    updateContainer(children, fiberRoot, parentComponent, callback);
-  });
 }
 ```
 
@@ -201,7 +284,7 @@ fiberRoot = root._internalRoot;
 仔细看看 root 和 fiberRoot 是怎样的吧 👇
 
 <details>
-  <summary>查看源码 💻</summary>
+  <summary>查看源码 ✍️</summary>
 
 ```js
 // packages/react-dom/src/client/ReactDOMLegacy.js
@@ -260,7 +343,7 @@ function ReactDOMBlockingRoot(
 注意了⚠️，this._internalRoot 就是 fiberRoot,也就是 createRootImpl方法的返回值。
 
 <details>
-  <summary>查看源码 💻</summary>
+  <summary>查看源码 ✍️</summary>
 
 ```js
 // packages/react-dom/src/client/ReactDOMRoot.js
@@ -318,7 +401,7 @@ createContainer 方法返回值是 createFiberRoot方法的返回值；
 createFiberRoot 方法的作用应该很明显了，就是创建 FiberRoot;
 
 <details>
-  <summary>查看源码 💻</summary>
+  <summary>查看源码 ✍️</summary>
 
 ```js
 export function createFiberRoot(
@@ -352,7 +435,7 @@ createFiberRoot 方法做了两件事：
 - 执行了 initializeUpdateQueue 方法(mount 时初始化更新 queue)
 
 <details>
-  <summary>查看源码 💻</summary>
+  <summary>查看源码 ✍️</summary>
 
 ```js
 export function createHostRootFiber(tag: RootTag): Fiber {
@@ -396,7 +479,7 @@ const createFiber = function(
 最终 createFiber 返回了一个 FiberNode构造函数的实例。
 
 <details>
-  <summary>查看源码 💻</summary>
+  <summary>查看源码 ✍️</summary>
 
 ```js
 // packages/react-reconciler/src/ReactFiber.old.js
@@ -459,10 +542,12 @@ function FiberNode(
 
 ___
 
+### 处理事件监听
+
 我们上面说了createRootImpl方法还做了另一件事，listenToAllSupportedEvents。
 
 <details>
-  <summary>查看源码 💻</summary>
+  <summary>查看源码 ✍️</summary>
 
 ```js
 export function listenToAllSupportedEvents(rootContainerElement: EventTarget) {
@@ -498,7 +583,7 @@ export function listenToAllSupportedEvents(rootContainerElement: EventTarget) {
 这里单独处理了不会冒泡的“selectionchange”事件，然后执行了 listenToNativeEvent。
 
 <details>
-  <summary>查看源码 💻</summary>
+  <summary>查看源码 ✍️</summary>
 
   ```js
   export function listenToNativeEvent(
@@ -530,7 +615,7 @@ listenToNativeEvent 方法调用了 addTrappedEventListener。
 addTrappedEventListener 方法经过一系列的判断会调用 “packages/react-dom/src/events/EventListener.js” 文件中的方法，EventListener.js 里的方法就是给元素绑定原生的**监听事件**。
 
 <details>
-  <summary>查看源码 💻</summary>
+  <summary>查看源码 ✍️</summary>
 
   ```js
   export function addEventBubbleListener(
@@ -545,12 +630,16 @@ addTrappedEventListener 方法经过一系列的判断会调用 “packages/reac
 
 </details>
 
-### 第2路： unbatchedUpdates
+## 第2路： updateContainer
 
-> "unbatchedUpdates" 可以直译为“无批量更新”。
+<code style="color: #708090; background-color: #F5F5F5;"> updateContainer</code>，进入 <span style="color: #ff0000; font-size: 16px;"> Reconciler </span>的掌控范围。
+
+记得前面的文章[React 架构](http://localhost:3000/#/react/react_architecture?id=_3-renderer%ef%bc%88%e6%b8%b2%e6%9f%93%e5%99%a8%ef%bc%89)这张图吗？
+
+![react架构工作流](../_media/react_flow.png)
 
 <details>
-  <summary>查看源码 💻</summary>
+  <summary>查看源码 ✍️</summary>
 
   ```js
   // packages/react-reconciler/src/ReactFiberReconciler.old.js
@@ -619,12 +708,12 @@ performSyncWorkOnRoot开始了 render 阶段。
 
 commitRoot 开始了commit阶段。
 
-#### render 阶段
+### render 阶段
 
 > render阶段开始与 performSyncWorkOnRoot方法或 performConcurrentWorkOnRoot 方法，取决于本次更新是同步更新还是异步更新。显然，初始化属于同步更新。
 
 <details>
-  <summary>查看源码 💻</summary>
+  <summary>查看源码 ✍️</summary>
 
   ```js
   // packages/react-reconciler/src/ReactFiberWorkLoop.old.js的 scheduleUpdateOnFiber 方法
@@ -677,7 +766,7 @@ commitRoot 开始了commit阶段。
 
 再看看 performConcurrentWorkOnRoot 做了什么？
 
-- renderRootConcurrent：主要执行 
+- renderRootConcurrent：主要执行了 workLoopConcurrent
 - ...
 
 ```js
@@ -715,7 +804,7 @@ performUnitOfWork方法会创建下一个Fiber节点并赋值给workInProgress�
 当遍历到叶子节点（即没有子组件的组件）时就会进入“归”阶段。
 
 <details>
-  <summary>查看performUnitOfWork源码 💻</summary>
+  <summary>查看performUnitOfWork源码 ✍️</summary>
 
   ```js
   // packages/react-reconciler/src/ReactFiberWorkLoop.old.js
@@ -738,7 +827,7 @@ performUnitOfWork方法会创建下一个Fiber节点并赋值给workInProgress�
 </details>
 
 <details>
-  <summary>查看beginWork源码 💻</summary>
+  <summary>查看beginWork源码 ✍️</summary>
 
   ```js
   // packages/react-reconciler/src/ReactFiberBeginWork.old.js
@@ -784,7 +873,7 @@ ReactDOM.render(<App />, document.getElementById("root"));
 
 ![Fiber 树结构](../_media/react_workFlow05.png)
 
-render阶段的 beginWork 会执行：
+render阶段的主要工作：
 
 ```js
 1. rootFiber beginWork
@@ -799,31 +888,909 @@ render阶段的 beginWork 会执行：
 10. rootFiber completeWork
 ```
 
-
-
-#### commit 阶段
+### commit 阶段
 
 > commit阶段从 commitRoot 方法的调用开始。
 
-commitRoot 方法主要是调用了commitRootImpl方法，commitRootImpl方法做了很多事，这个方法总共有400行左右代码。
+commitRoot 方法主要是调用了commitRootImpl方法，commitRootImpl方法就是commit阶段做的事。
 
 <details>
-  <summary>查看源码 💻</summary>
+  <summary>查看删减的源码 ✍️</summary>
 
   ```js
   // packages/react-reconciler/src/ReactFiberWorkLoop.old.js
   function commitRootImpl(root, renderPriorityLevel) {
-    do {
+  
+      /* -------------------------- before mutation阶段之前 ------------------------------ */
+      /*
+      * 主要是做一些变量赋值，状态重置的工作
+      * 关键点是获取 firstEffect，这是“副作用”列表，commit的3个阶段都有用到它
+      */
       ...
-      flushPassiveEffects();
-    } while (rootWithPendingPassiveEffects !== null);
-    flushRenderPhaseStrictModeWarningsInDEV();
+      // Get the list of effects.
+      let firstEffect;
+      if (finishedWork.flags > PerformedWork) {
+        if (finishedWork.lastEffect !== null) {
+          finishedWork.lastEffect.nextEffect = finishedWork;
+          firstEffect = finishedWork.firstEffect;
+        } else {
+          firstEffect = finishedWork;
+        }
+      } else {
+        // There is no effect on the root.
+        firstEffect = finishedWork.firstEffect;
+      }
+
+      /* -------------------------- before mutation 阶段 ------------------------------ */
+      
+      if (firstEffect !== null) {
+        ...
+        nextEffect = firstEffect;
+        do {
+          ...
+          // before Mutation阶段的主函数 -----------------
+          commitBeforeMutationEffects();
+          ...
+        } while (nextEffect !== null);
+
+        // The next phase is the mutation phase, where we mutate the host tree.
+        nextEffect = firstEffect;
+        do {
+          ...
+          // Mutation阶段的主函数 -----------------
+          commitMutationEffects(root, renderPriorityLevel);
+          ...
+        } while (nextEffect !== null);
+
+        if (shouldFireAfterActiveInstanceBlur) {
+          afterActiveInstanceBlur();
+        }
+        resetAfterCommit(root.containerInfo);
+
+        // ⚠️ 在双缓存机制一节我们介绍过，----
+        // workInProgress Fiber树在commit阶段完成渲染后会变为current Fiber树 ----
+        root.current = finishedWork;
+
+        nextEffect = firstEffect;
+        do {
+          ...
+          // layout 阶段的主函数 -----------------
+          commitLayoutEffects(root, lanes);
+          ...
+        } while (nextEffect !== null);
+
+        ...
+      } else {
+        // No effects.
+        root.current = finishedWork;
+        ...
+      }
+
+      /* -------------------------- layout 阶段之后 ------------------------------ */
+      const rootDidHavePassiveEffects = rootDoesHavePassiveEffects;
+
+      // useEffect相关 ------------------
+      if (rootDoesHavePassiveEffects) {
+        ...
+      } else {
+        ...
+      }
+
+      // Read this again, since an effect might have updated it
+      remainingLanes = root.pendingLanes;
+
+      // 性能优化相关 ---------------
+      // Check if there's remaining work on this root
+      if (remainingLanes !== NoLanes) {
+        ...
+      } else {
+        ...
+      }
+
+      if (enableSchedulerTracing) {
+        if (!rootDidHavePassiveEffects) {
+          ...
+        }
+      }
+
+      // 检测无限循环的同步任务 -------------
+      if (includesSomeLane(remainingLanes, (SyncLane: Lane))) {
+        ....
+      } else {
+        ...
+      }
+
+      // 在离开commitRoot函数前调用，触发一次新的调度，确保任何附加的任务被调度 -------------------
+      // Always call this before exiting `commitRoot`, to ensure that any
+      // additional work on this root is scheduled.
+      ensureRootIsScheduled(root, now());
+
+      // 性能追踪相关 --------------
+      onCommitRootDevTools(finishedWork.stateNode, renderPriorityLevel);
+      logCommitStopped();
+      markCommitStopped();
+
+      // 执行同步任务，这样同步任务不需要等到下次事件循环再执行 --------------------
+      // 比如在 componentDidMount 中执行 setState 创建的更新会在这里被同步执行
+      // 或useLayoutEffect
+      // If layout work was scheduled, flush it now.
+      flushSyncCallbackQueue();
+
+    }
+  }
+  ```
+
+</details>
+
+在<code style="color: #708090; background-color: #F5F5F5;"> rootFiber.firstEffect </code>上保存了一条需要执行<code style="color: #708090; background-color: #F5F5F5;">副作用</code>的<code style="color: #708090; background-color: #F5F5F5;">Fiber节点</code>的<code style="color: #708090; background-color: #F5F5F5;">单向链表effectList</code>，这些<code style="color: #708090; background-color: #F5F5F5;">Fiber节点</code>的<code style="color: #708090; background-color: #F5F5F5;">updateQueue</code>中保存了<code style="color: #708090; background-color: #F5F5F5;">变化的props</code>。
+
+这些副作用对应的DOM操作在commit阶段执行。
+
+除此之外，一些<code style="color: #708090; background-color: #F5F5F5;">生命周期钩子</code>（比如componentDidXXX）、<code style="color: #708090; background-color: #F5F5F5;">hook</code>（比如useEffect）需要在<code style="color: #708090; background-color: #F5F5F5;">commit阶段</code>执行。
+
+commit阶段的主要工作（即Renderer的工作流程）分为三部分：
+
+**1. before mutation阶段（执行DOM操作前)**
+
+**2. mutation阶段（执行DOM操作）**
+
+**3. layout阶段（执行DOM操作后）**
+
+在before mutation阶段之前和layout阶段之后还有一些额外工作，涉及到比如useEffect的触发、优先级相关的重置、ref的绑定/解绑。
+
+___
+
+**1> before mutation阶段之前:**
+
+<code style="color: #708090; background-color: #F5F5F5;"> before mutation </code>之前主要做一些变量赋值，状态重置的工作。
+
+主要是得到了<code style="color: #708090; background-color: #F5F5F5;"> firstEffect </code>，在commit的三个子阶段都会用到它。
+
+___
+
+**2> before mutation阶段:**
+
+主要执行 commitBeforeMutationEffects 方法：
+
+<details>
+  <summary>查看源码 ✍️</summary>
+
+  ```js
+  // packages/react-reconciler/src/ReactFiberWorkLoop.old.js
+  function commitBeforeMutationEffects() {
+    while (nextEffect !== null) {
+      const current = nextEffect.alternate;
+
+      if (!shouldFireAfterActiveInstanceBlur && focusedInstanceHandle !== null) {
+        // focus blur相关 ------
+      }
+
+      const flags = nextEffect.flags;
+
+      // 调用 getSnapshotBeforeUpdate 生命周期钩子 ------
+      if ((flags & Snapshot) !== NoFlags) {
+        setCurrentDebugFiberInDEV(nextEffect);
+        commitBeforeMutationEffectOnFiber(current, nextEffect);
+        resetCurrentDebugFiberInDEV();
+      }
+
+      // 调度useEffect ------
+      if ((flags & Passive) !== NoFlags) {
+        // If there are passive effects, schedule a callback to flush at
+        // the earliest opportunity.
+        if (!rootDoesHavePassiveEffects) {
+          rootDoesHavePassiveEffects = true;
+          scheduleCallback(NormalSchedulerPriority, () => {
+            flushPassiveEffects();
+            return null;
+          });
+        }
+      }
+      nextEffect = nextEffect.nextEffect;
+    }
+  }
+  ```
+
+</details>
+
+会遍历effectList，依次执行：
+
+1. 处理DOM节点渲染/删除后的 autoFocus、blur逻辑
+2. 调用getSnapshotBeforeUpdate生命周期方法，[查看getSnapshotBeforeUpdate生命周期方法](https://zh-hans.reactjs.org/docs/react-component.html#getsnapshotbeforeupdate)
+3. 调度useEffect
+
+___
+
+**3> mutation阶段:**
+
+这里是<span style="color: #ff0000; font-size: 16px;">执行DOM操作</span>阶段。
+
+主要执行 commitMutationEffects 函数。
+
+会遍历effectList，依次执行：
+
+- 更新ref
+- 根据 effectTag 分别处理需要插入、更新、删除的DOM
+
+<details>
+  <summary>查看源码 ✍️</summary>
+
+  ```js
+  // packages/react-reconciler/src/ReactFiberWorkLoop.old.js
+  function commitMutationEffects(root: FiberRoot, renderPriorityLevel) {
+    // 遍历effectList -------
+    while (nextEffect !== null) {
+      setCurrentDebugFiberInDEV(nextEffect);
+
+      const flags = nextEffect.flags;
+
+      // 根据 ContentReset、flags重置文字节点 -------
+      if (flags & ContentReset) {
+        commitResetTextContent(nextEffect);
+      }
+
+      // 更新ref -------
+      if (flags & Ref) {
+        const current = nextEffect.alternate;
+        if (current !== null) {
+          commitDetachRef(current);
+        }
+        if (enableScopeAPI) {
+          // TODO: This is a temporary solution that allowed us to transition away
+          // from React Flare on www.
+          if (nextEffect.tag === ScopeComponent) {
+            commitAttachRef(nextEffect);
+          }
+        }
+      }
+
+      // 根据 effectTag 分别处理 -------
+      const primaryFlags = flags & (Placement | Update | Deletion | Hydrating);
+      switch (primaryFlags) {
+        // 插入DOM
+        case Placement: {
+          commitPlacement(nextEffect);
+          nextEffect.flags &= ~Placement;
+          break;
+        }
+        // 插入DOM 并 更新DOM
+        case PlacementAndUpdate: {
+          // Placement
+          // 插入
+          commitPlacement(nextEffect);
+          // Clear the "placement" from effect tag so that we know that this is
+          // inserted, before any life-cycles like componentDidMount gets called.
+          nextEffect.flags &= ~Placement;
+
+          // Update
+          // 更新
+          const current = nextEffect.alternate;
+          commitWork(current, nextEffect);
+          break;
+        }
+        // SSR
+        case Hydrating: {
+          nextEffect.flags &= ~Hydrating;
+          break;
+        }
+        // SSR
+        case HydratingAndUpdate: {
+          nextEffect.flags &= ~Hydrating;
+
+          // Update
+          const current = nextEffect.alternate;
+          commitWork(current, nextEffect);
+          break;
+        }
+        // 更新DOM
+        case Update: {
+          const current = nextEffect.alternate;
+          commitWork(current, nextEffect);
+          break;
+        }
+        // 删除DOM
+        case Deletion: {
+          commitDeletion(root, nextEffect, renderPriorityLevel);
+          break;
+        }
+      }
+
+      resetCurrentDebugFiberInDEV();
+      nextEffect = nextEffect.nextEffect;
+    }
+  }
+  ```
+
+> ⚠️ 有个需要说明的地方是，上面具体执行DOM插入、更新、删除的分别是commitPlacement、commitWork、commitDeletion 方法，按照普通的模块引入去找找这个方法具体做了什么。
+
+源码中执行 commitPlacement、commitWork 的地方：
+
+```js
+  // 上面👆 commitMutationEffects 方法中处理DOM的switch 语句
+  switch (primaryFlags) {
+    case Placement: {
+      commitPlacement(nextEffect);
+      nextEffect.flags &= ~Placement;
+      break;
+    }
+    case PlacementAndUpdate: {
+      // Placement
+      commitPlacement(nextEffect);
+      nextEffect.flags &= ~Placement;
+
+      // Update
+      const current = nextEffect.alternate;
+      commitWork(current, nextEffect);
+      break;
+    }
+    ...
+  }
+```
+
+commitPlacement 从何而来？
+
+commitMutationEffects 方法从 ReactFiberCommitWork.old.js 模块中倒入了 commitPlacement等。
+
+```js
+// 上面👆 commitMutationEffects 方法从 ReactFiberCommitWork.old.js 模块中倒入了 commitPlacement等
+import {
+  ...
+  commitPlacement,
+  commitWork,
+  commitDeletion,
+  commitDetachRef,
+  ...
+} from './ReactFiberCommitWork.old';
+```
+
+ReactFiberCommitWork.old.js 模块中倒入了 commitPlacement方法。
+
+```js
+// packages/react-reconciler/src/ReactFiberCommitWork.old.js
+function commitPlacement(finishedWork: Fiber): void {
+  // ...省略参数处理相关代码
+
+  // 执行具体的操作方法
+  if (isContainer) {
+    insertOrAppendPlacementNodeIntoContainer(finishedWork, before, parent);
+  } else {
+    insertOrAppendPlacementNode(finishedWork, before, parent);
+  }
+}
+```
+
+我们看到 commitPlacement 方法主要是调用了 insertOrAppendPlacementNodeIntoContainer 或 insertOrAppendPlacementNode。
+
+我们看下 insertOrAppendPlacementNode 方法。
+
+```js
+// packages/react-reconciler/src/ReactFiberCommitWork.old.js
+import {
+  ...
+  appendChild,
+  insertBefore,
+  ...
+} from './ReactFiberHostConfig';
+
+function insertOrAppendPlacementNode(
+  node: Fiber,
+  before: ?Instance,
+  parent: Instance,
+): void {
+  // ...省略判断和递归调用的部分，主要执行的是这两个方法用于DOM操作
+  insertBefore(parent, stateNode, before);
+  appendChild(parent, stateNode);
+}
+```
+
+省略判断和递归调用的部分，主要执行的是insertBefore、appendChild这两个方法用于**DOM操作**。
+
+乱找一通后发现，appendChild、insertBefore方法来自于 ReactFiberHostConfig.js
+
+仔细看看 🧐 ReactFiberHostConfig.js里有什么吧！
+
+```js
+// packages/react-reconciler/src/ReactFiberHostConfig.js
+import invariant from 'shared/invariant';
+
+// We expect that our Rollup, Jest, and Flow configurations
+// always shim this module with the corresponding host config
+// (either provided by a renderer, or a generic shim for npm).
+
+invariant(false, 'This module must be shimmed by a specific renderer.');
+
+```
+
+你没看错，ReactFiberHostConfig.js 除去注释只有2行代码，**并没有我们要找的**appendChild、insertBefore方法。
+
+![问号脸](../_media/question_mark.jpeg)
+
+刚看到我也是一脸问号，本以为自己找错文件了，仔细看看注释，又跑去Google了一番，发现自己too young啊。
+
+> 在 react-dom 的源码中并没有显式初始化 react-reconciler ，它是如何向 react-reconciler 传递 hostConfig 的呢？是通过 rollup 的路径映射实现的。
+>
+> 具体的操作是，将'react-reconciler/src/ReactFiberHostConfig'路径映射为当前打包情景对应的 hostConfig 模块。
+
+我们在 [React 目录结构](http://localhost:3000/#/react/react_directory) 里介绍了 scripts 目录是各种工具链脚本文件夹。scripts 目录里的 rollup 文件夹里就是相关的配置.
+
+```js
+// scripts/rollup/forks.js
+'react-reconciler/src/ReactFiberHostConfig': (
+    bundleType,
+    entry,
+    dependencies,
+    moduleType
+  ) => {
+    ...
+    for (let rendererInfo of inlinedHostConfigs) {
+      if (rendererInfo.entryPoints.indexOf(entry) !== -1) {
+        return `react-reconciler/src/forks/ReactFiberHostConfig.${rendererInfo.shortName}.js`;
+      }
+    }
+    ...
+  },
+)
+
+```
+
+rendererInfo.shortName 是什么？
+
+```js
+// scripts/shared/inlinedHostConfigs.js
+module.exports = [
+  {
+    shortName: 'dom',
+    entryPoints: [
+      'react-dom',
+      'react-dom/testing',
+      'react-dom/unstable-fizz.node',
+      'react-transport-dom-webpack/server.node',
+      'react-transport-dom-webpack',
+    ],
+    ...
+  }
+  ...
+]
+```
+
+rendererInfo.shortName = ‘dom’.
+
+所以 rollup 会将 react-reconciler/src/ReactFiberHostConfig.js 映射为 react-reconciler/src/forks/ReactFiberHostConfig.dom.js。
+
+绕了一大圈，去看看 ReactFiberHostConfig.dom.js:
+
+```js
+export * from 'react-dom/src/client/ReactDOMHostConfig';
+```
+
+又绕道了 'react-dom/src/client/ReactDOMHostConfig'。
+
+```js
+// packages/react-dom/src/client/ReactDOMHostConfig.js
+...
+export function appendChild(
+  parentInstance: Instance,
+  child: Instance | TextInstance,
+): void {
+  parentInstance.appendChild(child);
+}
+...
+export function insertBefore(
+  parentInstance: Instance,
+  child: Instance | TextInstance,
+  beforeChild: Instance | TextInstance | SuspenseInstance,
+): void {
+  parentInstance.insertBefore(child, beforeChild);
+}
+...
+```
+
+终于找到了insertBefore、appendChild，就是普通的DOM操作，调用了原生的DOM操作方法。
+
+</details>
+
+___
+
+**4> layout阶段:**
+
+layout阶段主要执行 commitLayoutEffects 方法，
+
+会遍历effectList，依次执行：
+
+1. commitLayoutEffectOnFiber：（调用生命周期钩子和hook相关操作）
+2. commitAttachRef：（赋值 ref）
+
+<details>
+  <summary>查看源码 ✍️</summary>
+
+  ```js
+  // packages/react-reconciler/src/ReactFiberWorkLoop.old.js
+  import {
+    commitLifeCycles as commitLayoutEffectOnFiber,
+    commitAttachRef,
+  } from './ReactFiberCommitWork.old';
+
+  function commitLayoutEffects(root: FiberRoot, committedLanes: Lanes) {
+    ...
+    while (nextEffect !== null) {
+      setCurrentDebugFiberInDEV(nextEffect);
+
+      const flags = nextEffect.flags;
+
+      // 调用生命周期钩子和hook
+      if (flags & (Update | Callback)) {
+        const current = nextEffect.alternate;
+        commitLayoutEffectOnFiber(root, current, nextEffect, committedLanes);
+      }
+
+      // 赋值ref
+      if (enableScopeAPI) {
+        if (flags & Ref && nextEffect.tag !== ScopeComponent) {
+          commitAttachRef(nextEffect);
+        }
+      } else {
+        if (flags & Ref) {
+          commitAttachRef(nextEffect);
+        }
+      }
+
+      resetCurrentDebugFiberInDEV();
+      nextEffect = nextEffect.nextEffect;
+    }
     ...
   }
   ```
 
 </details>
 
+分别看下 commitLayoutEffectOnFiber 和 commitAttachRef：
 
+commitLayoutEffectOnFiber 就是 ReactFiberCommitWork.old.js 模块中的 commitLifeCycles 方法。
 
+方法名很形象第表达了它的用途“”。
 
+<details>
+  <summary>查看commitLayoutEffectOnFiber源码 ✍️</summary>
+
+  ```js
+  // packages/react-reconciler/src/ReactFiberCommitWork.old.js
+  function commitLifeCycles(
+    finishedRoot: FiberRoot,
+    current: Fiber | null,
+    finishedWork: Fiber,
+    committedLanes: Lanes,
+  ): void {
+    switch (finishedWork.tag) {
+      case FunctionComponent:
+      case ForwardRef:
+      case SimpleMemoComponent: {
+        // At this point layout effects have already been destroyed (during mutation phase).
+        // This is done to prevent sibling component effects from interfering with each other,
+        // e.g. a destroy function in one component should never override a ref set
+        // by a create function in another component during the same commit.
+        if (
+          enableProfilerTimer &&
+          enableProfilerCommitHooks &&
+          finishedWork.mode & ProfileMode
+        ) {
+          try {
+            startLayoutEffectTimer();
+            commitHookEffectListMount(HookLayout | HookHasEffect, finishedWork);
+          } finally {
+            recordLayoutEffectDuration(finishedWork);
+          }
+        } else {
+          commitHookEffectListMount(HookLayout | HookHasEffect, finishedWork);
+        }
+
+        schedulePassiveEffects(finishedWork);
+        return;
+      }
+      case ClassComponent: {
+        const instance = finishedWork.stateNode;
+        if (finishedWork.flags & Update) {
+          if (current === null) {
+            // We could update instance props and state here,
+            // but instead we rely on them being set during last render.
+            // TODO: revisit this when we implement resuming.
+            if (__DEV__) {
+              if (
+                finishedWork.type === finishedWork.elementType &&
+                !didWarnAboutReassigningProps
+              ) {
+                if (instance.props !== finishedWork.memoizedProps) {
+                  console.error(
+                    'Expected %s props to match memoized props before ' +
+                      'componentDidMount. ' +
+                      'This might either be because of a bug in React, or because ' +
+                      'a component reassigns its own `this.props`. ' +
+                      'Please file an issue.',
+                    getComponentName(finishedWork.type) || 'instance',
+                  );
+                }
+                if (instance.state !== finishedWork.memoizedState) {
+                  console.error(
+                    'Expected %s state to match memoized state before ' +
+                      'componentDidMount. ' +
+                      'This might either be because of a bug in React, or because ' +
+                      'a component reassigns its own `this.state`. ' +
+                      'Please file an issue.',
+                    getComponentName(finishedWork.type) || 'instance',
+                  );
+                }
+              }
+            }
+            if (
+              enableProfilerTimer &&
+              enableProfilerCommitHooks &&
+              finishedWork.mode & ProfileMode
+            ) {
+              try {
+                startLayoutEffectTimer();
+                instance.componentDidMount();
+              } finally {
+                recordLayoutEffectDuration(finishedWork);
+              }
+            } else {
+              instance.componentDidMount();
+            }
+          } else {
+            const prevProps =
+              finishedWork.elementType === finishedWork.type
+                ? current.memoizedProps
+                : resolveDefaultProps(finishedWork.type, current.memoizedProps);
+            const prevState = current.memoizedState;
+            // We could update instance props and state here,
+            // but instead we rely on them being set during last render.
+            // TODO: revisit this when we implement resuming.
+            if (__DEV__) {
+              if (
+                finishedWork.type === finishedWork.elementType &&
+                !didWarnAboutReassigningProps
+              ) {
+                if (instance.props !== finishedWork.memoizedProps) {
+                  console.error(
+                    'Expected %s props to match memoized props before ' +
+                      'componentDidUpdate. ' +
+                      'This might either be because of a bug in React, or because ' +
+                      'a component reassigns its own `this.props`. ' +
+                      'Please file an issue.',
+                    getComponentName(finishedWork.type) || 'instance',
+                  );
+                }
+                if (instance.state !== finishedWork.memoizedState) {
+                  console.error(
+                    'Expected %s state to match memoized state before ' +
+                      'componentDidUpdate. ' +
+                      'This might either be because of a bug in React, or because ' +
+                      'a component reassigns its own `this.state`. ' +
+                      'Please file an issue.',
+                    getComponentName(finishedWork.type) || 'instance',
+                  );
+                }
+              }
+            }
+            if (
+              enableProfilerTimer &&
+              enableProfilerCommitHooks &&
+              finishedWork.mode & ProfileMode
+            ) {
+              try {
+                startLayoutEffectTimer();
+                instance.componentDidUpdate(
+                  prevProps,
+                  prevState,
+                  instance.__reactInternalSnapshotBeforeUpdate,
+                );
+              } finally {
+                recordLayoutEffectDuration(finishedWork);
+              }
+            } else {
+              instance.componentDidUpdate(
+                prevProps,
+                prevState,
+                instance.__reactInternalSnapshotBeforeUpdate,
+              );
+            }
+          }
+        }
+
+        // TODO: I think this is now always non-null by the time it reaches the
+        // commit phase. Consider removing the type check.
+        const updateQueue: UpdateQueue<
+          *,
+        > | null = (finishedWork.updateQueue: any);
+        if (updateQueue !== null) {
+          if (__DEV__) {
+            if (
+              finishedWork.type === finishedWork.elementType &&
+              !didWarnAboutReassigningProps
+            ) {
+              if (instance.props !== finishedWork.memoizedProps) {
+                console.error(
+                  'Expected %s props to match memoized props before ' +
+                    'processing the update queue. ' +
+                    'This might either be because of a bug in React, or because ' +
+                    'a component reassigns its own `this.props`. ' +
+                    'Please file an issue.',
+                  getComponentName(finishedWork.type) || 'instance',
+                );
+              }
+              if (instance.state !== finishedWork.memoizedState) {
+                console.error(
+                  'Expected %s state to match memoized state before ' +
+                    'processing the update queue. ' +
+                    'This might either be because of a bug in React, or because ' +
+                    'a component reassigns its own `this.state`. ' +
+                    'Please file an issue.',
+                  getComponentName(finishedWork.type) || 'instance',
+                );
+              }
+            }
+          }
+          // We could update instance props and state here,
+          // but instead we rely on them being set during last render.
+          // TODO: revisit this when we implement resuming.
+          commitUpdateQueue(finishedWork, updateQueue, instance);
+        }
+        return;
+      }
+      case HostRoot: {
+        // TODO: I think this is now always non-null by the time it reaches the
+        // commit phase. Consider removing the type check.
+        const updateQueue: UpdateQueue<
+          *,
+        > | null = (finishedWork.updateQueue: any);
+        if (updateQueue !== null) {
+          let instance = null;
+          if (finishedWork.child !== null) {
+            switch (finishedWork.child.tag) {
+              case HostComponent:
+                instance = getPublicInstance(finishedWork.child.stateNode);
+                break;
+              case ClassComponent:
+                instance = finishedWork.child.stateNode;
+                break;
+            }
+          }
+          commitUpdateQueue(finishedWork, updateQueue, instance);
+        }
+        return;
+      }
+      case HostComponent: {
+        const instance: Instance = finishedWork.stateNode;
+
+        // Renderers may schedule work to be done after host components are mounted
+        // (eg DOM renderer may schedule auto-focus for inputs and form controls).
+        // These effects should only be committed when components are first mounted,
+        // aka when there is no current/alternate.
+        if (current === null && finishedWork.flags & Update) {
+          const type = finishedWork.type;
+          const props = finishedWork.memoizedProps;
+          commitMount(instance, type, props, finishedWork);
+        }
+
+        return;
+      }
+      case HostText: {
+        // We have no life-cycles associated with text.
+        return;
+      }
+      case HostPortal: {
+        // We have no life-cycles associated with portals.
+        return;
+      }
+      case Profiler: {
+        if (enableProfilerTimer) {
+          const {onCommit, onRender} = finishedWork.memoizedProps;
+          const {effectDuration} = finishedWork.stateNode;
+
+          const commitTime = getCommitTime();
+
+          let phase = current === null ? 'mount' : 'update';
+          if (enableProfilerNestedUpdatePhase) {
+            if (isCurrentUpdateNested()) {
+              phase = 'nested-update';
+            }
+          }
+
+          if (typeof onRender === 'function') {
+            if (enableSchedulerTracing) {
+              onRender(
+                finishedWork.memoizedProps.id,
+                phase,
+                finishedWork.actualDuration,
+                finishedWork.treeBaseDuration,
+                finishedWork.actualStartTime,
+                commitTime,
+                finishedRoot.memoizedInteractions,
+              );
+            } else {
+              onRender(
+                finishedWork.memoizedProps.id,
+                phase,
+                finishedWork.actualDuration,
+                finishedWork.treeBaseDuration,
+                finishedWork.actualStartTime,
+                commitTime,
+              );
+            }
+          }
+
+          if (enableProfilerCommitHooks) {
+            if (typeof onCommit === 'function') {
+              if (enableSchedulerTracing) {
+                onCommit(
+                  finishedWork.memoizedProps.id,
+                  phase,
+                  effectDuration,
+                  commitTime,
+                  finishedRoot.memoizedInteractions,
+                );
+              } else {
+                onCommit(
+                  finishedWork.memoizedProps.id,
+                  phase,
+                  effectDuration,
+                  commitTime,
+                );
+              }
+            }
+
+            // Schedule a passive effect for this Profiler to call onPostCommit hooks.
+            // This effect should be scheduled even if there is no onPostCommit callback for this Profiler,
+            // because the effect is also where times bubble to parent Profilers.
+            enqueuePendingPassiveProfilerEffect(finishedWork);
+
+            // Propagate layout effect durations to the next nearest Profiler ancestor.
+            // Do not reset these values until the next render so DevTools has a chance to read them first.
+            let parentFiber = finishedWork.return;
+            while (parentFiber !== null) {
+              if (parentFiber.tag === Profiler) {
+                const parentStateNode = parentFiber.stateNode;
+                parentStateNode.effectDuration += effectDuration;
+                break;
+              }
+              parentFiber = parentFiber.return;
+            }
+          }
+        }
+        return;
+      }
+      case SuspenseComponent: {
+        commitSuspenseHydrationCallbacks(finishedRoot, finishedWork);
+        return;
+      }
+      case SuspenseListComponent:
+      case IncompleteClassComponent:
+      case FundamentalComponent:
+      case ScopeComponent:
+      case OffscreenComponent:
+      case LegacyHiddenComponent:
+        return;
+    }
+    invariant(
+      false,
+      'This unit of work tag should not have side-effects. This error is ' +
+        'likely caused by a bug in React. Please file an issue.',
+    );
+  }
+  ```
+
+</details>
+
+<details>
+  <summary>查看commitAttachRef源码 ✍️</summary>
+
+  ```js
+  
+  ```
+
+</details>
+
+**5> layout阶段之后:**
+
+主要包括三点内容：
+- useEffect相关的处理
+- 性能追踪相关
+- 在commit阶段会触发一些生命周期钩子（如 componentDidXXX）和hook（如useLayoutEffect、useEffect）
