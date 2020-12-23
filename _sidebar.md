@@ -1,5 +1,7 @@
 * [Javascript](/js/ "原生JavaScript")
   * [JS基础](/js/element.md "Javascript HTMLElement 创建 HTML元素")
+  * [JS对象、类与面向对象编程](/js/object.md "Javascript object 对象 class 类 面向对象")
+  * [JS函数](/js/function.md "Javascript function 函数")
   * [JS事件 event](/js/events.md "Javascript js 事件")
   * [JS深拷贝与浅拷贝](/js/jscopy.md "Javascript 深拷贝与浅拷贝")
   * [JS的类 Class](/js/es6_class.md "Javascript 类 class")
