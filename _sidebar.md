@@ -1,5 +1,3 @@
-* [概览](/home/ "韩俊峰 博客 概览")
-
 * [Javascript](/js/ "原生JavaScript")
   * [JS基础](/js/element.md "Javascript HTMLElement 创建 HTML元素")
   * [JS事件 event](/js/events.md "Javascript js 事件")
@@ -28,10 +26,13 @@
 * [算法](/algorithms/ "算法 Algorithms")
   * [算法常见问题](/algorithms/questions.md "algorithms")
 
-* [Node.Js](/node/ "node")
+* [Node.Js](/node/ "nodeJS")
   * [Node.js API](/node/node_api.md "Node.js API")
   * [Koa 框架](/node/koa.md "koa node nodeJs")
   * [Nest 框架](/node/koa.md "Nest node nodeJs")
+
+* [GO](/go/ "go 语言")
+  * [Go可以做什么](/go/go_feature.md "GO 语言特征 有什么用")
 
 * [浏览器](/browser/ "浏览器")
   * [浏览器是如何工作的](/browser/browser_flow.md "浏览器工作流程")
@@ -40,5 +41,6 @@
   * [HTTP是如何工作的](/http/overview.md "浏览器工作流程")
 
 * [服务器与数据库](/server/ "服务器")
+  * [Linux 常用命令](/server/linux_.md "浏览器工作流程")
   * [MongoDB 学习笔记](/server/mongoDB.md "浏览器工作流程")
   * [Mongoose 有什么用](/server/mongoose.md "mongoose 学习")

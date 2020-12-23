@@ -129,7 +129,7 @@ function legacyRenderSubtreeIntoContainer(
       container,
       forceHydrate,
     );
-    // fiberRoot = root._internalRoot 为 FiberNote 实例
+    // fiberRoot = root._internalRoot 为 FiberRootNode 实例
     fiberRoot = root._internalRoot;
     if (typeof callback === 'function') {
       const originalCallback = callback;
@@ -836,7 +836,21 @@ performUnitOfWork方法会创建下一个Fiber节点并赋值给workInProgress�
     workInProgress: Fiber,
     renderLanes: Lanes,
   ): Fiber | null {
-    ...
+    // current 为当前工作的 fiber
+    if (current !== null) {
+      // current 存在的话执行 update
+      ...
+    } else {
+      // current 不存在就 mount
+      // mount 是指
+      ...
+    }
+
+    // 根据tag不同，创建不同的Fiber节点
+    // tag 分类在这里 -> packages/react-reconciler/src/ReactWorkTags.js
+    switch (workInProgress.tag) {
+      ...
+    }
   }
   ```
 

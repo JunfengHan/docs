@@ -9,4 +9,4 @@
 - `职业发展、创业、Idea交流`
 
 [GitHub](https://github.com/JunfengHan/docs)
-[Get Started](/home/)
+[Get Started](/?id=概览)
