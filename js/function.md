@@ -121,22 +121,26 @@ console.dir(sum);
 - caller: 返回调用函数的函数(非标准,了解一下就行了)
 - length: 函数参数个数
 - name：函数名
-- prototype：函数原型对象
-- __proto__: Chrome 暴露的指向构造函数的原型对象
+- prototype：用于挂载函数需要继承的属性和方法,默认有
+- __proto__: 浏览器暴露出的指向原型对象\[\[prototype\]\]的属性,即指向构造函数的prototype属性
 
 其中最核心也是最常用的是 prototype 属性.
 
 > 说明:函数sum是 Function对象 的实例,sum的内部\[\[Prototype\]\]指针会被赋
 > 值为构造函数的原型对象,但是我们无法访问,所以由Chrome 暴露出来让我们看到.
 
+可以看到: **函数是一个有默认属性的对象**.
+
+我们看一下这些属性:
+
 ```js
-console.log(sum.prototype)
+console.log(sum.prototype);
 // 输出 -> {constructor: ƒ}
 
-console.log(sum.prototype.constructor === sum)
+console.log(sum.prototype.constructor === sum);
 // 输出 -> true
 
-console.log(sum.prototype.constructor.__proto__ === Function.prototype)
+console.log(sum.prototype.constructor.__proto__ === Function.prototype);
 // 输出 -> true
 
 ```
@@ -147,6 +151,64 @@ ___
 3. 
 ___
 
+## 3.函数内部
 
+ES5中,函数内部存在两个特殊对象 arguments 和 this.
 
+ES6中新增了 new.target 
 
+- arguments: 类数组，包含调用函数时的参数，箭头函数没有这个属性
+- this：this在标准函数中，this　引用的是把函数当成方法调用的上下文；箭头函数中，this引用的是定义箭头函数的上下文。
+- new.target: 通过new 运算调用时返回构造函数,默认为 undefined
+
+```js
+function sum (num1, num2) {
+  console.dir(argumenst);
+  console.dir(this);
+}
+
+sum(1);
+
+// 输出
+Arguments
+{
+  0: 1,
+  callee: f sum(num1, num2),
+  length: 1,
+  __proto__: Object
+}
+Window
+{
+  alert: f alert()
+  ...
+}
+```
+
+```js
+function sum (num1, num2) {
+  console.log(new.target);
+}
+
+sum(1);
+// underfined
+
+let a = new sum();
+// function sum(num1, num2) {
+//   console.log(new.target);
+// }
+```
+
+## 4.闭包
+
+闭包指的是那些引用了另一个函数作用域中变量的函数,通常在嵌套函数中实现.
+
+```js
+function User(user) {
+  return function (userName) {
+    // 在匿名函数中使用了User 中的变量user,形成闭包
+    let name = user && user.name;
+    let age = usre && user.age;
+    return name + age;
+  }
+}
+```
