@@ -5,6 +5,7 @@
 ## 1.定义函数
 
 函数可以大致分为两种：
+
 - 普通函数
 - 箭头函数
 
@@ -29,6 +30,7 @@ const square = function(number) {
 ```
 
 定义箭头函数：
+
 ```js
 let sum = (num1, num2) => {
   return num1 + num2;
@@ -47,8 +49,8 @@ let sum = new Function("num1", "num2", "return num1 + num2");
 
 通俗来说就是：浏览器的JS引擎会把函数声明方式定义的函数名提升到源代码树的顶部。
 
-
 例：声明式定义函数，函数提升
+
 ```js
 // 因为 addNum 是声明式定义的，所以函数“addNum” 会被提升到代码的最上方
 // 所以这里可以正确执行
@@ -60,6 +62,7 @@ function addNum(num1, num2) {
 ```
 
 例：表达式定义函数，函数不会提升
+
 ```js
 // 报错，无法执行
 // Uncaught ReferenceError: minusNum is not defined
@@ -67,7 +70,7 @@ let minus1 = minusNum(1, 2);
 
 let minusNum = function (num1, num2) {
   return num1 - num2;
-}
+};
 
 ```
 
@@ -110,8 +113,8 @@ function sum(num1, num2) {
 }
 
 console.dir(sum);
-
 ```
+
 // 控制台输出结果
 ![function](../_media/function.png)
 
@@ -130,23 +133,76 @@ console.dir(sum);
 > 值为构造函数的原型对象,但是我们无法访问,所以由Chrome 暴露出来让我们看到.
 
 ```js
+// 证明结论1
 console.log(sum.prototype)
 // 输出 -> {constructor: ƒ}
 
+// 证明结论2
 console.log(sum.prototype.constructor === sum)
 // 输出 -> true
 
+// 证明结论3
 console.log(sum.prototype.constructor.__proto__ === Function.prototype)
 // 输出 -> true
 
+console.log(sum.__proto__ === Function.prototype)
+// 输出 -> true
+
 ```
+
 ___
-结论📝:
+函数结论📝:
 1. 函数的 prototype 是个对象,会自动获取一个名为 constructor 的属性
 2. 函数的 prototype 对象的 constructor 属性指向函数本身
-3. 
+3. 函数的 __proto__ 属性指向它的构造函数 Function 的 prototype
 ___
 
+我们知道 Function 是个[基本对象](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects),同时也是个构造函数。
+
+Function 相关代码示例👇：
+
+```js
+
+// 证明结论1
+console.log(Function.prototype === Function.__proto__);
+// 输出 -> true
+
+// 证明结论2
+console.log(Function.prototype.constructor === Function);
+// 输出 -> true
+
+// 证明结论3
+console.log(Function.prototype);
+console.log(Function.__proto__);
+// 输出 -> ƒ anonymous()
+//        apply: ƒ apply()
+//        arguments: (...)
+//        bind: ƒ bind()
+//        call: ƒ call()
+//        caller: (...)
+//        constructor: ƒ Function()
+//        length: 0
+//        name: ""
+//        toString: ƒ toString()
+//        Symbol(Symbol.hasInstance): ƒ [Symbol.hasInstance]()
+//        get arguments: ƒ ()
+//        set arguments: ƒ ()
+//        get caller: ƒ ()
+//        set caller: ƒ ()
+//        __proto__: Object
+// 证明结论4
+console.log(Function.__proto__.__proto__.constructor === Object);
+// 证明结论4
+console.log(Function.__proto__.__proto__.toString === Object.toString);
 
 
+```
+
+___
+Function函数 相关结论📝:
+1. Function函数的原型对象 prototype 等于Function函数的  __proto__属性
+2. Function函数的原型对象 prototype 的 constructor 属性同样指向函数本身
+3. Function函数的原型对象和 __proto__ 指向同一个匿名函数对象
+4. Function函数的原型对象和 __proto__ 指向的匿名函数对象是 Object 的实例
+___
 
