@@ -26,7 +26,9 @@
       // logo可以是个图片，不设置logo的话会用上面的name替代
       // logo: '/_media/icon.svg',
       // 最大支持渲染的标题层级
-      maxLevel: 4,
+      // maxLevel: 5,
+      // 自定义侧边栏后默认不会再生成目录，设置生成目录的最大层级，建议配置为1或者2
+      subMaxLevel: 4,
       // 侧边栏，配合 ./_sidebar.md
       loadSidebar: true,
       // 设置别名，避免回退问题，否则进入其他文件夹时会报错“找不到当前目录的_sidebar.md”
@@ -34,15 +36,13 @@
         '/.*/_sidebar.md': '/_sidebar.md',
         '/.*/_navbar.md': '/_navbar.md'
       },
-      // 自定义侧边栏后默认不会再生成目录，设置生成目录的最大层级，建议配置为1或者2
-      subMaxLevel: 3,
       // 仓库地址，点击右上角的Github章鱼猫头像会跳转到此地址
       repo: 'https://github.com/JunfengHan/docs',
       search: {
         maxAge: 86400000,
         placeholder: '搜索',
         noData: '找不到结果',
-        depth: 4,
+        depth: 5,
         hideOtherSidebarContent: false,
         namespace: 'legendBlog',
       },
