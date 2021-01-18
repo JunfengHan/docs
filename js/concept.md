@@ -4,7 +4,19 @@
 
 ## 1.基本概念
 
-### 1.1 Window 和 window
+### 1.1 JavaScript 实现
+
+![JS数据类型](../_media/js_compose.png)
+
+JavaScript 包括:
+
+- ECMAScript: 我们写的JS代码，由ECMA-262定义并提供核心功能
+- BOM: 提供与浏览器交互的方法和接口
+- DOM: 提供与网页内容相交互的方法和接口
+
+所有JS相关的问题都逃不出这三点。
+
+### 1.2 Window 和 window
 
 ```js
 console.log(Window)
@@ -41,7 +53,7 @@ ___
 
 - window的属性是全局变量，所以可以直接打印出 document
 
-### 1.2 Document 和 document
+### 1.3 Document 和 document
 
 ```js
 console.log(Document)
