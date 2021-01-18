@@ -35,7 +35,7 @@ Hook 拥抱了函数，是我们在<code style="color: #708090; background-color
 
 [React Hook](https://zh-hans.reactjs.org/docs/hooks-overview.html#but-what-is-a-hook)是一些可以让你在<code style="color: #708090; background-color: #F5F5F5;">函数组件</code>里“钩入” React state 及生命周期等特性的函数。
 
-我们类分析下React 官方给的这个定义。
+我们来分析下React 官方给的这个定义。
 
 **React Hook 是 函数**。
 
@@ -57,7 +57,7 @@ React Hook大致可以分为4种：
 - 自定义 Hook
 - 其他 Hook
 
-### State Hook
+### 3.1 State Hook
 
 React 内置了一些像 <code style="color: #708090; background-color: #F5F5F5;">useState</code> 这样的 <code style="color: #708090; background-color: #F5F5F5;">Hook</code>，它是 <code style="color: #708090; background-color: #F5F5F5;">State Hook</code>。
 
@@ -82,9 +82,17 @@ function Example() {
 
 ```
 
-### Effect Hook
+### 3.2 Effect Hook
+
 
 > 在 React 组件中执行过数据获取、订阅或者手动修改过 DOM。我们统一把这些操作称为<code style="color: #708090; background-color: #F5F5F5;">“副作用</code>”，或者简称为<code style="color: #708090; background-color: #F5F5F5;">“作用(Effect)”</code>。
+#### 先了解下副作用
+
+<code style="color: #708090; background-color: #F5F5F5;">副作用</code>是函数执行中和返回值无关或改变返回值的操作。
+
+如：console.log()、Ajax获取数据并调用setState更新状态。
+
+以上操作console.log和返回值无关，Ajax请求的数据会使得函数返回不确定的值，因此都算是副作用。
 
 <code style="color: #708090; background-color: #F5F5F5;">useEffect</code> 就是一个 [Effect Hook](https://zh-hans.reactjs.org/docs/hooks-overview.html#effect-hook)，给函数组件增加了操作副作用的能力。
 
@@ -117,7 +125,224 @@ function Example() {
 }
 ```
 
-### 自定义 Hook
+#### useEffect的使用
+
+*源码中的useEffect：*
+
+```ts
+function useEffect(effect: EffectCallback, deps?: DependencyList): void;
+```
+
+useEffect接收两个参数：
+
+- effect：可以返回清理函数的执行函数
+- deps: 可选，只有当列表中的值发生变化时，效果才会激活
+
+*示例：*
+
+```js
+useEffect(() => {
+  // 执行函数获取数据并更新数据
+  fetch(url)
+  .then(res => res.json())
+  .then(updateData())
+  .catch((err) => console.log(err));
+
+  // 返回清理函数
+  // 会在调用一个新的 effect 之前对前一个 effect 进行清理
+  return () => {
+    resetData();
+  }
+});
+```
+
+**useEffect 会在每次组件更新后执行。**
+
+例如：我们setState 引起了组件更新，那么useEffect就会执行。
+
+显然，这样有时是不合理的，我们应该尽量减少effect的默认更新。
+
+**deps为空[] 时，effect 只在mount和unmount时执行。**
+
+```ts
+useEffect(() => {
+  // do Something
+}, [])
+```
+
+**deps是不为空的[] 时，effect 只在deps里的状态值发生变化时执行。**
+
+
+```ts
+// mount 发生变化时才会执行
+useEffect(() => {
+  // do Something
+}, [mount])；
+```
+
+**useEffect中使用异步函数：👇**
+
+*示例：*
+
+```js
+useEffect(() => {
+  // 异步函数包裹一下业务
+  const fetchData = async () => {
+    const resData = await fetch(url);
+    const data = await resData.json();
+    // 操作data
+    setData(data);
+  };
+
+  // 手动执行函数
+  fetchData();
+});
+```
+
+#### useEffect的好处
+
+- **使用多个 Effect 实现关注点分离**
+
+  这个可以解决把过多副作用都放到componentDidMount中的问题，解决<code style="color: #708090; background-color: #F5F5F5;">“复杂组件变得难以理解”</code>的问题。
+
+  我们可以使用多个useEffect 来处理不同的逻辑，以此实现关注点分离。
+
+- **通过跳过 Effect 进行性能优化**
+
+  你可以通知 React 跳过对 effect 的调用，只要传递数组作为 useEffect 的第二个可选参数即可
+
+#### useEffect是如何实现的？？
+
+### 3.3 useContext
+
+#### React的跨组件数据传递
+
+*父组件传数据给子组件：Props*
+
+```js
+class App extends React.Component {
+  render() {
+    return <Toolbar theme="dark" />;
+  }
+}
+
+function Toolbar(props) {
+  // Toolbar 组件接受一个额外的“theme”属性，然后传递给 ThemedButton 组件。
+  // 如果应用中每一个单独的按钮都需要知道 theme 的值，这会是件很麻烦的事，
+  // 因为必须将这个值层层传递所有组件。
+  return (
+    <div>
+      <ThemedButton theme={props.theme} />
+    </div>
+  );
+}
+
+class ThemedButton extends React.Component {
+  render() {
+    return <Button theme={this.props.theme} />;
+  }
+}
+```
+
+**使用 context, 我们可以避免通过中间元素传递 props:**
+
+[Context](https://zh-hans.reactjs.org/docs/context.html) 设计目的是为了共享那些对于一个组件树而言是“全局”的数据，例如当前认证的用户、主题或首选语言。
+
+```js
+const themes = {
+  light: {
+    foreground: "#000000",
+    background: "#eeeeee"
+  },
+  dark: {
+    foreground: "#ffffff",
+    background: "#222222"
+  }
+};
+// Context 可以让我们无须明确地传遍每一个组件，就能将值深入传递进组件树。
+// 为当前的 theme 创建一个 context（“light”为默认值）。
+const ThemeContext = React.createContext(themes.light);
+
+class App extends React.Component {
+  render() {
+    // 使用一个 Provider 来将当前的 theme 传递给以下的组件树。
+    // 无论多深，任何组件都能读取这个值。
+    // 在这个例子中，我们将 “dark” 作为当前的值传递下去。
+    return (
+      <ThemeContext.Provider value="dark">
+        <Toolbar />
+      </ThemeContext.Provider>
+    );
+  }
+}
+
+// 中间的组件再也不必指明往下传递 theme 了。
+function Toolbar() {
+  return (
+    <div>
+      <ThemedButton />
+    </div>
+  );
+}
+
+class ThemedButton extends React.Component {
+  // 指定 contextType 读取当前的 theme context。
+  // React 会往上找到最近的 theme Provider，然后使用它的值。
+  // 在这个例子中，当前的 theme 值为 “dark”。
+  static contextType = ThemeContext;
+  render() {
+    return <Button theme={this.context} />;
+  }
+}
+```
+
+React Hook 提供了一个<code style="color: #708090; background-color: #F5F5F5;">useContext</code>函数,
+
+它接收一个 context 对象（<code style="color: #708090; background-color: #F5F5F5;">React.createContext</code> 的返回值）并返回该 context 的当前值。
+
+当前的 context 值由上层组件中距离当前组件最近的 <MyContext.Provider> 的 value prop 决定。
+
+当组件上层最近的 <MyContext.Provider> 更新时，该 Hook 会触发重渲染，并使用最新传递给 MyContext provider 的 context value 值。
+
+> useContext(MyContext) 相当于 class 组件中的 static contextType = MyContext 或者 <MyContext.Consumer>。
+> useContext(MyContext) 只是让你能够读取 context 的值以及订阅 context 的变化。你仍然需要在上层组件树中使用 <MyContext.Provider> 来为下层组件提供 context。
+
+*将上面的class组件改为函数组件：*
+
+```js
+function App() {
+  return (
+    // 父组件依然需要提供 ThemeContext.Provider
+    <ThemeContext.Provider value={themes.dark}>
+      <Toolbar />
+    </ThemeContext.Provider>
+  );
+}
+
+function Toolbar(props) {
+  return (
+    <div>
+      <ThemedButton />
+    </div>
+  );
+}
+
+function ThemedButton() {
+  // 子组件通过 useContext 获取 ThemeContext
+  const theme = useContext(ThemeContext);
+  return (
+    <button style={{ background: theme.background, color: theme.foreground }}>
+      I am styled by theme context!
+    </button>
+  );
+}
+```
+
+#### useContext是如何实现的？？
+
+todo...
+
+### 3.3 自定义 Hook
 
 > 自定义 Hook 更像是一种约定而不是功能。
 
