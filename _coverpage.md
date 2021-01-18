@@ -6,7 +6,7 @@
 
 - `前端->全栈知识`
 - `互联网开发周边相关`
-- `职业发展、创业、Idea交流`
+- `技术、产品、创业Idea交流`
 
 [GitHub](https://github.com/JunfengHan/docs)
 [Get Started](/?id=概览)
