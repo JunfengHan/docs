@@ -1,4 +1,8 @@
-# 实现一个简单的webpack
+# 手动实现一个简单的webpack
+
+> webpack 是一个按照配置解析文件并使用相关loader和plugin做处理的工具。
+
+
 
 ## 参考
 

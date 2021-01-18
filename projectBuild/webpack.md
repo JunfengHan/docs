@@ -2,18 +2,18 @@
 
 ![webpack](../_media/webpack1.png)
 
-## 1.为什么是webpack
+## 1. 前端模块化
 
-> webpack是怎么来的，我们为什么需要webpack?
+> 前端项目越越来越复杂，很多问题突显，模块化势在必行。
 
-#### 前端模块化
+**模块化可以解决的问题：**
 
 - 命名冲突
 - 文件依赖（加载顺序）
 - 代码复用
 - 样式文件中的模块化（sass、less）
 
-#### 新框架与语言
+### 1.1 新框架与语言
 
 - 三大前端框架，React、Vue、Angular
 - ES6+
@@ -21,12 +21,13 @@
 - Flow
 - SCSS
 
-#### 前端构建
+### 1.2 前端构建
 
 > 前端项目越来越复杂，更新也越来越快，前端项目的构建就必不可少。
 > 前端构建就是将我们的源代码转换成可执行的 JS、CSS、HTML
 
 构建往往包含以下内容：
+
 - 代码转换：将TypeScript编译为JS、将SCSS编译为CSS
 - 文件优化：压缩JS、CSS、HTML代码，压缩合并图片
 - 代码分割：提取多个页面的公共代码，提取首屏不需要执行的代码让其异步加载
@@ -35,11 +36,11 @@
 - 代码校验：代码提交到仓库前需要校验代码是否符合规范，以及单元测试是否通过
 - 自动发布：更新代码后，自动构件出线上发布代码并传输给发布系统
 
-#### 前端构建工具
+## 2. 前端构建工具
 
 > Node.js是前端工程师所熟悉的，所以大多数前端构建工具都是基于它来开发的。
 
-###### Grunt
+### 2.1 Grunt
 
 是一个任务执行者，Grunt有大量的插件封装了常见的任务，也能管理任务之间的依赖关系，自动化执行依赖的任务，每个任务的具体执行代码和依赖关系写在配置文件的GruntFile.js里。
 
@@ -47,7 +48,7 @@
 - 大量可复用的插件封装好了常见的构建任务
 - 集成度不高，要写很多配置才能使用，无法开箱即用
 
-###### Gulp
+### 2.2 Gulp
 
 是一个基于流的自动化构建工具。除了可以管理和执行任务，还支持监听文件、读写文件。Gulp被设计得非常简单，只通过下面5种方法就可以支持几乎所有构建场景：
 
@@ -63,7 +64,7 @@ Gulp 优点是好用又不失灵活，既可以单独完成构建，也可以和
 
 可以把Gulp 看作Grunt 的加强版，Gulp 增加了监听文件、读写文件、流式处理功能。
 
-###### webpack
+### 2.3 webpack
 
 是一个现代JS应用程序的*静态模块打包器*，在webpack里一切文件皆模块，通过Loader转换文件，通过Plugin 注入钩子，最后输出由多个模块组合成的文件。webpack 处理应用时，它会在内部创建一个*依赖图* ，用于映射到项目需要的每个模块，然后将这些依赖生成到一个或多个bundle。
 
@@ -73,7 +74,7 @@ Gulp 优点是好用又不失灵活，既可以单独完成构建，也可以和
 - 社区庞大活跃，能紧跟时代发展新的特性
 - 不足是只能采用模块化开发项目
 
-###### Rollup
+### 2.4 Rollup
 
 是一个和Webpack很类似但专注于ES6的模块打包工具。它的亮点在于，能针对ES6源码进行Tree Shaking，以去除那些已被定义但没被使用的代码并进行Scope Hoisting，以减小输出文件的大小和提升运行性能。然而Rollup的这些亮点随后就被Webpack模仿和实现。
 
@@ -85,9 +86,9 @@ Gulp 优点是好用又不失灵活，既可以单独完成构建，也可以和
 - Rollup不支持Code Spliting，但好处是在打包出来的代码中没有Webpack那段模块的加载、执行和缓存的代码
 - 用于打包 JavaScript库时比Webpack 更有优势，因为其打包出来的代码更小、更快。但它的功能不够完善，在很多场景下都找不到现成的解决方案
 
-#### 为什么选择webpack
+## 3. 为什么选择webpack
 
-> 构建工具是随着时代的发展而产生的，从侧面反映出Web 开发的发展趋势
+> 构建工具是随着时代的发展而产生的，从侧面反映出Web 开发的发展趋势.
 
 - 在Npm Script和Grunt时代，Web开发要做的事情变多，流程复杂，自动化思想被引入，用于简化流程
 - 在Gulp时代，开始出现一些新语言用于提高开发效率，流式处理思想的出现是为了简化文件转换的流程，例如将ES5转换成ES6
@@ -95,12 +96,11 @@ Gulp 优点是好用又不失灵活，既可以单独完成构建，也可以和
 
 **webpack 成为首选的原因：**
 
- - 大多数团队都会采用“模块化+新语言+新框架”技术方案，Webpack可以为这些新项目提供一站式的解决方案
- -  webpack有良好的生态链和维护团队，能提供良好的开发体验并保证质量
- -  webpack被全世界大量的Web开发者使用和验证，能找到各个层面所需的教程和经验分享
+- 大多数团队都会采用“模块化+新语言+新框架”技术方案，Webpack可以为这些新项目提供一站式的解决方案
+- webpack有良好的生态链和维护团队，能提供良好的开发体验并保证质量
+- webpack被全世界大量的Web开发者使用和验证，能找到各个层面所需的教程和经验分享
 
-
-## 2.webpack 的概念与基础
+## 4.webpack 的概念与基础
 
 > 此处详情推荐到官网查看 [webpack文档](https://webpack.js.org/concepts/)
 
@@ -109,19 +109,19 @@ Gulp 优点是好用又不失灵活，既可以单独完成构建，也可以和
 - loader
 - plugin
 
-#### entry
+### 4.1 entry
 
 指示 webpack 应该使用哪个模块，来作为构建其内部依赖图的开始，webpack 会找出有哪些模块和 library 是入口起点（直接和间接）依赖的。
 
-#### output
+### 4.2 output
 
 output 属性告诉 webpack 在哪里输出它所创建的 bundles，以及如何命名这些文件.
 
-#### <font color=red> chunk </font>
+#### 4.3 <font color=red> chunk </font>
 
 chunk 是 webpack 中的重要概念，webpack有一个入口文件，入口文件的依赖及各文件的依赖都称为 chunk. 所以我们看到类似的配置：
 
-```
+```js
 // 入口文件
 entry: {
     app: './src/main.js'
@@ -140,34 +140,31 @@ output: {
 }
 ```
 
+### 4.4 loader
 
-#### loader
-
-webpack 自身只支持 JavaScript。而 loader 能够让 webpack 处理那些非 JavaScript(如：css文件) 文件，并且先将它们转换为有效 模块，然后添加到依赖图中，这样就可以提供给应用程序使用。
+webpack 自身只支持 JavaScript。而 loader 能够让 webpack 处理那些非 JavaScript(如：css文件) 文件，并且先将它们转换为有效模块，然后添加到依赖图中，这样就可以提供给应用程序使用。
 
 webpack 的配置中 loader 有两个特征：
-1.  ==test== 属性，用于标识出应该被对应的 loader 进行转换的某个或某些文件
-2.  ==use== 属性，表示进行转换时，应该使用哪个 loader
 
-#### plugin
+1. test属性: 用于标识出应该被对应的 loader 进行转换的某个或某些文件
+2. use: 表示进行转换时，应该使用哪个 loader
+
+### 4.5 plugin
 
 loader 被用于转换某些类型的模块，而插件则可以用于执行范围更广的任务，插件的范围包括：打包优化、资源管理和注入环境变量。
 
-#### mode
+### 4.6 mode
 
 通过将 mode 参数设置为 development, production 或 none，可以启用对应环境下 webpack 内置的优化。默认值为 production
 
-#### configuration
-
-webpack的配置文件是导出一个对象的 JS 文件，是一个标准的Node.js CommonJs 模块，可以像写普通JS 文件一样。此对象由webpack 根据对象定义的属性进行解析。
-
-#### modules
+### 4.7 modules
 
 在模块化编程中，开发者将程序分解成离散功能块(discrete chunks of functionality)，并称之为_模块_。每个模块具有比完整程序更小的接触面，使得校验、调试、测试轻而易举。 精心编写的_模块_提供了可靠的抽象和封装界限，使得应用程序中每个模块都具有条理清楚的设计和明确的目的。
 
 **什么是webpack模块？**
 
 webpack _模块_能够以各种方式表达它们的依赖关系，几个例子如下：
+
 - ES2015 import 语句
 - CommonJs require 语句
 - AMD define 和 require 语句
@@ -175,6 +172,7 @@ webpack _模块_能够以各种方式表达它们的依赖关系，几个例子�
 - 样式 （url(...)）或 HTML 文件（<img src=...>）中的图片链接（image url）
 
 **支持的模块类型有哪些？**
+
 - CoffeeScript
 - TypeScript
 - ESNext（Babel）
@@ -182,7 +180,7 @@ webpack _模块_能够以各种方式表达它们的依赖关系，几个例子�
 - Less
 - Stylus
 
-#### 模块的解析
+### 4.8 模块的解析
 
 *resolver* 是一个（library）,用于帮助找到绝对路径。模块间的依赖通常在 require、import语句中。当打包模块时，webpack使用*enhanced-resolve*来解析路径。
 
@@ -191,14 +189,14 @@ webpack _模块_能够以各种方式表达它们的依赖关系，几个例子�
 
 - 绝对路径
 
-```
+```js
 import '/home/me/file';
 import 'C:\\Users\\me\\file';
 ```
 
 - 相对路径
 
-```
+```js
 import '../src/file1';
 import './file2';
 ```
@@ -207,7 +205,7 @@ import './file2';
 
 模块将在 resolve.modules 中指定的所有目录内搜索。 你可以替换初始模块路径，此替换路径通过使用 resolve.alias 配置选项来创建一个别名。
 
-```
+```js
 import 'module';
 import 'module/lib/file';
 ```
@@ -215,18 +213,19 @@ import 'module/lib/file';
 解析路径后，解析器(resolver)将检查路径是否指向文件或目录。如果文件有文件扩展名，则直接打包。否则，将[resolve.extensions]选项作为文件扩展名来解析。
 
 如果路径指向文件夹，按顺序查找目录下的扩展名：
+
 - package.json
 - main 字段
 
 webpack 根据构建目标(build target)为这些选项提供了合理的默认配置。
 
-#### 依赖图
+## 5. 依赖图
 
 任何时候，一个文件依赖于另一个文件，webpack 就把此视为文件之间有依赖关系。这使得 webpack 可以接收非代码资源(non-code asset)（例如图像或 web 字体），并且可以把它们作为_依赖_提供给你的应用程序。
 
 从这些入口起点开始，webpack 递归地构建一个依赖图，这个依赖图包含着应用程序所需的每个模块，然后将所有这些模块打包为少量的 bundle - 通常只有一个 - 可由浏览器加载。
 
-#### manifest (清单)
+## 6. manifest (清单)
 
 在使用 webpack 构建的典型应用程序或站点中，有三种主要的代码类型：
 
@@ -248,7 +247,7 @@ webpack 根据构建目标(build target)为这些选项提供了合理的默认�
 &#8195; <font color=yellowgreen> 通过使用 bundle 计算出内容散列(content hash)作为文件名称，这样在内容或文件修改时，浏览器中将通过新的内容散列指向新的文件，从而使缓存无效。一旦你开始这样做，你会立即注意到一些有趣的行为。即使表面上某些内容没有修改，计算出的哈希还是会改变。这是因为，runtime 和 manifest 的注入在每次构建都会发生变化。</font>
 </td></tr></table>
 
-#### hot module replacement (HMR) 模块热替换
+## 7. hot module replacement (HMR) 模块热替换
 
 模块热替换功能会在应用程序运行过程中替换、添加或删除模块，而无需重新加载整个页面。主要是通过以下几种方式，来显著加快开发速度：
 
@@ -286,7 +285,7 @@ HMR 是可选功能，只会影响包含HMR 代码的模块。当一个模块中
 
 <br>
 
-## 3.webpack 的配置
+## 8.webpack 的配置文件
 
 > 查看更多详细的配置信息[webpack 官方配置详解]()
 
@@ -294,7 +293,7 @@ webpack 开箱即用，但是会假定项目的入口起点为 src/index，然�
 
 <br>
 
-## 4.webpack 的工作流程
+## 9. webpack 的工作流程
 
 ![image](../_media/webpack2.png)
 
