@@ -11,7 +11,7 @@ JavaScript的模块化有多种解决方案，目前和日后主流的应该是 
 ## 1. 为什么我们需要 CSS 模块化？
 
 - CSS 作用域是全局的
-- 无法模块化
+- 组件中样式无法模块化，导致组件无法实现真正的模块化
 
 ### 1.1 CSS 作用域是全局的
 
@@ -186,7 +186,9 @@ ___
 
 显然，styled-components 的优点是基本能实现CSS的模块化；
 
-缺点是**要像写JS一样来写CSS**，且<span style="color: #ff0000; font-size: 16px;">易读性比较差</span>。
+缺点是**要像写JS一样来写CSS**，且<span style="color: #ff0000; font-size: 16px;">易读性比较差</span>；
+
+不能利用成熟的 CSS 预处理器（或后处理器）。
 
 为什么说易读性差呢？
 
@@ -195,7 +197,7 @@ ___
 <NavItem></NavItem>
 ```
 
-**看到这两个组件，你能看到什么？甚至它是什么元素都不知道，个人感觉和React 声明式的理念不太符合，JSX的让写JS像HTML一样，但 styled-components 却破坏了它，所以我尝试一下，实在不喜欢这中方式，最终放弃了。**
+**看到这两个组件，你能看到什么？甚至它是什么元素都不知道，个人感觉和React 声明式的理念不太符合，JSX让写JS像HTML一样，但 styled-components 却破坏了它，所以我尝试一下，实在不喜欢这中方式，最终放弃了。**
 
 ## 4. CSS Modules
 
@@ -215,7 +217,6 @@ CSS Modules 既不是官方标准，也不是浏览器的特性，而是在构�
 
 ```js
 import styles from "./style.css";
-// import { className } from "./style.css";
 
 element.innerHTML = '<div class="' + styles.className + '">';
 ```
@@ -328,3 +329,5 @@ module: {
 [css模块化及CSS Modules使用详解](https://cloud.tencent.com/developer/article/1036799)
 
 [Webpack打包配置解读-CSS 样式篇](https://juejin.cn/post/6868538920796340237#heading-1)
+
+[CSS Modules 详解及 React 中实践](https://github.com/camsong/blog/issues/5)

@@ -108,3 +108,7 @@ mini-css-extract-plugin不能与style-loader混用；
 [常见 loader 源码简析，以及动手实现一个 md2html-loader](https://github.com/6fedcom/fe-blog/tree/master/webpack/loader)
 
 [编写一个loader](https://v4.webpack.docschina.org/contribute/writing-a-loader)
+
+[Webpack loader 之 file-loader](https://cloud.tencent.com/developer/article/1533438)
+
+[[webpack] devtool里的7种SourceMap模式是什么鬼？](https://juejin.cn/post/6844903450644316174)

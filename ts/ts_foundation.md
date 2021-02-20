@@ -1,6 +1,6 @@
-# 前端学TypeScript
+# TypeScript入门
 
-> TypeScript 的严谨比 JavaScript更适合写 NodeJS 应用用于后端服务。当然，如果前端应用使用的化代码也会更加容易规范化。本文以一个前端开发者的视角来学习TypeScript。
+> TypeScript 的严谨比 JavaScript更适合写 NodeJS项目。
 
 **"Typed JavaScript at Any Scale."**这是官网的宣传语，翻译一下应该是“<span style="color: #ff0000; font-size: 16px;"><类型化任何规模的JavaScript</span>”.
 
@@ -104,7 +104,7 @@ let strLength: number = (<string>someValue).length;
 
 JS的设计模式多种多样，有时会难以自动推断其类型。
 
-TypeScript支持JavaScript语言的扩展，它提供了一些地方让你告诉TypeScript应该是什么类型。
+TypeScript 支持 JavaScript语言的扩展，它提供了一些地方让你告诉TypeScript应该是什么类型。
 
 例如：创建一个推断类型的对象
 
@@ -219,13 +219,38 @@ function buildName(firstName: string, lastName = "Smith") {
 }
 ```
 
-## 总结
+## 3. Class(类)
 
-1. 类型相当重要，为此TypeScript还特地创造了JavaScript中没有的几个数据类型，如：Enum。因此，声明变量一定要有确定的类型，无论是基础类型或interface等。
+*一个简单的类：*
 
-2. 应该给函数的参数和返回值定义类型；
+```ts
+// 定义类
+class Greeter {
+  // 定义属性的类型
+  greeting: string;
+
+  // ES7 语法，相当于在constructor中定义: this.name = "Legend"
+  name = "Legend";
+
+  // 定义构造函数
+  constructor(message: string) {
+    this.greeting = message;
+  }
+
+  // 实例方法
+  greet() {
+    return "Hello, " + this.greeting;
+  }
+}
+
+// 实例化类
+let greeter = new Greeter("world");
+```
 
 ## 参考
 
-[TypeScript for JavaScript Programmers-TypeScript官方文档](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
+[TypeScript for JavaScript Programmers --> TypeScript官方文档](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
+
 [<<深入理解TypeScript>>](https://jkchao.github.io/typescript-book-chinese/)
+
+[TS 常见问题整理 --> 掘金/秋天不落叶](https://juejin.cn/post/6844904055039344654#heading-13)
