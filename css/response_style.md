@@ -98,7 +98,7 @@ body {
 
 **现在布局中存在的问题，如下：**
 
-#### 3.2.1 行内块于空白于垂直居中
+#### 3.2.1 行内块空白与垂直居中
 
 使用行内块（inline-block）会在HTML元素间渲染空白。
 
@@ -168,28 +168,28 @@ Flexbox 是一种一维的布局，与之相对的是另一个二维布局 [CSS 
     margin: 0;
   }
   .container {
-  border: 2px solid red;
-  display: inline-flex;
-  height: 400px;
-}
-.item {
-  border: 2px dashed yellowgreen;
-}
-.item1 {
-  width: 50px;
-}
-.item2 {
-  width: 100px;
-  height: 100px;
-}
-.item3 {
-  width: 150px;
-  height: 150px;
-}
-.item4 {
-  width: 200px;
-  height: 200px;
-}
+    border: 2px solid red;
+    display: inline-flex;
+    height: 400px;
+  }
+  .item {
+    border: 2px dashed yellowgreen;
+  }
+  .item1 {
+    width: 50px;
+  }
+  .item2 {
+    width: 100px;
+    height: 100px;
+  }
+  .item3 {
+    width: 150px;
+    height: 150px;
+  }
+  .item4 {
+    width: 200px;
+    height: 200px;
+  }
 </style>
 </html>
 ```
