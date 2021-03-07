@@ -8,10 +8,11 @@
 
 - 普通函数
 - 箭头函数
+- 构造函数
 
 ### 1.1 定义函数
 
-函数声明定义函数：
+函数声明定义一个普通函数：
 
 ```js
 function square(number) {
@@ -19,7 +20,7 @@ function square(number) {
 }
 ```
 
-函数表达式定义函数：
+函数表达式定义一个普通函数：
 
 ```js
 // 函数表达式定义函数
@@ -73,6 +74,127 @@ let minusNum = function (num1, num2) {
 };
 ```
 
+#### 1.1.1 构造函数
+
+函数声明定义一个<span style="color: #ff0000; font-size: 16px;">构造函数</span>：
+
+```js
+function Square(number) {
+  return number * number;
+}
+```
+
+**构造函数**没啥特别的，一般函数名首字母大些。
+
+构造函数一般是用来构造对象的。
+
+```js
+function Car(make, model, year) {
+  this.make = make;
+}
+Car.prototype.name = function () {
+  return this.make;
+};
+
+const car1 = new Car("Eagle");
+console.log(car1);
+```
+
+_打印结果：_
+
+![function_new](../_media/function_new.png)
+
+**new 关键字做了如下操作：**🌟🌟🌟
+
+- 1. 内存中创建一个简单对象 {}
+- 2. 将新对象内部的 [[Prototype]] 指针赋值为构造函数的 prototype 属性，实现继承
+- 3. 将新对象内部的 [[Prototype]] 的 constructor 属性指向构造函数
+- 4. 构造函数内，this 指向新对象
+- 5. 执行构造函数内代码（给新对象添加属性）
+- 6. 如果该函数没有返回对象，则返回 this，即返回了新对象
+
+#### 1.1.2 箭头函数
+
+箭头函数是一个特殊的存在。除了和普通函数写法不同，最关键的是<span style="color: #ff0000; font-size: 16px;">箭头函数的 this 在定义时被确定</span>。
+
+这一点至关重要。因此，使用箭头函数时应当特别注意作用域问题。
+
+_对象中的箭头函数：_
+
+```js
+var a = 1;
+var obj1 = {
+  a: 2,
+  // 对象中函数，this 指向调用它的对象
+  func1: function () {
+    console.log(this.a);
+  },
+  // 此时箭头函数的作用域是 全局
+  func2: () => {
+    console.log(this.a);
+  },
+  // 此时箭头函数的作用域是 func3
+  func3: function () {
+    let b = () => {
+      console.log(this.a);
+    };
+
+    return b;
+  },
+};
+obj1.func1(); // 2
+obj1.func2(); // 1
+obj1.func3()(); // 2
+```
+
+_setTimeout 中的箭头函数：_
+
+```js
+function foo() {
+  setTimeout(() => {
+    console.log("id1:", this.id);
+  }, 100);
+  setTimeout(function () {
+    console.log("id2:", this.id);
+  }, 100);
+}
+
+var id = 21;
+
+foo.call({ id: 42 });
+// id1: 42
+// id2: 21
+```
+
+箭头函数定义时，this 指向 { id: 42 }；
+
+箭头函数执行时，this 仍然指向 { id: 42 }；所以，id2 => 42.
+
+普通函数执行时，this 指向全局对象 window；所以，id1 => 21.
+
+**箭头函数 this 固定化的原因：**
+
+> 箭头函数根本没有自己的 this，导致内部的 this 就是外层代码块的 this。
+
+**因此：**
+
+- 箭头函数不能用于构造函数
+- 对象的属性也不要使用箭头函数，此时箭头函数里的 this 指向对象的上下文环境，而不是指向对象
+
+  ```js
+  globalThis.s = 21;
+  const obj = {
+    s: 42,
+    m: () => console.log(this.s),
+  };
+
+  obj.m(); // 21
+  ```
+
+- 需要动态 this 的时候，也不应使用箭头函数
+  如：绑定的监听事件中的 this;
+  如：继承时挂载在函数上的方法，User.prototype.getName = () => {};
+
 ### 1.2 定义箭头函数的其它方式
 
 只有一个参数可以不用括号：
@@ -115,14 +237,15 @@ let double = (x) => return 2 * x;
 打印下看看函数是什么:
 
 ```js
-function sum(num1, num2) {
-  return num1 + num2;
+function Fn() {
+  this.age = 12;
 }
 
-console.dir(sum);
+console.dir(Fn);
 ```
 
-// 控制台输出结果
+_控制台输出结果:_
+
 ![function](../_media/function.png)
 
 **可以看到函数 sum 有 6 个属性：**
@@ -131,96 +254,94 @@ console.dir(sum);
 - caller: 返回调用函数的函数(非标准,了解一下就行了)
 - length: 函数参数个数
 - name：函数名
-- prototype：用于挂载函数需要继承的属性和方法,默认有
-- \_\_proto\_\_: 浏览器暴露出的指向原型对象\[\[prototype\]\]的属性,即指向构造函数的 prototype 属性
+- prototype：用于挂载函数需要继承的属性和方法,默认属性有：
 
-其中最核心也是最常用的是 prototype 属性.
+  - constructor: 指向函数本身
 
-> 说明:函数 sum 是 Function 对象 的实例,sum 的内部\[\[Prototype\]\]指针会被赋
-> 值为构造函数的原型对象,但是我们无法访问,所以由 Chrome 暴露出来让我们看到.
+  - \_\_proto\_\_：指向 Object.prototype
 
-可以看到: **函数是一个有默认属性的对象**.
+- \_\_proto\_\_: 浏览器暴露出的指向原型对象\[\[prototype\]\]的属性;
+  指向 Function.prototype 属性
+
+> 说明:函数 sum 是 Function 对象 的实例,sum 的内部\[\[Prototype\]\]指针会被赋值为构造函数的原型对象,但是我们无法访问,所以由 Chrome 暴露出来让我们看到.
 
 我们看一下这些属性:
 
 ```js
-// 证明结论1
-console.log(sum.prototype);
-// 输出 -> {constructor: ƒ}
+function Fn() {
+  this.age = 12;
+}
 
-// 证明结论2
-console.log(sum.prototype.constructor === sum);
-// 输出 -> true
+const obj = new Fn();
 
-// 证明结论3
-console.log(sum.prototype.constructor.__proto__ === Function.prototype);
-// 输出 -> true
+// 1
+console.log(Function.prototype.__proto__ === Object.prototype);
+// 7
+console.log(
+  Fn.prototype.__proto__.constructor === Object.prototype.constructor
+);
 
-console.log(sum.__proto__ === Function.prototype);
-// 输出 -> true
+// 3
+console.log(Fn.prototype.__proto__ === Object.prototype);
+// 6
+console.log(Fn.__proto__ === Function.prototype);
+
+// 8
+console.log(Function.prototype.constructor === Function);
+// 9
+console.log(Fn.prototype.constructor === Fn);
+
+// 2
+console.log(obj.__proto__ === Fn.prototype);
+// 10
+console.log(obj.__proto__.constructor === Fn);
+
+// 4
+console.log(Fn.prototype.__proto__ === Object.prototype);
+
+// 5
+console.log(Fn.prototype.__proto__ === Object.prototype);
+
+// 11
+console.log(Function.__proto__ === Function.prototype);
+
+// 12
+Fn.customProp = "customProp";
+console.dir(Fn);
+
+Function.customProp = "customProp";
+console.dir(Function);
 ```
 
----
+_关系图 👇：_
 
-函数结论 📝:
+红色箭头代表 -- 继承对象属性
 
-1. 函数的 prototype 是个对象,会自动获取一个名为 constructor 的属性
-2. 函数的 prototype 对象的 constructor 属性指向函数本身
-3. 函数的 **proto** 属性指向它的构造函数 Function 的 prototype
+绿色箭头代表 -- 继承函数属性
 
----
+蓝色箭头代表 -- 构造函数
+
+![function_extend](../_media/function_extend.png)
+
+**结论:** 🌟🌟🌟
+
+- **函数是一个由 Function 构造函数构建的， 有默认属性的对象**.
 
 我们知道 Function 是个[基本对象](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects),同时也是个构造函数。
 
-Function 相关代码示例 👇：
-
-```js
-// 证明结论1
-console.log(Function.prototype === Function.__proto__);
-// 输出 -> true
-
-// 证明结论2
-console.log(Function.prototype.constructor === Function);
-// 输出 -> true
-
-// 证明结论3
-console.log(Function.prototype);
-console.log(Function.__proto__);
-// 输出 -> ƒ anonymous()
-//        apply: ƒ apply()
-//        arguments: (...)
-//        bind: ƒ bind()
-//        call: ƒ call()
-//        caller: (...)
-//        constructor: ƒ Function()
-//        length: 0
-//        name: ""
-//        toString: ƒ toString()
-//        Symbol(Symbol.hasInstance): ƒ [Symbol.hasInstance]()
-//        get arguments: ƒ ()
-//        set arguments: ƒ ()
-//        get caller: ƒ ()
-//        set caller: ƒ ()
-//        __proto__: Object
-// 证明结论4
-console.log(Function.__proto__.__proto__.constructor === Object);
-// 证明结论4
-console.log(Function.__proto__.__proto__.toString === Object.toString);
-```
-
-Function 特性与 Object 关系：
-
-1. Function 函数的 prototype 属性 等于 Function 函数的 **proto**属性
-2. Function 函数的 prototype 属性 的 constructor 属性同样指向函数本身
-3. Function 函数的 prototype 属性 和 \_\_proto\_\_ 指向同一个匿名函数对象
-4. Function 函数的 prototype 属性 和 \_\_proto\_\_ 指向的匿名函数对象是个 Object 的实例
+_总结：_
 
 ---
 
-Function 函数 相关结论 📝:
-
-- Function 是个继承于 Object 的基本对象
-- Function 的 prototype 属性挂载有一些属性，用于继承
+- 1、2、3、4 说明： 对象都继承了 Object.prototype
+- 1、3、7、12 说明：函数是对象，且可以直接用“.”操作符设置属性
+- 3、6 说明：普通函数不但继承了 Function 相关属性，而且继承了 Object 相关属性
+- 4 说明：自定义对象 {} 继承了 Object.prototype
+- 5 说明：构造函数 Object 是个函数，且继承了 Function.prototype
+- 5，6，11 说明：任何函数的指针 [[Prototype]] (\_\_proto\_\_) 都指向 Function.prototype,包括全局构造函数 Object、Number 和 Function
+- 2 说明：new 操作出的 obj 继承了它构造函数 prototype 上的属性
+- 10 说明: new 运算符操作函数得到对象 obj 的构造函数是该函数
+- 8、9 说明：函数的 prototype 的 constructor 属性指向函数本身
 
 ---
 
@@ -271,7 +392,301 @@ let a = new sum();
 // }
 ```
 
-## 4.闭包
+## 4. 搞懂 this
+
+<span style="color: #ff0000; font-size: 16px;">this</span> 是函数内部的一个关键字。
+
+### 4.1 this 的值是什么
+
+不一定。
+
+为什么说不一定呢？
+
+在绝大多数情况下，<span style="color: #ff0000; font-size: 16px;">函数的调用方式决定了 this 的值（运行时绑定）</span>。
+
+记住这句话，答应我，一定要记住。
+
+这句话的重点是 **在大多数情况下** 和 **调用方式决定**。
+
+疑问来了 🤔️，什么叫大多数情况？连 MDN 都解释的如此模糊。
+
+然而，函数的执行是在 <code style="color: #708090; background-color: #F5F5F5;">执行上下文</code> 中的。
+
+讨论 this 的值自然离不开 执行上下文。
+
+#### 4.1.1 全局上下文
+
+```js
+// 在浏览器中
+console.log(this === window); // true
+
+// node 环境中
+console.log(this === globalThis); // true
+```
+
+**结论：**全局上下文中的 this 指向 全局对象。
+
+#### 4.1.2 函数上下文中的 this
+
+🌰 _例 411-1：_
+
+```js
+function test() {
+  console.log(this);
+}
+
+test();
+```
+
+_浏览器运行结果：_
+
+![this4111](../_media/function_this_4111.png)
+
+**结论**：
+
+- 非严格模式下，在浏览器中，函数上下文的 this 指向 window 对象。
+
+🌰 _例 411-2：_
+
+```js
+// 开启严格模式
+"use strict";
+
+function test() {
+  console.log(this);
+}
+
+test();
+```
+
+_浏览器运行结果：_
+
+![this4111](../_media/function_this_4112.png)
+
+**结论**：
+
+- 严格模式下，在浏览器中直接执行函数，this 指向的是 undefined。
+
+#### 4.1.3 基类上下文中的 this
+
+```js
+class Example {
+  constructor() {
+    this.name = "Name1";
+    console.log("this:", this);
+    const proto = Object.getPrototypeOf(this);
+    console.log(Object.getOwnPropertyNames(proto));
+  }
+  first() {}
+  second() {}
+  static third() {}
+}
+
+new Example(); // this: {name: "Name1"}
+// ['constructor', 'first', 'second']
+```
+
+**结论**：
+
+- 在类的构造函数中，<span style="color: #ff0000; font-size: 16px;">this 指向新对象</span>，类中所有<code style="color: #708090; background-color: #F5F5F5;">非静态的方法</code>都会被添加到 this 的原型中。
+
+#### 4.1.4 派生类上下文中的 this
+
+```js
+class Base {
+  constructor() {
+    this.name = "Base";
+  }
+}
+
+class Good extends Base {
+  constructor() {
+    // 相当于 super.constructor() 调用了Base 中的 constructor
+    // super() 会生成一个 this 绑定，相当于 this = new Base()
+    super();
+    console.log(this); // this = new Base();
+    this.sex = "Boy";
+  }
+}
+
+let man = new Good();
+```
+
+**结论**：
+
+- 派生类中的 this 指向 new Base()
+
+#### 4.1.5 bind() 中的 this
+
+bind() 方法是函数原型上自带的方法。 Function.prototype.bind()。
+
+调用 f.bind(someObject)会创建一个与 f 具有相同函数体和作用域的函数，
+
+但是在这个新函数中，**this 将永久地被绑定到了 bind 的第一个参数**，
+
+<span style="color: #ff0000; font-size: 16px;">无论这个函数是如何被调用的</span>。
+
+```js
+function a() {
+  console.log("this", this);
+}
+
+let c = a.bind();
+// window
+```
+
+```js
+function f() {
+  return this.a;
+}
+
+var g = f.bind({ a: "han" });
+console.log(g()); // han
+
+var h = g.bind({ a: "yoo" }); // bind只生效一次！
+console.log(h()); // han
+
+// bind 值生效一次，所以，g 和 h 无论哪里执行 a 都是 “han”
+var o = { a: 37, f: f, g: g, h: h };
+console.log(o.a, o.f(), o.g(), o.h()); // 37, 37, azerty, azerty
+```
+
+**结论**：
+
+- bind() 中的 this 指向第一个参数，且 bind 只生效一次。
+- bind() 没有传参数时 this 指向 window
+
+#### 4.1.6 call() 和 apply() 中的 this
+
+<code style="color: #708090; background-color: #F5F5F5;">call()</code> 和 <code style="color: #708090; background-color: #F5F5F5;">apply()</code> 方法使用一个指定的 this 值和传递的参数来<span style="color: #ff0000; font-size: 16px;">调用一个函数</span>。
+
+call() 和 apply() 方法只有一个区别，就是 call() 方法接受的是一个<code style="color: #708090; background-color: #F5F5F5;">参数列表</code>，而 apply() 方法接受的是一个包含多个参数的 <code style="color: #708090; background-color: #F5F5F5;">数组</code>。
+
+```js
+var sData = "Wisen";
+
+function display() {
+  console.log("sData value is %s ", this.sData);
+}
+
+// this 也指向 window
+display.call(); // sData value is Wisen
+```
+
+```js
+function bar() {
+  console.log(Object.prototype.toString.call(this));
+}
+
+// 7 会被 new Number(7) 对象化
+// this 指向对象化后的 [object Number]
+bar.call(7); // [object Number]
+bar.call("foo"); // [object String]
+```
+
+**结论**：
+
+- call() 中的 this 指向第一个参数，然后调用函数
+- call() 没有传参数时 this 也指向 window
+- call() 传入的第一个参数是非对象时，该参数会被对象化
+
+#### 4.1.7 箭头函数中的 this
+
+<code style="color: #708090; background-color: #F5F5F5;">箭头函数</code>中的 this 指向<span style="color: #ff0000; font-size: 16px;">被设置为他被创建时的环境</span>。
+
+```js
+// 普通的箭头函数，this 与创建时环境中的 this 一致
+var globalObject = this;
+var foo = () => this;
+console.log(foo() === globalObject); // true
+
+// 作为对象的一个方法调用
+var obj = { foo: foo };
+console.log(obj.foo() === globalObject); // true
+
+// 尝试使用call来设定this,
+// call 给箭头函数设置this 会被忽略
+console.log(foo.call(obj) === globalObject); // true
+
+// 尝试使用bind来设定this
+foo = foo.bind(obj);
+console.log(foo() === globalObject); // true
+```
+
+💣 注意有坑：
+
+```js
+// 函数中的箭头函数
+var a = 2;
+var obj = {
+  a: 1,
+  bar: function () {
+    // 箭头函数
+    var x = () => this.a;
+    return x;
+  },
+};
+
+// 获取 obj.bar 中的箭头函数
+var fn1 = obj.bar();
+// 执行箭头函数,
+console.log(fn1()); // 1
+
+// obj.bar 赋值给 fn
+var fn2 = obj.bar;
+// 全局作用域下执行 fn2, bar() 的执行环境发生了变化⚠️
+console.log(fn2()()); // 2
+```
+
+**结论**：
+
+- 箭头函数 中的 this 指向定义时环境对象
+- 注意父函数中的箭头函数，会随着父函数的执行上下文而变化
+
+#### 4.1.8 作为对象方法中的 this
+
+this 被设置为<span style="color: #ff0000; font-size: 16px;">调用该函数的对象</span>。
+
+```js
+var o = {
+  prop: 37,
+  f: function () {
+    return this.prop;
+  },
+};
+
+console.log(o.f()); // 37
+```
+
+**结论**：
+
+- 作为对象方法被调用时，this 指向该对象
+
+#### 4.1.9 DOM 事件中的 this
+
+```js
+// 被调用时，将关联的元素变成蓝色
+function bluify(e) {
+  // 总是 true
+  console.log(this === e.currentTarget);
+  // 当 currentTarget 和 target 是同一个对象时为 true
+  console.log(this === e.target);
+}
+
+// 获取文档中的所有元素的列表
+var elements = document.getElementsByTagName("*");
+```
+
+```js
+<button onclick="alert(this.tagName.toLowerCase());">Show this</button>
+```
+
+**结论**：
+
+- 作为事件处理函数时，它的 this 指向触发事件的元素
+- 内联 on-event 处理函数 调用时，它的 this 指向监听器所在的 DOM 元素
+
+## 5. 闭包
 
 闭包指的是那些引用了另一个函数作用域中变量的函数,通常在嵌套函数中实现.
 
@@ -288,13 +703,13 @@ function createUser(user) {
 let user = createUser({ name: "boy", age: 12 })();
 ```
 
-### 4.1 理解闭包
+### 5.1 理解闭包
 
 理解作用域链对理解闭包很有帮助.
 
 在调用一个函数时，会为函数调用创建一个执行上下文，并创建一个作用域链。
 
-然后用 arguments 和其它命名参数来初始化这个函数的活动对象。
+然后用 arguments 和其它命名参数来初始化这个函数的<span style="color: #ff0000; font-size: 16px;">活动对象</span>。
 
 外部函数的活动对象时内部函数作用域链上的第二个对象。
 
@@ -325,7 +740,7 @@ let result = compare(5, 10);
 
 ![闭包函数作用域链](../_media/function_scope_package.png)
 
-### 4.2 闭包中的 this
+### 5.2 闭包中的 this
 
 > 闭包中使用 this 会让代码变得复杂。
 
@@ -376,7 +791,7 @@ console.log((obj.getIdentityFunc = obj.getIdentityFunc)(); // 'The Window'
 
 (obj.getIdentityFunc = obj.getIdentityFunc) 这里执行了一次赋值，赋值表达式的值是函数本身，this 不再于任何对象绑定，所以会打印出‘The Window’。
 
-## 5.异步函数
+## 6. 异步函数
 
 异步行为是为了优化因计算量大而运行时间长的操作。
 
@@ -398,7 +813,7 @@ console.log(x); // -> 3
 
 <span style="color: #ff0000; font-size: 16px;">设计一个能够知道 x 什么时候可以读取的系统是非常难的。</span>JavaScript 在实现这样一个系统的过程中也经历了几次迭代。
 
-### 5.1 以往的异步编程模式
+### 6.1 以往的异步编程模式
 
 早期 JavaScript 中，只支持定义回调函数来表明异步操作的完成。串联多个异步操作是一个常见的问题，通常需要深度的嵌套函数（俗称”回调地狱“）来解决。
 
@@ -418,7 +833,7 @@ double(3);
 
 而且，double()函数在 setTimeout 成功调度异步操作之后会立即退出。
 
-#### 5.1.1 异步调用的嵌套
+#### 6.1.1 异步调用的嵌套
 
 > 回调可以获取异步函数的返回值
 
@@ -472,11 +887,11 @@ let success = (x) => {
 
 随着代码越来越复杂，我们的回调慢慢变成真的“回调地狱”，对于代码的理解和维护都是问题。
 
-### 5.2 能不能不嵌套？Promise 出现了
+### 6.2 能不能不嵌套？Promise 出现了
 
 > 我们想更优雅地处理这种嵌套，于是 Promise 诞生了。
 
-#### 5.2.1 什么是 Promise
+#### 6.2.1 什么是 Promise
 
 ```js
 console.log(Promise);
@@ -513,7 +928,7 @@ console.dir(Promise);
 
 Promise 作为 ES6 新增的引用类型，可以通过 new 操作符来实例化。
 
-#### 5.2.2 Promise 有什么用？
+#### 6.2.2 Promise 有什么用？
 
 假设我们要做月饼 🥮，流程是这样的：
 
@@ -541,7 +956,7 @@ Promise 就是利用这个原理来设计的，用来解决“回调地狱”的
 
 <span style="color: #ff0000; font-size: 16px;">Promise 最主要的作用是串行化异步任务。</span>
 
-#### 5.2.3 Promise 怎么用？
+#### 6.2.3 Promise 怎么用？
 
 > 我们来看看 Promise 是怎么做月饼的吧，哦不，是怎么处理异步函数的。
 
@@ -611,19 +1026,19 @@ Promise() 构造函数用于包装还没添加 promise 支持的函数。
 
 像我们熟悉的[Object()](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object)一样，Promise()也有自己的静态方法：
 
-- Promise.all(iterable)：返回一个新的promise对象，该promise对象在iterable参数对象里所有的promise对象都成功的时候才会触发成功，一旦有任何一个iterable里面的promise对象失败则立即触发该promise对象的失败
+- Promise.all(iterable)：返回一个新的 promise 对象，该 promise 对象在 iterable 参数对象里所有的 promise 对象都成功的时候才会触发成功，一旦有任何一个 iterable 里面的 promise 对象失败则立即触发该 promise 对象的失败
 
-- Promise.allSettled(iterable)：返回一个promise，该promise在所有promise完成后完成
+- Promise.allSettled(iterable)：返回一个 promise，该 promise 在所有 promise 完成后完成
 
-- Promise.any(iterable)：接收一个Promise对象的集合，当其中的一个 promise 成功，就返回那个成功的promise的值。
+- Promise.any(iterable)：接收一个 Promise 对象的集合，当其中的一个 promise 成功，就返回那个成功的 promise 的值。
 
-- Promise.race(iterable)：当iterable参数里的任意一个子promise被成功或失败后，父promise马上也会用子promise的成功返回值或失败详情作为参数调用父promise绑定的相应句柄，并返回该promise对象
+- Promise.race(iterable)：当 iterable 参数里的任意一个子 promise 被成功或失败后，父 promise 马上也会用子 promise 的成功返回值或失败详情作为参数调用父 promise 绑定的相应句柄，并返回该 promise 对象
 
-- Promise.reject(reason)：返回一个状态为失败的Promise对象，并将给定的失败信息传递给对应的处理方法
+- Promise.reject(reason)：返回一个状态为失败的 Promise 对象，并将给定的失败信息传递给对应的处理方法
 
-- Promise.resolve(value)：返回一个状态由给定value决定的Promise对象。
+- Promise.resolve(value)：返回一个状态由给定 value 决定的 Promise 对象。
 
-创建一个Promise 实例：
+创建一个 Promise 实例：
 
 ```js
 const myFirstPromise = new Promise((resolve, reject) => {
@@ -633,7 +1048,6 @@ const myFirstPromise = new Promise((resolve, reject) => {
   // ?或
   //   reject("failure reason"); // rejected
 });
-
 ```
 
 Promise 会把一个叫做“处理器函数”（executor function）的函数作为它的参数。
@@ -642,13 +1056,13 @@ Promise 会把一个叫做“处理器函数”（executor function）的函数�
 
 当异步任务顺利完成且返回结果值时，会调用 resolve 函数；
 
-而当异步任务失败且返回失败原因（通常是一个错误对象）时，会调用reject 函数。
+而当异步任务失败且返回失败原因（通常是一个错误对象）时，会调用 reject 函数。
 
-*如果想要某个函数拥有promise功能，怎么办？？*
+_如果想要某个函数拥有 promise 功能，怎么办？？_
 
-答案就是： **让它返回一个promise即可**。
+答案就是： **让它返回一个 promise 即可**。
 
-封装一个myFetch()函数，让它利用 XMLHttpRequest 发起 HTTP请求，并返回promise 👇：
+封装一个 myFetch()函数，让它利用 XMLHttpRequest 发起 HTTP 请求，并返回 promise 👇：
 
 ```js
 // type: 请求类型； url：请求地址
@@ -656,7 +1070,7 @@ function myFetch(type, url) {
   // 返回一个promise
   return new Promise((resolve, reject) => {
     let req = new XMLHttpRequest();
-    
+
     // 这里应该做type判断，暂时省略了
     req.open(type, url);
 
@@ -685,112 +1099,136 @@ function myFetch(type, url) {
 我们来使用下：
 
 ```js
-myFetch('story.json').then(function(response) {
-  console.log("Success!", response);
-}, function(error) {
-  console.error("Failed!", error);
-})
+myFetch("story.json").then(
+  function (response) {
+    console.log("Success!", response);
+  },
+  function (error) {
+    console.error("Failed!", error);
+  }
+);
 ```
 
 **2> 神奇的 then()**
 
-> then()  不是myFetch的终点，我们可以链式调用then()来 <code style="color: #708090; background-color: #F5F5F5;">变换值</code> 或陆续运行额外的 <code style="color: #708090; background-color: #F5F5F5;">异步操作</code>。
+> then() 不是 myFetch 的终点，我们可以链式调用 then()来 <code style="color: #708090; background-color: #F5F5F5;">变换值</code> 或陆续运行额外的 <code style="color: #708090; background-color: #F5F5F5;">异步操作</code>。
 
-在5.2.1 中我们知道 then() 就是 Promise.prototype.then，所以Promise构造函数 的实例都有这个方法。
+在 6.2.1 中我们知道 then() 就是 Promise.prototype.then，所以 Promise 构造函数 的实例都有这个方法。
 
-##### 利用then()进行转换值
+##### 利用 then()进行转换值
 
 ```js
 let promise = new Promise((resolve, reject) => {
   resolve(1);
 });
 
-promise.then((val) => {
-  console.log(val); // 1
-  return val + 2;
-}).then((val) => {
-  console.log(val); // 3
-});
+promise
+  .then((val) => {
+    console.log(val); // 1
+    return val + 2;
+  })
+  .then((val) => {
+    console.log(val); // 3
+  });
 ```
 
 ```js
-get('story.json').then(function(response) {
-  return JSON.parse(response);
-}).then(function(response) {
-  console.log("Yey JSON!", response);
-})
+get("story.json")
+  .then(function (response) {
+    return JSON.parse(response);
+  })
+  .then(function (response) {
+    console.log("Yey JSON!", response);
+  });
 ```
 
 把上面的函数精简下：
 
 ```js
-get('story.json').then(JSON.parse).then(function(response) {
-  console.log("Yey JSON!", response);
-}, function (err) {
-  // 错误处理
-  console.log(err);
-})
+get("story.json")
+  .then(JSON.parse)
+  .then(
+    function (response) {
+      console.log("Yey JSON!", response);
+    },
+    function (err) {
+      // 错误处理
+      console.log(err);
+    }
+  );
 ```
 
-##### 利用then()进行异步任务链式处理
+##### 利用 then()进行异步任务链式处理
 
-> 当你在 then() 中返回一个 回调，有一点魔法🪄。
+> 当你在 then() 中返回一个 回调，有一点魔法 🪄。
 
-<span style="color: #ff0000; font-size: 16px;">如果你返回了一个值，下一个then()会用该值调用。</span>
+<span style="color: #ff0000; font-size: 16px;">如果你返回了一个值，下一个 then()会用该值调用。</span>
 
-<span style="color: #ff0000; font-size: 16px;">如果你返回了一个promise,下一个then() 会等待它执行，当promise settles((succeeds/fails))时下一个then()才会调用。</span>
+<span style="color: #ff0000; font-size: 16px;">如果你返回了一个 promise,下一个 then() 会等待它执行，当 promise settles((succeeds/fails))时下一个 then()才会调用。</span>
 
 ```js
-getJSON('story.json').then(function(story) {
-  return getJSON(story.chapterUrls[0]);
-}).then(function(chapter1) {
-  console.log("Got chapter 1!", chapter1);
-})
+getJSON("story.json")
+  .then(function (story) {
+    return getJSON(story.chapterUrls[0]);
+  })
+  .then(function (chapter1) {
+    console.log("Got chapter 1!", chapter1);
+  });
 ```
 
-___
+---
 
 结论：
 
 - then() 方法会返回一个 promise
 - then() 方法接受两个函数作为参数,函数的默认参数是 promise settles((succeeds/fails))
 
-___
+---
 
 **3> 错误处理**
 
 > then() 接受两个函数作为参数，一个处理成功时调用，一个失败时调用
 
-🌰 *then()捕获错误:*
+🌰 _then()捕获错误:_
+
 ```js
-get('story.json').then(JSON.parse).then(function(response) {
-  console.log("Yey JSON!", response);
-}, function (err) {
-  // 错误处理
-  console.log(err);
-})
+get("story.json")
+  .then(JSON.parse)
+  .then(
+    function (response) {
+      console.log("Yey JSON!", response);
+    },
+    function (err) {
+      // 错误处理
+      console.log(err);
+    }
+  );
 ```
 
-🌰 *catch()捕获错误:*
+🌰 _catch()捕获错误:_
 
 ```js
-get('story.json').then(function(response) {
-  console.log("Success!", response);
-}).catch(function(error) {
-  console.log("Failed!", error);
-})
+get("story.json")
+  .then(function (response) {
+    console.log("Success!", response);
+  })
+  .catch(function (error) {
+    console.log("Failed!", error);
+  });
 ```
 
 catch()只是 then(undefined, func)的语法糖，但可读性更好。
 
-其实上面两个例子时不同的，第二个替换成then()方法：
+其实上面两个例子时不同的，第二个替换成 then()方法：
 
 ```js
-get('story.json').then(function(response) {
-  console.log("Success!", response);
-}).then(undefined, function(error) {
-  console.log("Failed!", error);
-})
+get("story.json")
+  .then(function (response) {
+    console.log("Success!", response);
+  })
+  .then(undefined, function (error) {
+    console.log("Failed!", error);
+  });
 ```
 
 catch 像是 try/catch 语句，一旦 “try”中有错误发生，会立即跳转到 catch().
@@ -799,49 +1237,64 @@ catch 像是 try/catch 语句，一旦 “try”中有错误发生，会立即�
 
 then(func1, func2) 只会执行其中的一个，then(func1).catch(func2) 是调用链上的不同的步骤，因此，func1 和 func2 都会执行。
 
-🌰 *promise捕获错误例子：*
+🌰 _promise 捕获错误例子：_
 
 ```js
-asyncThing1().then(function() {
-  return asyncThing2();
-}).then(function() {
-  return asyncThing3();
-}).catch(function(err) {
-  return asyncRecovery1();
-}).then(function() {
-  return asyncThing4();
-}, function(err) {
-  return asyncRecovery2();
-}).catch(function(err) {
-  console.log("Don't worry about it");
-}).then(function() {
-  console.log("All done!");
-})
+asyncThing1()
+  .then(function () {
+    return asyncThing2();
+  })
+  .then(function () {
+    return asyncThing3();
+  })
+  .catch(function (err) {
+    return asyncRecovery1();
+  })
+  .then(
+    function () {
+      return asyncThing4();
+    },
+    function (err) {
+      return asyncRecovery2();
+    }
+  )
+  .catch(function (err) {
+    console.log("Don't worry about it");
+  })
+  .then(function () {
+    console.log("All done!");
+  });
 ```
 
-*流程图：*
+_流程图：_
 
 ![promise捕获错误](../_media/promise_catch_err.png)
 
 实践中的错误处理：
 
 ```js
-getJSON('story.json').then(function(story) {
-  return getJSON(story.chapterUrls[0]);
-}).then(function(chapter1) {
-  addHtmlToPage(chapter1.html);
-}).catch(function() { // 捕获到上面处理的错误
-  addTextToPage("Failed to show chapter");
-}).then(function() { // 处理错误后的页面
-  document.querySelector('.spinner').style.display = 'none';
-})
+getJSON("story.json")
+  .then(function (story) {
+    return getJSON(story.chapterUrls[0]);
+  })
+  .then(function (chapter1) {
+    addHtmlToPage(chapter1.html);
+  })
+  .catch(function () {
+    // 捕获到上面处理的错误
+    addTextToPage("Failed to show chapter");
+  })
+  .then(function () {
+    // 处理错误后的页面
+    document.querySelector(".spinner").style.display = "none";
+  });
 ```
 
-#### 5.2.4 手写一个Promise
+#### 6.2.4 手写一个 Promise
 
-手写一个Promise,我们需要实现的功能有哪些？
+手写一个 Promise,我们需要实现的功能有哪些？
 
-[Promise/A+](https://promisesaplus.com/) 规范定义了实现Promise的具体内容，所以无论谁来实现，逻辑是不变的。
+[Promise/A+](https://promisesaplus.com/) 规范定义了实现 Promise 的具体内容，所以无论谁来实现，逻辑是不变的。
 
 规范内容大致如下：
 
@@ -853,51 +1306,51 @@ getJSON('story.json').then(function(story) {
 - exception 就是 throw 语句抛出的值
 - reason 是一个指示 promise 为什么被 rejected 的值
 
-**Promise状态：**
+**Promise 状态：**
 
 - pending 状态，promise 可以切换到 fulfilled 或 rejected
 - fulfilled 状态，不能迁移到其它状态，必须有个不可变的 value
 - rejected 状态，不能迁移到其它状态，必须有个不可变的 reason
 
-**Then方法：**
+**Then 方法：**
 
 - promise 必须有 then 方法，接受 onFulfilled 和 onRejected 参数
 - onFulfilled 和 onRejected 如果是函数，必须最多执行一次
 - onFulfilled 的参数是 value，onRejected 函数的参数是 reason
 - then 方法可以被调用很多次，每次注册一组 onFulfilled 和 onRejected 的 callback。且如果它们被调用，必须按照注册顺序调用
-- then 方法必须返回 promise，且then方法的处理是异步的
+- then 方法必须返回 promise，且 then 方法的处理是异步的
 - then 方法返回的 promise，也有自己的 state 和 result。它们将由 onFulfilled 和 onRejected 的行为指定。
 
-**resolve的处理逻辑：**
+**resolve 的处理逻辑：**
 
 一些特殊的 value 被 resolve 时，要做特殊处理
 
-- 如果 result 是当前 promise 本身，就抛出 TypeError 错误(因为resolve promise本身,则会把promise本身传给then，会形成无限循环调用)
+- 如果 result 是当前 promise 本身，就抛出 TypeError 错误(因为 resolve promise 本身,则会把 promise 本身传给 then，会形成无限循环调用)
 - 如果 result 是另一个 promise，那么沿用它的 state 和 result 状态
 - 如果 result 是一个 thenable 对象。先取 then 函数，再 call then 函数，重新进入 The Promise Resolution Procedure 过程。
 
-*关键点：*
+_关键点：_
 
-> ES6 的原生 Promise 中的异步是V8引擎提供的微任务，我们可以setTimeout 来模拟异步，但是他是个宏任务。
+> ES6 的原生 Promise 中的异步是 V8 引擎提供的微任务，我们可以 setTimeout 来模拟异步，但是他是个宏任务。
 
-具体实现如下👇：
+具体实现如下 👇：
 
 ```js
 // 定义Promise 的状态
-const PENDING = 'pending';
-const FULFILLED = 'fulfilled';
-const REJECTED = 'rejected';
+const PENDING = "pending";
+const FULFILLED = "fulfilled";
+const REJECTED = "rejected";
 
 // state, result是 promise 的状态和结果
 // handleCallback 根据 state 和 result 做的具体处理逻辑
 const handleCallback = (callback, state, result) => {
-  let { onFulfilled, onRejected, resolve, reject} = callback;
+  let { onFulfilled, onRejected, resolve, reject } = callback;
 
   try {
     // promise状态为 FULFILLED，调用then 方法的 resolve 参数来处理
     if (state === FULFILLED) {
       isFunction(onFulfilled) ? resolve(onFulfilled(result)) : resolve(result);
-    } else if (state === REJECTED){
+    } else if (state === REJECTED) {
       isFunction(onRejected) ? resolve(onRejected(result)) : reject(result);
     }
   } catch (err) {
@@ -909,17 +1362,17 @@ const handleCallback = (callback, state, result) => {
 // 执行then方法注册的回调
 const handleCallbacks = (callbacks, state, result) => {
   while (callbacks.length) handleCallback(callbacks.shift(), state, result);
-}
+};
 
 // transition()用来改变状态
 const transition = (promise, state, result) => {
   // 只有状态为PENDING 时才能改变状态
-  if (promise.state !== PENDING) return
-  promise.state = state
-  promise.result = result
+  if (promise.state !== PENDING) return;
+  promise.state = state;
+  promise.result = result;
   // 改变状态后异步调用回调
-  setTimeout(() => handleCallbacks(promise.callbacks, state, result), 0)
-}
+  setTimeout(() => handleCallbacks(promise.callbacks, state, result), 0);
+};
 
 // 一些特殊的 value 被 resolve 时，要做特殊处理
 /*
@@ -931,7 +1384,7 @@ const transition = (promise, state, result) => {
 let resolvePromise = (promise, result, resolve, reject) => {
   // resolve promise本身会造成无限循环，所以要抛出错误
   if (result === promise) {
-    let reason = new TypeErroe('不能resolve promise本身');
+    let reason = new TypeErroe("不能resolve promise本身");
     return reject(reason);
   }
 
@@ -945,16 +1398,16 @@ let resolvePromise = (promise, result, resolve, reject) => {
     try {
       let then = result.then;
       if (isFunction(then)) {
-        return new Promise(then.bind(result)).then(resolve, reject)
+        return new Promise(then.bind(result)).then(resolve, reject);
       }
-    } catch(err) {
-      return reject(err)
+    } catch (err) {
+      return reject(err);
     }
   }
 
   // 普通值就直接resolve 结果
   resolve(result);
-}
+};
 
 // 定义Promise 构造函数
 // Promise 接收一个执行器函数，并立即执行
@@ -968,29 +1421,29 @@ function Promise(fn) {
 
   // 成功需要转换状态PENDING -> FULFILLED，输出value
   // onFulfilled -> transition「改变状态和result」 -> 调用 then()注册的成功回调
-  let onFulfilled = value => transition(this, FULFILLED, value);
+  let onFulfilled = (value) => transition(this, FULFILLED, value);
   // 失败需要转换状态PENDING -> REJECTED，给出失败reason
   // onRejected -> transition「改变状态和result」 -> 调用 then()注册的失败回调
-  let onRejected = reason => transition(this, REJECTED, reason);
+  let onRejected = (reason) => transition(this, REJECTED, reason);
 
   // 定义一个开关，只能调用 resolve 或 reject 中的一个
   let lock = false;
-  
-  // resolve(value), 
-  let resolve = value => {
-    if (lock) return
+
+  // resolve(value),
+  let resolve = (value) => {
+    if (lock) return;
     lock = true;
     // 一些特殊的 value 被 resolve 时，要做特殊处理
-    resolvePromise(this, value, onFulfilled, onRejected)
-  }
+    resolvePromise(this, value, onFulfilled, onRejected);
+  };
 
   // reject(value), value值要传给 then方法
-  let reject = reason => {
-    if (lock) return
+  let reject = (reason) => {
+    if (lock) return;
     lock = true;
     // 一些特殊的 value 被 resolve 时，要做特殊处理
-    onRejected(reason)
-  }
+    onRejected(reason);
+  };
 
   // 调用fn，把resolve, reject作为参数传给fn，用户可以根据情况在fn中使用
   // 当异步任务顺利完成且返回结果值时，用户可以调用 resolve 函数
@@ -1010,27 +1463,28 @@ function Promise(fn) {
 // then()可以被多次调用，但需要按顺序执行，因此，需要记录then()注册的的onFulfilled, onRejected顺序
 Promise.prototype.then = function (onFulfilled, onRejected) {
   return new Promise((resolve, reject) => {
-    let callback = { onFulfilled, onRejected, resolve, reject};
+    let callback = { onFulfilled, onRejected, resolve, reject };
 
     // 状态为 PENDING时,存储回调到 callbacks
     if (this.state === PENDING) {
       this.callbacks.push(callback);
-    } else { // 状态不为 PENDING，then方法需要做具体逻辑处理
+    } else {
+      // 状态不为 PENDING，then方法需要做具体逻辑处理
       // 这里要实现异步操作，我们不是在JS引擎层面实现，只能用JS语言的异步来实现异步功能，这里选用了setTimeout,也可以用别的异步实现
       // 注意：原生Promise 是V8 引擎实现的微任务，这里的setTimeout 是宏任务
       setTimeout(() => handleCallback(callback, this.state, this.result), 0);
     }
-  })
-}
+  });
+};
 ```
 
-### 5.3 异步函数 async/await
+### 6.3 异步函数 async/await
 
 > 异步函数的作用是提高 Promise 的易用性.
 
 可以利用它们像编写同步代码那样编写基于 Promise 的代码，而且还不会阻塞主线程。 它们可以让异步代码“智商”下降、可读性提高。
 
-因此有人说这是JavaScript 异步的“终极形式”（有待商榷）。
+因此有人说这是 JavaScript 异步的“终极形式”（有待商榷）。
 
 异步函数的写法：
 
@@ -1057,11 +1511,12 @@ Promise 写法：
 ```js
 function logFetch(url) {
   return fetch(url)
-    .then(response => response.text())
-    .then(text => {
+    .then((response) => response.text())
+    .then((text) => {
       console.log(text);
-    }).catch(err => {
-      console.error('fetch failed', err);
+    })
+    .catch((err) => {
+      console.error("fetch failed", err);
     });
 }
 ```
@@ -1073,9 +1528,8 @@ async function logFetch(url) {
   try {
     const response = await fetch(url);
     console.log(await response.text());
-  }
-  catch (err) {
-    console.log('fetch failed', err);
+  } catch (err) {
+    console.log("fetch failed", err);
   }
 }
 ```
@@ -1085,7 +1539,7 @@ async function logFetch(url) {
 箭头函数：
 
 ```js
-const jsonPromises = urls.map(async url => {
+const jsonPromises = urls.map(async (url) => {
   const response = await fetch(url);
   return response.json();
 });
@@ -1135,8 +1589,8 @@ storage.getAvatar('jaffathecake').then(…);
 ```js
 // 定义一个Promise
 function resolveAfter2Seconds(val) {
-  return new Promise(resolve => {
-    setTimeout(()=> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
       console.log(val);
       resolve(val);
     }, 2000);
@@ -1145,7 +1599,7 @@ function resolveAfter2Seconds(val) {
 
 async function f1() {
   // 遇到 await 之前的表达式立即执行，像new Promise()里的执行函数
-  let x,y;
+  let x, y;
   console.log(1);
   try {
     // 遇到 await，暂停执行，直到Promise 返回执行结果
@@ -1155,7 +1609,7 @@ async function f1() {
     await resolveAfter2Seconds(333);
 
     return [x, y];
-  }catch (e) {
+  } catch (e) {
     console.log(e);
 
     return Error(e);
@@ -1169,7 +1623,7 @@ f1();
 // 333 （约4s后）
 ```
 
-如果该值不是一个 Promise，await 会把该值转换为已正常处理的Promise，然后等待其处理结果。
+如果该值不是一个 Promise，await 会把该值转换为已正常处理的 Promise，然后等待其处理结果。
 
 ```js
 async function f2() {
@@ -1192,19 +1646,18 @@ async function f3() {
 f3();
 ```
 
-
-
-
 ## 参考
 
 [JavaScript Promises: An introduction](https://web.dev/promises/)
 
 [异步函数 - 提高 Promise 的易用性](https://developers.google.com/web/fundamentals/primers/async-functions)
 
+[动态图演示 Promises & Async/Await 的过程](https://zhuanlan.zhihu.com/p/145442030)
+
 [100 行代码实现 Promises/A+ 规范](https://juejin.cn/post/6903725134977171463)
 
 [Promise/A+](https://promisesaplus.com/)
 
-《JavaScript 高级程序设计（第 4 版）》
+[ECMAScript6 入门 -- 阮一峰](https://es6.ruanyifeng.com/#docs/function)
 
-MDN
+《JavaScript 高级程序设计（第 4 版）》
