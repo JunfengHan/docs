@@ -31,7 +31,6 @@
 - [Serverless](/serverless/ "severless")
 
   - [Serverless 起步](/serverless/start.md "serverless 概念 基础")
-  - [Serverless 架构](/serverless/framework.md "serverless 概念 基础")
   - [阿里云 Serverless](/serverless/aliServerless.md "aliyun 阿里云 serverless 使用")
   - [Docker](/serverless/docker.md "docker 简介 容器 镜像")
 

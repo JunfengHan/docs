@@ -1,6 +1,6 @@
 # Serverless computing(无服务器计算)
 
-> 服务器
+> Serverless 为什么翻译成无服务器？不应该是少服务器吗？
 
 **无服务器运算**（Serverless computing），又被称为功能即服务（Function-as-a-Service，缩写为 FaaS），是云计算的一种**模型**。
 
