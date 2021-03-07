@@ -2,7 +2,7 @@
 
 > TypeScript 的严谨比 JavaScript 更适合写 NodeJS 项目。
 
-**"Typed JavaScript at Any Scale."**这是官网的宣传语，翻译一下应该是“<span style="color: #ff0000; font-size: 16px;"><类型化任何规模的 JavaScript</span>”.
+"Typed JavaScript at Any Scale."这是官网的宣传语，翻译一下应该是“<span style="color: #ff0000; font-size: 16px;">类型化任何规模的 JavaScript</span>”.
 
 这句话总结了 TypeScript 的作用，也说明了和 JavaScript 的关系。
 
@@ -248,7 +248,11 @@ let greeter = new Greeter("world");
 
 ## 参考
 
-[TypeScript for JavaScript Programmers --> TypeScript 官方文档](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
+[The TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
+
+[TypeScript 手册中文版](https://www.tslang.cn/docs/handbook/basic-types.html)
+
+[TypeScript for JavaScript Programmers](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
 
 [<<深入理解 TypeScript>>](https://jkchao.github.io/typescript-book-chinese/)
 
