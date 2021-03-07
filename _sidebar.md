@@ -12,7 +12,7 @@
 
 - [TypeScript](/ts/ "TypeScript 学习")
 
-  - [TypeScript 基础](/ts/ts_foundation.md "TypeScript 学习笔记")
+  - [TypeScript 基础](/ts/base.md "TypeScript 学习笔记")
 
 - [React](/react/ "react 学习 教程 源码")
 
