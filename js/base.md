@@ -112,7 +112,7 @@ console.log(console instanceof Object); // true
 console.log(console.log instanceof Function); // true
 ```
 
-可以看出，instanceof 判断引用基础数据类型是不准确的：
+可以看出，instanceof 判断数据类型是不准确的：
 
 - instanceof 能有效判断引用数据类型
 - instanceof 不能准确判断基础数据类型
@@ -137,7 +137,7 @@ Object.prototype.toString.call(document); //"[object HTMLDocument]"
 Object.prototype.toString.call(window); //"[object Window]"
 ```
 
-#### 实现一个判断判断函数
+#### 实现一个数据类型判断函数
 
 ```js
 function getType(obj) {
@@ -158,6 +158,179 @@ console.log(getType("8")); // number
 console.log(getType([])); // array
 ```
 
-### 1.3 数据类型转换
+## 2. 引用类型
+
+### 2.1 基本引用类型
+
+- Date
+- RegExp
+- 原始值包装类型：Boolean、Number、String
+
+  <span style="color: #ff0000; font-size: 16px;">用到原始值的方法时，后台会自动创建一个原始包装类型</span>，如：let s1 = "abcdefg"; let s2 = s1.substring(2);
+
+  第二次调用时，如 s1.substring() 会读取 s1;
+
+  读取操作会执行以下 3 个步骤：
+
+  - 1. 创建一个 String 类型
+  - 2. 调用实例上的特定方法
+  - 3. 销毁实例
+
+- 单例内置对象：Global、Math
+  - Global 是 ECMAScript 中的全局对象
+  - 全局作用域中定义的变量都会变成 Global 的属性
+  - 浏览器的 window 实现了 Global，但不只有 Global
+
+_对日期的处理：_
+
+[Moment.js -- 经典的时间处理库](https://momentjs.com/)
+
+```js
+// 获取当前时间
+// new Date 返回一个对象
+let now = new Date();
+console.log(now); // Mon Mar 08 2021 01:24:00 GMT+0800 (中国标准时间)
+console.log(typeof now); // object
+
+// 获取当前时间戳
+let time1 = Date.parse(new Date()); // 精确到秒
+let time2 = new Date().valueOf(); // 精确到毫秒
+let time3 = new Date().getTime(); // 精确到毫秒
+// ES5新增API，获取当前毫秒时间戳，返回一个数字
+let start = Date.now();
+console.log(start); // 1615138155922
+console.log(typeof start); // number
+
+// 获取当前月份，0开始计数
+let month = now.getMonth();
+
+// 日期转换
+// 转为时间戳
+Date.parse();
+```
+
+### 2.2 集合引用类型
+
+- Object：对象
+- Array：数组
+- 定型数组：
+- Map：可以像 Object 一样存储键值对
+
+  - Map 可以使用任意数据类型作为键
+  - Map 会维护键值对插入顺序
+  - Map 和 Object 没什么大的差别，处了使用方式不同，Object 的查询性能略好，Map 增、删、改性能更好
+
+- WeakMap
+- Set：允许你存储任何类型的唯一值，<span style="color: #ff0000; font-size: 16px;">Set 中的元素是唯一的</span>
+- WeakSet
+
+```js
+// Set
+let mySet = new Set([1, 2, 3, 1]);
+
+// Set 会忽略重复的值
+console.log(mySet); // {1, 2, 3}
+```
+
+## 3. 引用类型的操作
+
+### 3.1 Array 的操作
+
+> 数组操作是前端数据处理的重点。
+
+Array 应该是 JS 中第二常用的数据类型吧，第一是 Object。
+
+_数组方法不完全汇总：_
+
+![Array method](../_media/array_method.png)
+
+[脑图地址，拿走不谢](https://www.processon.com/view/link/60453082e401fd4f9cbc6f5d)
+
+#### 3.1.1 数组的操作方法
+
+#### 3.1.2 数组去重
+
+_方法 1: 运用 Set 特性_
+
+```js
+const numbers = [2, 3, 4, 4, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 5, 32, 3, 4, 5];
+// new Set去重，... 将 set再次转变为数组
+console.log([...new Set(numbers)]);
+```
+
+#### 3.1.3 数组扁平化
+
+_方法 1: 运用新 API flat()_
+
+[].flat(): 默认参数扁平化深度为 1;
+
+[].flat(Infinity): 展开任意深度.
+
+```js
+const arr1 = [0, 1, 2, [3, [5, 6]]];
+
+console.log(arr1.flat()); // [0, 1, 2, 3, [5, 6]]
+console.log(arr1.flat(Infinity)); // [0, 1, 2, 3, 5, 6]
+```
+
+_方法 2: 运用 forEach 或 for 循环 + 递归_
+
+```js
+function flatten(arr) {
+  const result = [];
+
+  arr.forEach((ele) => {
+    // 递归
+    if (Array.isArray(ele)) {
+      result.push(...flatten(ele));
+      // 跳出递归
+    } else {
+      result.push(ele);
+    }
+  });
+
+  return result;
+}
+```
+
+_方法 3: Generator function_
+
+```js
+function* flatten(array) {
+  for (const item of array) {
+    if (Array.isArray(item)) {
+      yield* flatten(item);
+    } else {
+      yield item;
+    }
+  }
+}
+
+var arr = [1, 2, [3, 4, [5, 6]]];
+const flattened = [...flatten(arr)];
+```
+
+#### 3.1.4 数组排序
+
+_方法 1: 原生方法 sort_
+
+```js
+// 升序排列
+let c = a.sort((a, b) => (a <= b ? -1 : 1));
+```
+
+### 3.2 对象的操作
+
+_定义一个对象：_
+
+```js
+// 字面量定义一个属性
+let obj = {
+  name: "nameIsObj",
+  size: 123,
+};
+```
+
+--- 持续更新中... ---
 
 ## 参考

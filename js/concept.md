@@ -6,7 +6,7 @@
 
 ### 1.1 JavaScript 实现
 
-![JS数据类型](../_media/js_compose.png)
+![JS组成](../_media/js_compose.png)
 
 JavaScript 包括:
 
@@ -350,3 +350,13 @@ DOM 操作示例：
   </script>
 </html>
 ```
+
+## 3.BOM
+
+--- 更新中... ---
+
+## 参考
+
+[MDN](https://developer.mozilla.org/zh-CN/)
+
+《JavaScript 高级程序设计 4》

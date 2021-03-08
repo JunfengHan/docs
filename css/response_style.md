@@ -722,8 +722,6 @@ _效果 ⬇️：_
 
 ![flex](../_media/flex_map.png)
 
---- 未完待续...
-
 ## 参考
 
 [flex 布局的基本概念 --> MDN](https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Flexible_Box_Layout/Basic_Concepts_of_Flexbox)
