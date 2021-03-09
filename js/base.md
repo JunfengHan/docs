@@ -321,6 +321,8 @@ let c = a.sort((a, b) => (a <= b ? -1 : 1));
 
 ### 3.2 对象的操作
 
+#### 3.2.1 对象是什么
+
 _定义一个对象：_
 
 ```js
@@ -329,7 +331,49 @@ let obj = {
   name: "nameIsObj",
   size: 123,
 };
+
+console.dir(obj);
 ```
+
+_打印结果：_
+
+![对象是什么](../_media/what_is_object.png)
+
+我们可以看到，对象 obj 上有这些属性：
+
+- name 和 size: 这是我们创建对象时添加的属性
+- \_\_proto\_\_ : 这是对象自有的属性，用来继承构造函数 Object.prototype 上的属性
+
+对象 obj 继承了哪些属性呢？
+
+- constructor: 就是 Object 构造函数
+  obj.\_\_proto\_\_.constructor === Object.prototype.constructor;
+
+  Object.prototype.constructor === Object;
+
+- hasOwnProperty: 指示对象自身属性中是否具有指定的属性
+
+  obj.hasOwnProperty('name'); // true
+
+  obj.hasOwnProperty('toString'); // false
+
+- isPrototypeOf: 用于测试一个对象是否存在于另一个对象的原型链上
+- propertyIsEnumerable: 检测指定的属性是否可枚举
+- valueOf：返回指定对象的原始值
+  Number、String、Function、Array 等任何 Object 实例都有这个属性
+- toString、toLocaleString：返回一个表示该对象的字符串
+  Number、String、Function、Array 等任何 Object 实例都有这个属性
+
+#### 3.2.2 操作对象
+
+#### Object 构造函数上的方法
+
+- Object.assign(): 分配一个或多个对象到目标对象上
+- Object.keys(): 获取给定对象的自身可枚举属性
+- Object.create()：
+- Object.defineProperties(): 直接在一个对象上定义新的属性或修改现有属性，并返回该对象
+
+...
 
 --- 持续更新中... ---
 
