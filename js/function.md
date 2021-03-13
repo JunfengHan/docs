@@ -256,12 +256,11 @@ _控制台输出结果:_
 - name：函数名
 - prototype：用于挂载函数需要继承的属性和方法,默认属性有：
 
-  - constructor: 指向函数本身
+  - constructor: prototype 自动获取的属性，指向函数本身（这里是 Fn）
 
-  - \_\_proto\_\_：指向 Object.prototype
+  - \_\_proto\_\_：指向它的构造函数的原型对象 (这里就是 Object.prototype)
 
-- \_\_proto\_\_: 浏览器暴露出的指向原型对象\[\[prototype\]\]的属性;
-  指向 Function.prototype 属性
+- \_\_proto\_\_: 浏览器暴露出的指向构造函数的原型对象(这里是 Function.prototype)的属性;
 
 > 说明:函数 sum 是 Function 对象 的实例,sum 的内部\[\[Prototype\]\]指针会被赋值为构造函数的原型对象,但是我们无法访问,所以由 Chrome 暴露出来让我们看到.
 
@@ -323,25 +322,25 @@ _关系图 👇：_
 
 ![function_extend](../_media/function_extend.png)
 
-**结论:** 🌟🌟🌟
+**结论:**
 
 - **函数是一个由 Function 构造函数构建的， 有默认属性的对象**.
 
 我们知道 Function 是个[基本对象](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects),同时也是个构造函数。
 
-_总结：_
+*总结：*🌟🌟🌟
 
 ---
 
-- 1、2、3、4 说明： 对象都继承了 Object.prototype
+- 1、2、3、4 说明： 对象都通过内部指针 \_\_proto\_\_ ([[Prototype]])继承了它们构造函数的原型 Object.prototype
 - 1、3、7、12 说明：函数是对象，且可以直接用“.”操作符设置属性
 - 3、6 说明：普通函数不但继承了 Function 相关属性，而且继承了 Object 相关属性
-- 4 说明：自定义对象 {} 继承了 Object.prototype
-- 5 说明：构造函数 Object 是个函数，且继承了 Function.prototype
-- 5，6，11 说明：任何函数的指针 [[Prototype]] (\_\_proto\_\_) 都指向 Function.prototype,包括全局构造函数 Object、Number 和 Function
-- 2 说明：new 操作出的 obj 继承了它构造函数 prototype 上的属性
+- 4 说明：自定义对象 {} 通过内部指针 \_\_proto\_\_ ([[Prototype]])继承了 Object.prototype
+- 5 说明：构造函数 Object 是个函数，且继承了 Function 的原型对象 Function.prototype
+- 5，6，11 说明：任何函数的指针 \_\_proto\_\_ ([[Prototype]]) 都指向自定义构造函数 Function 的原型 Function.prototype,包括全局构造函数 Object、Number 和 Function 本身
+- 2 说明：new 操作出的 obj 继承了它构造函数原型对象 prototype 上的属性
 - 10 说明: new 运算符操作函数得到对象 obj 的构造函数是该函数
-- 8、9 说明：函数的 prototype 的 constructor 属性指向函数本身
+- 8、9 说明：函数的原型对象 prototype 的 constructor 属性指向函数本身
 
 ---
 
@@ -922,7 +921,7 @@ console.dir(Promise);
 
 我们可以看到，Promise 有 resolve()、reject()、all()等特有的方法。
 
-它的实例继承（prototype 属性）的有 then()、catch()等方法。
+它的原型对象（prototype）的有 then()、catch()等方法，也就是 Promise 实例会继承的方法。
 
 其实，Promise 是 ECMAScript 6 对 Promise/A+规范的完善支持。
 
@@ -990,6 +989,8 @@ callbackHell(0);
 Promise 的等效写法：
 
 ```js
+let x = 0;
+let now = Date.now();
 // 初始化一只兔子，给他安装2个灯，因为已经有一个默认的黄灯了（pending）
 let p1 = new Promise((resolve, reject) => {
   // 制作月饼（结果）
@@ -1009,13 +1010,16 @@ let p1 = new Promise((resolve, reject) => {
   .then((x2) => {
     // 继续做月饼
     let x3 = x2 + 1;
-    console.log("x3:", x3);
+    console.log("result:", x3);
 
     // 看看花了多长时间
     let nowPromise = Date.now();
     let time = nowPromise - now;
     console.log("time:", time);
   });
+
+// -> result: 3
+// -> time: 0
 ```
 
 **1> 构造函数 Promise()**
@@ -1054,9 +1058,9 @@ Promise 会把一个叫做“处理器函数”（executor function）的函数�
 
 这个“处理器函数”接受两个函数——resolve 和 reject ——作为其参数。
 
-当异步任务顺利完成且返回结果值时，会调用 resolve 函数；
+当异步任务顺利完成且返回结果值时，可以调用 resolve 函数并把返回结果作为其参数；
 
-而当异步任务失败且返回失败原因（通常是一个错误对象）时，会调用 reject 函数。
+而当异步任务失败且返回失败原因（通常是一个错误对象）时，可以调用 reject 函数并传递一个错误原因作为其参数。
 
 _如果想要某个函数拥有 promise 功能，怎么办？？_
 

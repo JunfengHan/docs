@@ -89,12 +89,14 @@ console.log(typeof console.log); // function
 
 结论：
 
-- typeof 只能判断基本数据类型（null 除外）
+- typeof 能判断基本数据类型（null 除外）
 - typeof 判断引用类型只能判断出函数为 function,其他引用类型数据都为 object
 
 #### instanceof
 
 > instanceof 运算符用于检测构造函数的 prototype 属性是否出现在某个实例对象的原型链上.
+
+翻译成人话就是，a instanceof Fa,检测 a 是不是 Fa 的实例。
 
 _例：_
 
