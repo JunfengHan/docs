@@ -153,38 +153,108 @@ JSX 在编译时会被 Babel 编译为 React.createElement 方法。
 
 也就是说，这里的 JSX 就是 React.createElement 方法的语法糖。
 
-以下两种示例代码完全等效：
+这也是为什么我们需要在模块中引入 React 这个模块，否则就会报错。
+
+显然，必须引入一个你并没有直接使用的模块，这样做挺麻烦的。
+
+React 17 开始可以不必为了解析 JSX 引用 React 到模块中了，你可以使用新的解析方法。
+
+可以配合 Babel 来使用，简单说就是在配置以下 JSX 解析模式。详情请看[官方博客-介绍全新的 JSX 转换](https://zh-hans.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html)。
 
 ```js
-const element = <h1 className="greeting">Hello, world!</h1>;
+...
+[
+  "@babel/preset-react",
+  {
+    // 使用 automatic 解析 JSX语法
+    runtime: "automatic",
+  },
+],
+...
 ```
 
+模式有两种：<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">classic、</code><code style="color: #708090; background-color: #F5F5F5; font-size: 18px">automatic</code>.
+
+- classic: 将 JSX 解析成 React.createElement
+- automatic: 将 JSX 解析成 (0, \_jsxRuntime.jsx)(）
+
+\_jsxRuntime 是 React17 自带的一个包"react/jsx-runtime"，Babel 会自动帮我们引入。
+
+以下两种示例代码完全等效：
+
+_原生 JSX：_
+
 ```js
-const element = React.createElement(
-  "h1",
-  { className: "greeting" },
-  "Hello, world!"
+<>
+  <h1 className="greeting">Hello, world!</h1>
+  <div>
+    <span>test</span>
+    <span>test</span>
+    <span>test</span>
+  </div>
+</>
+```
+
+_Babel classic 模式解析后：_
+
+```js
+React.createElement(
+  React.Fragment,
+  null,
+  React.createElement(
+    "h1",
+    {
+      className: "greeting",
+    },
+    "Hello, world!"
+  ),
+  React.createElement(
+    "div",
+    null,
+    React.createElement("span", null, "test"),
+    React.createElement("span", null, "test"),
+    React.createElement("span", null, "test")
+  )
 );
 ```
 
-实际最终返回的是一个“React 元素”,它们描述了你希望在屏幕上看到的内容。<span style="color: #ff5050">React 通过读取这些对象，然后使用它们来构建 DOM 以及保持随时更新</span>。
+_Babel automatic 模式解析后：_
 
 ```js
-// 最终返回的“React 元素”
-{
-  $$typeof: [object Symbol] { ... },
-  _owner: null,
-  _store: [object Object] { ... },
-  key: null,
-  props: [object Object] {
-    children: "Hello World!"
-  },
-  ref: null,
-  type: "div"
-}
+var _jsxRuntime = require("react/jsx-runtime");
+
+(0, _jsxRuntime.jsxs)(_jsxRuntime.Fragment, {
+  children: [
+    (0, _jsxRuntime.jsx)("h1", {
+      className: "greeting",
+      children: "Hello, world!",
+    }),
+    (0, _jsxRuntime.jsxs)("div", {
+      children: [
+        (0, _jsxRuntime.jsx)("span", {
+          children: "test",
+        }),
+        (0, _jsxRuntime.jsx)("span", {
+          children: "test",
+        }),
+        (0, _jsxRuntime.jsx)("span", {
+          children: "test",
+        }),
+      ],
+    }),
+  ],
+});
 ```
 
 [Babel 编译 JSX 示例](https://babeljs.io/repl#?browsers=defaults%2C%20not%20ie%2011%2C%20not%20ie_mob%2011&build=&builtIns=false&spec=false&loose=false&code_lz=DwEwlgbgBGILwCIBOB7FAXBA-AUFKAEgKYA2JKUA6ikiSAIQ7AD04EWQA&debug=false&forceAllTransforms=false&shippedProposals=false&circleciRepo=&evaluate=false&fileSize=false&timeTravel=false&sourceType=module&lineWrap=true&presets=env%2Creact%2Cstage-2&prettier=false&targets=&version=7.12.10&externalPlugins=)
+
+React.createElement 实际最终返回的是一个“React Element”,它们描述了你希望在屏幕上看到的内容。<span style="color: #ff5050">React 获取到这些 React Element 后会在 render 阶段做 diff 算法时用</span>。
+
+_最终返回的 React Element_
+
+![react element](../_media/react_jsx_reactElement.png)
+
+可以看到，**最终得到的 React Element 是一个对象，通过 pros 属性的 children 构建出了一个模拟的 DOM 树**。
 
 ### 3.1 JSX 创建 React 元素(源码)
 

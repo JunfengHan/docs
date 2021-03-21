@@ -845,13 +845,16 @@ class Person {
 // 别这样用，反模式
 Person.age = 30;
 
-console.dir(Person);
-
 let p1 = new Person();
 let p2 = new Person();
 
 console.log(p1.colors === p2.colors); // false
-console.log(Person.prototype.getColors()); // ƒ getColors() { return this.colors; }
+console.log(p1.getColors()); // ["black", "white"]
+// 引用 p1.getColors
+let newGetColors = p1.getColors;
+
+// 因为，此时getColors中的this 在非严格模式下是 window，但是 class是使用的严格模式，所以this 为 undefined 🌟🌟
+console.log(newGetColors()); // Uncaught TypeError: Cannot read property 'colors' of undefined
 ```
 
 ### 5.4 类的继承

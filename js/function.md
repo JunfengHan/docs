@@ -109,7 +109,7 @@ _打印结果：_
 - 1. 内存中创建一个简单对象 {}
 - 2. 将新对象内部的 [[Prototype]] 指针赋值为构造函数的 prototype 属性，实现继承
 - 3. 将新对象内部的 [[Prototype]] 的 constructor 属性指向构造函数
-- 4. 构造函数内，this 指向新对象
+- 4. 构造函数内，this 指向新对象实例
 - 5. 执行构造函数内代码（给新对象添加属性）
 - 6. 如果该函数没有返回对象，则返回 this，即返回了新对象
 
@@ -401,7 +401,7 @@ let a = new sum();
 
 为什么说不一定呢？
 
-在绝大多数情况下，<span style="color: #ff0000; font-size: 16px;">函数的调用方式决定了 this 的值（运行时绑定）</span>。
+<span style="color: #ff0000; font-size: 16px;">在绝大多数情况下，函数的调用方式决定了 this 的值（运行时绑定）</span>。
 
 记住这句话，答应我，一定要记住。
 
@@ -487,7 +487,7 @@ new Example(); // this: {name: "Name1"}
 
 **结论**：
 
-- 在类的构造函数中，<span style="color: #ff0000; font-size: 16px;">this 指向新对象</span>，类中所有<code style="color: #708090; background-color: #F5F5F5;">非静态的方法</code>都会被添加到 this 的原型中。
+- 在类的构造函数中，<span style="color: #ff0000; font-size: 16px;">this 指向新对象实例</span>，类中所有<code style="color: #708090; background-color: #F5F5F5;">非静态的方法</code>都会被添加到 this 的原型中。
 
 #### 4.1.4 派生类上下文中的 this
 
@@ -496,6 +496,10 @@ class Base {
   constructor() {
     this.name = "Base";
   }
+
+  getName() {
+    return this.name;
+  }
 }
 
 class Good extends Base {
@@ -503,7 +507,7 @@ class Good extends Base {
     // 相当于 super.constructor() 调用了Base 中的 constructor
     // super() 会生成一个 this 绑定，相当于 this = new Base()
     super();
-    console.log(this); // this = new Base();
+    console.log(this); // {name: "Base"}
     this.sex = "Boy";
   }
 }
@@ -1113,7 +1117,140 @@ myFetch("story.json").then(
 );
 ```
 
-**2> 神奇的 then()**
+**2> Promise.resolve() 方法**
+
+_语法：_
+
+> Promise.resole(value)
+
+_返回值：_
+
+> promise
+
+value 可以是以下值：
+
+- 任何合法的 JS 值
+- thenable(带有 then 方法的对象)
+- promise
+
+Promise.resolve 会根据 value 的类型做不同的解析处理。
+
+如果是个 thenable，返回的 promise 会“跟随”这个 thenable 对象，采用他的最终状态；
+
+如果是个 promise,则返回这个 promise;
+
+否则，返回的 promise 将以此值完成。
+
+_thenable:_
+
+```js
+let p1 = Promise.resolve({
+  then: function (onFulfill, onReject) {
+    // onFulfill 和 onReject 分别处理履行和是拒绝
+    onFulfill("onFulfilled");
+    // onReject("onRejected");
+  },
+});
+
+p1.then(
+  // 接收履行结果
+  (res) => {
+    console.log(res);
+  },
+  // 接收拒绝结果
+  (rej) => {
+    console.log(rej);
+  }
+);
+// onFulfilled
+```
+
+_promise:_
+
+```js
+let p1 = new Promise((resolve, reject) => {
+  resolve(123);
+});
+
+// Promise.resolve() 直接将 p1 返回
+let p2 = Promise.resolve(p1);
+
+console.log(p2 === p1); // true
+
+p2.then((res) => {
+  console.log(res);
+});
+// 123
+```
+
+_普通值：_
+
+```js
+// promise将以 1 完成
+let p1 = Promise.resolve(1);
+
+p1.then((res) => {
+  console.log(res);
+});
+// 1
+```
+
+**3> 处理器函数的 resolve()**
+
+处理器函数的 resolve(value) 方法会解析 value。
+
+解析规则和 Promise.resolve() 一样。
+
+需要注意的是：<span style="color: #ff0000; font-size: 16px;">resolve(promise) 时会将 promise 动态地插入到链式调用中</span>。
+
+```js
+new Promise((resolve, reject) => {
+  console.log(1);
+  resolve(Promise.resolve(5));
+})
+  .then((res) => {
+    console.log(res);
+  })
+  .then(() => {
+    console.log(6);
+  });
+
+// 相当于上面的代码，resolve(Promise.resolve(5)) 被替换
+// new Promise((resolve, reject) => {
+//   console.log(1);
+//   resolve();
+// })
+//   .then()
+//   .then(() => {
+//     return 5;
+//   })
+//   .then((res) => {
+//     console.log(res);
+//   })
+//   .then(() => {
+//     console.log(6);
+//   });
+
+new Promise((resolve, reject) => {
+  console.log(2);
+  resolve();
+})
+  .then(() => {
+    console.log(3);
+  })
+  .then(() => {
+    console.log(4);
+  });
+
+// 1
+// 2
+// 3
+// 4
+// 5
+// 6
+```
+
+**4> 神奇的 then()**
 
 > then() 不是 myFetch 的终点，我们可以链式调用 then()来 <code style="color: #708090; background-color: #F5F5F5;">变换值</code> 或陆续运行额外的 <code style="color: #708090; background-color: #F5F5F5;">异步操作</code>。
 
@@ -1189,7 +1326,7 @@ getJSON("story.json")
 
 ---
 
-**3> 错误处理**
+**5> 错误处理**
 
 > then() 接受两个函数作为参数，一个处理成功时调用，一个失败时调用
 
