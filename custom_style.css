@@ -1,0 +1,11 @@
+li.level-1 p a {
+  font-size: 18px !important;
+}
+
+li.open p.open a {
+  color: yellowgreen !important;
+}
+
+li.file.open {
+  background-color: #eee !important;
+}
