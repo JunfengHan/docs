@@ -17,6 +17,10 @@
 
   - [TypeScript 基础](/ts/base.md "TypeScript 学习笔记")
 
+- [浏览器](/browser/ "浏览器")
+
+  - [浏览器重排（reflow）与重绘制（repaint）](/browser/reflow_repaint.md "浏览器 重排 reflow 重绘 repaint")
+
 - [React](/react/ "react 学习 教程 源码")
 
   - [React 理念](/react/react_base.md "react 理念")
