@@ -92,8 +92,8 @@ Virtual DOM 的新架构 Fiber Reconciler（包含了 Diff 算法）才是 React
   >
   > 虚拟 DOM 不只是一个缓冲层，里面涉及大量算法，你可以使用 hash 或 KMP (Knuth-Morris-Pratt 算法），确保更新最少。
 
-## 6. React 是用来干嘛的？什么时候需要用它
-
 ## 参考
 
 详细论述了基于 JSON 的 VirtualDOM:[Your benefits of working with JSON based virtual DOM](https://medium.com/dataseries/your-benefits-of-working-with-json-based-virtual-dom-7318a983da9e)
+
+解释了 Virtual DOM 真正的优点是让开发者更方便运用 DOM，而不是速度[The Real Benefits of the Virtual DOM in React.js]()

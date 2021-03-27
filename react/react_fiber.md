@@ -2,7 +2,17 @@
 
 Fiber 是践行代数效应的产物。
 
-Fiber 一般指的是 Fiber 架构，fiber 代表数据结构。
+Fiber 是 React16 中新增的协调引擎.
+
+fiber 是一个对象，指<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Fiber 节点</code>（Fiber Node 实例）包含了组件相关的信息，和组件实例有对应关系，通过 stateNode 跟踪实例。
+
+_一个 fiber node:_
+
+```js
+{
+  child, stateNode, siblings, alternate, return, type, key
+}
+```
 
 ## 1. 为何需要 Fiber
 
@@ -132,3 +142,13 @@ _更新组件渲染 fiber 树：_
 ![react_fiber_node](../_media/react_fiber_workInProgress.png)
 
 **将 CurrentFiber 和更新所生成的 React Element（一般根据 JSX 生成）做对比，生成新的 workProgressFiber 的算法就是 <span style="color: #ff0000; font-size: 16px;">diff 算法</span>。**🌟🌟🌟
+
+链接：
+
+[Inside Fiber: an in-depth overview of the new reconciliation algorithm in React](https://blog.ag-grid.com/inside-fiber-an-in-depth-overview-of-the-new-reconciliation-algorithm-in-react/)
+
+[Virtual DOM 及内核 -- React 官网](https://zh-hans.reactjs.org/docs/faq-internals.html)
+
+react 核心团队成员文章：[React Fiber Architecture](https://github.com/acdlite/react-fiber-architecture)
+
+## 参考

@@ -2,6 +2,8 @@
 
 > 本文会根据官方文档的介绍顺序来尝试读源码。先分析 react 的理念显然是有必要的，如果不知道理念的话读别人写的代码会很累。不知道原作者的理念的话读起来一切都是在猜。
 
+![React介绍](../_media/react_what_is.png)
+
 ## 1.React 是做什么的？
 
 “用于构建用户界面的 JavaScript 库”，官方文档是这样给 React 定义的。
@@ -115,5 +117,7 @@ React 给出的答案是<span style="color: #ff9966">将人机交互研究的结
 而在源码内部，为了支持这些特性，同样需要将同步的更新变为可中断的异步更新。
 
 ## 参考
+
+[React 官网](https://zh-hans.reactjs.org/)
 
 [React 技术揭秘](https://react.iamkasong.com/preparation/idea.html)

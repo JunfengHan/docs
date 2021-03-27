@@ -4,6 +4,7 @@
 
 - 源码系列文章基于 React 17.0.1
 - 为了阅读体验，源码会截取一小部分
+- 这里只是粗略地读了一遍，可能有很多细节每来得及理清楚，后面会不断补充
 
 ## 前置知识
 
@@ -942,7 +943,7 @@ function commitRootImpl(root, renderPriorityLevel) {
   }
 
   // Check if there are any effects in the whole tree.
-  // 检查整个树中是否有任何效果
+  // 检查整个树中是否有任何 effects
   const subtreeHasEffects =
     (finishedWork.subtreeFlags &
       (BeforeMutationMask | MutationMask | LayoutMask | PassiveMask)) !==
@@ -1103,25 +1104,13 @@ function commitRootImpl(root, renderPriorityLevel) {
 - 1. 主要做一些变量赋值，状态重置的工作
 - 2. 调度 useEffect
 
-**before mutation:**
+#### 4.3.1 before mutation 阶段
+
+**主要功能：**
 
 - 1. 处理 DOM 节点渲染/删除后的 autoFocus、blur 逻辑
 
 - 2. 调用 getSnapshotBeforeUpdate 生命周期钩子
-
-**mutation:**
-
-- 1. 执行 DOM 操作，页面视图发生变化
-
-**layout:**
-
-- **layout 之后:**
-
-- 1. useEffect 相关的处理
-- 2. 性能追踪相关
-- 3. 在 commit 阶段会触发一些生命周期钩子（如 componentDidXXX）和 hook（如 useLayoutEffect、useEffect）。
-
-#### 4.3.1 before mutation 阶段
 
 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">before mutation 阶段</code>从 [commitBeforeMutationEffects](https://github.com/facebook/react/blob/master/packages/react-reconciler/src/ReactFiberCommitWork.old.js#L270)开始。
 
@@ -1216,7 +1205,49 @@ mutation 阶段从 commitMutationEffects 方法开始.
 
 **主要函数调用流程：**
 
-commitMutationEffects -> commitMutationEffects_complete -> commitMutationEffectsOnFiber.
+commitMutationEffects -> commitDeletion/commitMutationEffects_complete -> commitMutationEffectsOnFiber.
+
+_处理需要删除的元素：_
+
+```js
+...
+if (deletions !== null) {
+  for (var i = 0; i < deletions.length; i++) {
+    var childToDelete = deletions[i];
+
+    {
+      invokeGuardedCallback(null, commitDeletion, null, root, childToDelete, fiber, renderPriorityLevel);
+
+      if (hasCaughtError()) {
+        var error = clearCaughtError();
+        captureCommitPhaseError(childToDelete, fiber, error);
+      }
+    }
+  }
+}
+...
+```
+
+ClassComponent 的删除流程：
+
+commitDeletion -> unmountHostComponents -> commitUnmount -> safelyCallComponentWillUnmount -> callComponentWillUnmountWithTimer
+
+_删除时，classComponent 的卸载：_
+
+生命周期钩子 🪝 componentWillUnmount 会被调用。
+
+```js
+var callComponentWillUnmountWithTimer = function (current, instance) {
+  instance.props = current.memoizedProps;
+  instance.state = current.memoizedState;
+
+  {
+    instance.componentWillUnmount();
+  }
+};
+```
+
+_处理 mutation 的元素：_
 
 ```js
 function commitMutationEffects_complete(
@@ -1456,17 +1487,39 @@ function insertOrAppendPlacementNode(
 }
 ```
 
-文章更新 log: 2021.03.21 初步完成文章
-
 #### 4.3.3 layout 阶段
+
+首先要知道，在 layout 阶段之前已经改变了 root.current 的指向。
+
+```js
+root.current = finishedWork;
+```
+
+**因为该阶段的代码都是在 DOM 渲染完成（mutation 阶段完成）后执行的。**
+
+**该阶段触发的生命周期钩子和 hook 可以直接访问到已经改变后的 DOM.**
+
+layout 阶段从 commitLayoutEffects() 开始。
+
+函数调用顺序：
+
+commitLayoutEffects ->
+commitLayoutEffects_begin ->
+commitLayoutMountEffects_complete ->
+commitLayoutEffectOnFiber
+
+**commitLayoutEffectOnFiber 方法：**
+
+会根据 fiber.tag 对不同类型的节点分别处理.
+
+- <span style="color: #ff0000; font-size: 16px;">执行了 ClassComponent 的生命周期钩子：</span>
+
+  componentDidMount（mount 时执行） 或 componentDidUpdate（update 时执行）
 
 ## 参考
 
 - 卡颂老师的 React 源码文章[React 技术揭秘](https://react.iamkasong.com/#%E5%AF%BC%E5%AD%A6%E8%A7%86%E9%A2%91)
+
 - 你可能非常有必要读一下[stack reconciler 实现说明](https://zh-hans.reactjs.org/docs/implementation-notes.html)
-- React 团队成员的文章，高屋建瓴[react-fiber-architecture](https://github.com/acdlite/react-fiber-architecture)
+
 - React 官网推荐文章[an in-depth overview of the new reconciliation algorithm in React](https://blog.ag-grid.com/inside-fiber-an-in-depth-overview-of-the-new-reconciliation-algorithm-in-react/)
-
-```
-
-```
