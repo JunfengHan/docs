@@ -2,7 +2,68 @@
 
 ## 1. 本地安装 mongoDB
 
+macOS
+
+使用 Homebrew 安装：
+
+_Tap the MongoDB Home-brew Tap_
+
+```bash
+brew tap mongodb/brew
+
+brew install mongodb-community@4.2
+```
+
+除了安装二进制文件，安装还创建了如下：
+
+- mongod 配置文件 (/usr/local/etc/mongod.conf)
+- 日志目录路径(/usr/local/var/log/mongodb)
+- 数据目录路径(/usr/local/var/mongodb)
+
 ## 2. 启动 mongo 服务
+
+运行时会使用安装 MongoDB 时创建的配置文件（/usr/local/etc/mongod.conf）, 当然，我们可以自己配置这个文件。
+
+[配置详情](https://docs.mongodb.com/manual/reference/configuration-options/)
+
+- 运行 MongoDB 作为 macOS 服务
+
+  ```bash
+  brew services start mongodb-community@4.2
+  ```
+
+  停止服务:
+
+  ```bash
+  brew services stop mongodb-community@4.2
+  ```
+
+- 手动运行 MongoDB 作为一个后台进程
+
+  ```bash
+  mongod --config /usr/local/etc/mongod.conf --fork
+  ```
+
+  停止 MongoDB 后台服务 -- 本地或认证的连接
+
+  ```bash
+  db.adminCommand({ shutdown: 1 })
+  ```
+
+  停止 MongoDB 后台服务 -- 副本集
+
+  ```bash
+  db.adminCommand({ shutdown: 1, force: true })
+  ```
+
+**查看是否有 mongod 程序运行:**
+
+```bash
+ps aux | grep -v grep | grep mongod
+
+# 查到pid后，直接关闭mongod进程
+kill -pid
+```
 
 ## 3. mongo Shell 操作 mongo 服务
 
