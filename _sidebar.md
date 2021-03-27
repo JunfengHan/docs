@@ -19,7 +19,7 @@
 
 - [浏览器](/browser/ "浏览器")
 
-  - [浏览器重排（reflow）与重绘制（repaint）](/browser/reflow_repaint.md "浏览器 重排 reflow 重绘 repaint")
+  - [DOM 操作与重排(reflow)、重绘(repaint)](/browser/reflow_repaint.md "浏览器 重排 reflow 重绘 repaint")
 
 - [React](/react/ "react 学习 教程 源码")
 
@@ -53,4 +53,12 @@
   - [Webpack 实战与配置详解](/projectBuild/webpack_case.md "webpack")
 
 - [方案](/scheme/ "方案")
+
   - [无状态登录 JWT](/scheme/JWT.md "无状态登录")
+  - [文件上传](/scheme/upload.md "文件上传 upload")
+
+  <!-- - [React 源码(三)事件](/react/react_code5.md "react 源码 事件 合成事件")
+  - [React 源码(四)生命周期](/react/react_code5.md "react 源码 生命周期")
+  - [React 源码(五)diff 算法](/react/react_code5.md "react 源码 diff算法")
+  - [React 源码(六)hooks](/react/react_code6.md "react 源码 hooks")
+  - [React 项目中的性能优化](/react/react_style.md "react 性能") -->
