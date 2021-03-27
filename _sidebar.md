@@ -10,6 +10,8 @@
   - [JS 深拷贝与浅拷贝](/js/jscopy.md "JavaScript 深拷贝与浅拷贝")
   - [JS 中的面向对象、继承和 Class(类)](/js/object.md "JavaScript Object 对象")
   - [JS 函数](/js/function.md "JavaScript function 函数")
+  - [Event Loop (事件循环)](/js/event_loop.md "JavaScript event loop 事件循环")
+  - [内存管理](/js/memory.md "JavaScript 内存管理")
 
 - [TypeScript](/ts/ "TypeScript 学习")
 

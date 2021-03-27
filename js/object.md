@@ -885,24 +885,6 @@ super 是 [[HomeObject]] 的原型。
 - 4. super 可以给父类构造函数传参
 - 5. 派生类中如果显示定义了 constructor 则必须调用 super(),要么在 constructor 中返回一个对象
 
-### 5.9 手动实现一个类
-
-这个类有哪些特征？
-
-- 一个 constructor 函数自动执行
-- 可以实现继承，不能有副作用
-
-```js
-function MyClass() {
-  this.Super = function (arguments) {};
-}
-
-let subClass = MyClass(function () {
-  // 调用父类的实例，不传的话父类要自己调用
-  this.Super(arguments);
-});
-```
-
 ## 参看
 
 [Object](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object)
