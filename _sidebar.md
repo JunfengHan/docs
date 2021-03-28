@@ -30,6 +30,7 @@
   - [一文读懂 React Hook](/react/react_hooks.md "react Hooks")
   - [React 源码(一)整体流程](/react/react_code1.md "react 源码 初始化 渲染流程")
   - [React 源码(二)视图更新](/react/react_code4.md "react 源码 视图更新 细节")
+  - [React 生命周期（含源码分析）](/react/react_lifecycle.md "react 生命周期")
   - [一次搞懂 React Router（含源码分析）](/react/react_router.md "react router 路由 源码")
   - [React 项目中的样式处理](/react/react_style.md "react CSS Modules 样式 模块化")
   - [React 问答](/react/react_ask.md "react 问答 源码")

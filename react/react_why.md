@@ -16,11 +16,27 @@
 
 ## 1. React 是什么
 
-**React 是一个前端 JavaScript 库。**
+**React 是一个前端 JavaScript 视图库。**
 
 它不是框架，和 React-Router、Redux 等结合起来可以组成一个前端框架。
 
-## 2. React 架构组成
+## 2. React 为什么使用 JSX？
+
+JSX 只是个语法糖，会被转译为 React.cerateElement() 函数。
+
+React 创造并使用 JSX 主要是为了 **“关注点分离”**，另一个优点是 **“像 HTML 一样，简洁”**。
+
+关注点分离价值在于：**简化程序的开发与维护**。
+
+能够事后修改一段代码，而无需知道其他部分的细节。
+
+**为何不用模板？**
+
+模版会引入很多其他概念，增加难度，不易读。
+
+模板字符串、JXON 等语法提示效果差。
+
+## 3. React 架构组成
 
 > React 官方并没有说自己的架构组成是什么，React 团队成员的演讲和源码中的注释都给出了答案。
 
@@ -29,7 +45,7 @@ scheduler 调度器
 reconciler 协调器
 renderer: 渲染器
 
-## 3. React 基本工作原理
+## 4. React 基本工作原理
 
 <span style="color: #ff0000; font-size: 16px;">React 的基本思维模式是每次有变动就整个重新渲染整个应用</span>。
 
@@ -43,7 +59,7 @@ renderer: 渲染器
 
 **他们都会导致整个应用重新渲染**。
 
-## 4. 每次有变动就重新渲染整个应用，效率岂不是很低？
+## 5. 每次有变动就重新渲染整个应用，效率岂不是很低？
 
 一般不会。
 
@@ -63,7 +79,7 @@ React 想要做的是让用户感觉到“更快”。
 
 ![react介绍](../_media/react_compare_other.png)
 
-## 5. Virtual DOM 是什么，让 React 更快吗
+## 6. Virtual DOM 是什么，让 React 更快吗
 
 > 我觉得不应该这样问，应该问 Virtual DOM 是如何工作的。
 
