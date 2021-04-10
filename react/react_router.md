@@ -752,7 +752,7 @@ var Switch =
 
 ### 9.6 useHistory
 
-useHistory 是一个钩子函数，能帮我们获取到 historyContext 的值。
+[useHistory](https://reactrouter.com/web/api/Hooks/usehistory) 是一个钩子函数，能帮我们获取到 historyContext 的值。
 
 ```js
 function useHistory() {
@@ -772,6 +772,26 @@ function useHistory() {
 **结论：**
 
 > useHistory 主要作用是 获取并订阅 historyContext。
+
+_useHistory() 使用案例：_
+
+```js
+import { useHistory } from "react-router-dom";
+
+function HomeButton() {
+  let history = useHistory();
+
+  function handleClick() {
+    history.push("/home");
+  }
+
+  return (
+    <button type="button" onClick={handleClick}>
+      Go home
+    </button>
+  );
+}
+```
 
 ## 10. react-router-dom 是如何做的（源码分析）
 

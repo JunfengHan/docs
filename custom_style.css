@@ -9,3 +9,7 @@ li.open p.open a {
 li.file.open {
   background-color: #eee !important;
 }
+
+article h4 {
+  background-color: #eee;
+}

@@ -9,7 +9,7 @@
 
 ![react_lifecycle](../_media/react_lifecycle.png)
 
-## 1. 什么是 React 生命周期函数
+## 1. 什么是 React 生命周期方法
 
 React 的 **Class Component** 的在 render、commit 各个阶段会调用特定的方法，它们就是 React **Class Component** 的<span style="color: #ff0000; font-size: 16px;">生命周期方法</span>。
 

@@ -29,6 +29,12 @@
 
 ## 2. 子组件 -> 父子组
 
+![react组件间通信](../_media/react_message.png)
+
+Redux 用自己的方式实现了应用的**全局状态管理**。
+
+![react组件间通信](../_media/react_redux_message.png)
+
 ## 3. 兄弟组件之间
 
 ## 4. 无嵌套的组件间通信

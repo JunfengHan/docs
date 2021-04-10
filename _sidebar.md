@@ -17,6 +17,11 @@
 
   - [TypeScript 基础](/ts/base.md "TypeScript 学习笔记")
 
+- [算法与数据结构](/algorithmStructure/ "算法 数据结构")
+
+  - [算法](/algorithmStructure/algorithm.md "算法")
+  - [数据结构](/algorithmStructure/structure.md "数据结构")
+
 - [浏览器](/browser/ "浏览器")
 
   - [DOM 操作与重排(reflow)、重绘(repaint)](/browser/reflow_repaint.md "浏览器 重排 reflow 重绘 repaint")
@@ -32,8 +37,13 @@
   - [React 源码(二)视图更新](/react/react_code4.md "react 源码 视图更新 细节")
   - [React 生命周期（含源码分析）](/react/react_lifecycle.md "react 生命周期")
   - [一次搞懂 React Router（含源码分析）](/react/react_router.md "react router 路由 源码")
+  - [Redux](/react/react_redux.md "react redux 状态管理")
   - [React 项目中的样式处理](/react/react_style.md "react CSS Modules 样式 模块化")
   - [React 问答](/react/react_ask.md "react 问答 源码")
+
+- [NodeJS](/node/ "nodeJs")
+
+  - [深入了解 NodeJs](/node/base.md "认识 Node.js")
 
 - [服务器与数据库](/server/ "服务器")
 
@@ -57,6 +67,8 @@
 
   - [无状态登录 JWT](/scheme/JWT.md "无状态登录")
   - [文件上传](/scheme/upload.md "文件上传 upload")
+  - [阿里云 OSS 文件上传](/scheme/oss.md "阿里云文件上传 upload OSS")
+  - [阿里云视频点播（OSS）](/scheme/vod.md "视频点播")
 
   <!-- - [React 源码(三)事件](/react/react_code5.md "react 源码 事件 合成事件")
   - [React 源码(四)生命周期](/react/react_code5.md "react 源码 生命周期")

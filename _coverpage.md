@@ -8,5 +8,6 @@
 - `互联网开发周边相关`
 - `技术、产品、创业Idea交流`
 
-[GitHub](https://github.com/JunfengHan/docs)
+<!-- [GitHub](https://github.com/JunfengHan/docs) -->
+
 [Get Started](/?id=概览)

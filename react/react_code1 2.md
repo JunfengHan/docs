@@ -1,9 +1,14 @@
-# React 源码(一)初始化整体流程
+# React 源码(一) 整体流程
 
 ## 说明
 
 - 源码系列文章基于 React 17.0.1
-- 源码会截图一小部分，否则会影响阅读
+- 为了阅读体验，源码会截取一小部分
+- 这里只是粗略地读了一遍，可能有很多细节每来得及理清楚，后面会不断补充
+
+## 前置知识
+
+- 需要了解源码文件目录请看[源码概览](https://zh-hans.reactjs.org/docs/codebase-overview.html)
 
 ## 1. 我是如何看源码的
 
@@ -23,7 +28,7 @@
 
 ```shell
 npx create-react-app react-code
-cd my-app
+cd react-code
 npm start
 ```
 
@@ -278,6 +283,60 @@ function scheduleUpdateOnFiber(fiber, lane, eventTime) {
 - commitRoot()：**启动 commit 阶段， 将获取的 Fiber 树渲染到页面**
 
 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">renderRootSync</code>和<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">commitRoot</code> 是同步执行的，先执行<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">renderRootSync</code>，协调器工作（render 阶段）完成后得到要更新的结果，然后<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">commitRoot</code>做渲染（commit 阶段）工作。
+
+```js
+function performSyncWorkOnRoot(root) {
+  if (!((executionContext & (RenderContext | CommitContext)) === NoContext)) {
+    {
+      throw Error("Should not already be working.");
+    }
+  }
+
+  flushPassiveEffects();
+  var lanes;
+  var exitStatus;
+
+  // 优化处理，继续渲染一棵未完成的树
+  if (
+    root === workInProgressRoot &&
+    includesSomeLane(root.expiredLanes, workInProgressRootRenderLanes)
+  ) {
+    lanes = workInProgressRootRenderLanes;
+    exitStatus = renderRootSync(root, lanes);
+  } else {
+    // 正常的 mount 和 update执行这里
+    lanes = getNextLanes(root, NoLanes);
+
+    {
+      var nextLanesPriority = returnNextLanesPriority();
+
+      if (nextLanesPriority < InputDiscreteLanePriority) {
+        return null;
+      }
+    }
+    // 启动协调器（render 阶段）
+    exitStatus = renderRootSync(root, lanes);
+  }
+
+  // 错误处理
+  if (root.tag !== LegacyRoot && exitStatus === RootErrored) {
+    ...
+    // If something threw an error, try rendering one more time.
+  }
+
+  ...
+  // We now have a consistent tree. Because this is a sync render, we will commit it even if something suspended.
+  // 翻译下官网注释：现在我们得到了一个一致的 Fiber树. 因为渲染是同步进行的，就算有要暂停地方，我们仍要 commit 它。
+  var finishedWork = root.current.alternate;
+  root.finishedWork = finishedWork;
+  root.finishedLanes = lanes;
+  // 启动渲染器（commit阶段）
+  commitRoot(root);
+
+  ensureRootIsScheduled(root, now());
+  return null;
+}
+```
 
 #### 4.2.2 执行 renderRootSync 函数
 
@@ -675,7 +734,7 @@ if (next === null) {
 
 _beginWork 流程图：_
 
-> （来自-卡颂) 这张图画的挺好，后面有时间自己画一个更详细点的
+> （来自-卡颂) 这张图画的挺好，红色为我的标注，后面有时间自己画一个更详细点的
 
 ![beginWork 流程图](../_media/react_beginWork.png)
 
@@ -801,10 +860,666 @@ function completeWork(
 
 _completeWork 流程图：_
 
-> （来自-卡颂) 这张图画的挺好，后面有时间自己画一个更详细点的
+> （来自-卡颂) 这张图画的挺好，红色为我的标注，后面有时间自己画一个更详细点的
 
 ![completeWork 流程图](../_media/react_completeWork.png)
 
 ### 4.3 渲染器（commit 阶段）
 
-渲染器拿到需要渲染的 Fiber 树（虚拟 DOM），将其渲染到页面。
+**渲染器（commit 阶段）**的主要工作是将 Fiber 树（虚拟 DOM）渲染到页面。
+
+渲染器的工作可以分为三个阶段：
+
+- before mutation 阶段（执行 DOM 操作前）
+- mutation 阶段（执行 DOM 操作）
+- layout 阶段（执行 DOM 操作后）
+
+这三个阶段之外还做了一些额外工作，如 useEffect 触发、优先级重置、ref 绑定/解绑等。
+
+【4.2.1 章节中的 performSyncWorkOnRoot 函数】里完成 render 阶段的工作（执行 renderRootSync）后调用 commitRoot 方法，
+
+最终它会调用 commitRootImpl 方法。
+
+启动 commit 阶段。
+
+_源码中的 commitRootImpl 方法_
+
+```js
+// root：fiberRootNode
+// renderPriorityLevel: 优先级
+function commitRootImpl(root, renderPriorityLevel) {
+  // ------------------------ before mutation 之前
+  do {
+    // `flushPassiveEffects`会在最后调用`flushSyncUpdateQueue`，
+    // 这意味着`flushPassiveEffects`有时会导致额外的被动效果，如触发useEffect回调与其他同步任务
+    // 所以我们需要一直循环刷新，直到没有更多待处理的效果
+    flushPassiveEffects();
+  } while (rootWithPendingPassiveEffects !== null);
+  flushRenderPhaseStrictModeWarningsInDEV();
+
+  ...
+  // root.finishedWork 指当前应用的 rootFiber 🌟
+  const finishedWork = root.finishedWork;
+  const lanes = root.finishedLanes;
+
+  ...
+  root.finishedWork = null;
+  root.finishedLanes = NoLanes;
+  ...
+
+  // 重置Scheduler绑定的回调函数
+  root.callbackNode = null;
+  root.callbackPriority = NoLanePriority;
+
+  let remainingLanes = mergeLanes(finishedWork.lanes, finishedWork.childLanes);
+  // 重置优先级相关变量
+  markRootFinished(root, remainingLanes);
+
+  // 重置全局变量
+  if (root === workInProgressRoot) {
+    // We can reset these now that they are finished.
+    workInProgressRoot = null;
+    workInProgress = null;
+    workInProgressRootRenderLanes = NoLanes;
+  } else {
+  }
+
+  // If there are pending passive effects, schedule a callback to process them.
+  // 如果有待处理的被动效果，安排回调处理.
+  // Do this as early as possible, so it is queued before anything else that might get scheduled in the commit phase.
+  // 尽可能早地这样做，这样它就会插入 commit阶段 可能被安排的其他事情的 队列之前
+  // 调度 useEffect 🪝🪝
+  if (
+    (finishedWork.subtreeFlags & PassiveMask) !== NoFlags ||
+    (finishedWork.flags & PassiveMask) !== NoFlags
+  ) {
+    if (!rootDoesHavePassiveEffects) {
+      rootDoesHavePassiveEffects = true;
+      scheduleCallback(NormalSchedulerPriority, () => {
+        flushPassiveEffects();
+        return null;
+      });
+    }
+  }
+
+  // Check if there are any effects in the whole tree.
+  // 检查整个树中是否有任何 effects
+  const subtreeHasEffects =
+    (finishedWork.subtreeFlags &
+      (BeforeMutationMask | MutationMask | LayoutMask | PassiveMask)) !==
+    NoFlags;
+  const rootHasEffect =
+    (finishedWork.flags &
+      (BeforeMutationMask | MutationMask | LayoutMask | PassiveMask)) !==
+    NoFlags;
+
+  // 处理有 effects 的情况
+  if (subtreeHasEffects || rootHasEffect) {
+    ...
+
+    // Reset this to null before calling lifecycles
+    // 在调用 lifecycles 之前，将其重置为 null
+    ReactCurrentOwner.current = null;
+
+    /*
+     * 官方注释：
+     * commit阶段 分为几个子阶段
+     * 我们对每个阶段的 effect list 进行单独的传递：所有的 mutation effects 在所有 layout effects 之前，以此类推
+     */
+
+    // ------------------------ before mutation 阶段----------------------------------
+
+
+    // 我们在 mutation 之前使用这个阶段来读取 host tree 的状态
+    // 调用 getSnapshotBeforeUpdate
+    const shouldFireAfterActiveInstanceBlur = commitBeforeMutationEffects(
+      root,
+      finishedWork
+    );
+
+    ...
+
+    // ------------------------ mutation 阶段----------------------------------
+
+    // mutate host tree.
+    // 页面视图更新在这个阶段 🌟🌟🌟
+    commitMutationEffects(root, renderPriorityLevel, finishedWork);
+
+    if (shouldFireAfterActiveInstanceBlur) {
+      afterActiveInstanceBlur();
+    }
+    resetAfterCommit(root.containerInfo);
+
+    // The work-in-progress tree is now the current tree. This must come after
+    // the mutation phase, so that the previous tree is still current during
+    // componentWillUnmount, but before the layout phase, so that the finished
+    // work is current during componentDidMount/Update.
+    root.current = finishedWork;
+
+    // ------------------------ layout 阶段----------------------------------
+
+    // 调用副作用（effects） 在 host tree mutation之后读取它
+    // 这阶段主要用来完成 layout（布局）
+    // 但由于传统原因，类组件的 🌟生命周期也会在这里启动🌟
+    ...
+    commitLayoutEffects(finishedWork, root, lanes);
+    ...
+
+    // Tell Scheduler to yield at the end of the frame, so the browser has an opportunity to paint.
+    // 告诉 Scheduler 在帧结束时让步，这样浏览器就有机会绘制
+    requestPaint();
+
+    if (enableSchedulerTracing) {
+      popInteractions(((prevInteractions: any): Set<Interaction>));
+    }
+    executionContext = prevExecutionContext;
+
+    if (previousLanePriority != null) {
+      // Reset the priority to the previous non-sync value.
+      setCurrentUpdateLanePriority(previousLanePriority);
+    }
+  } else {
+    // No effects.
+    // 没有副作用直接切换 current 指向 finishedWork
+    root.current = finishedWork;
+    ...
+  }
+
+  // ------------------------ layout 阶段之后 做的其他工作
+
+  const rootDidHavePassiveEffects = rootDoesHavePassiveEffects;
+
+  // useEffect相关
+  if (rootDoesHavePassiveEffects) {
+    // This commit has passive effects. Stash a reference to them. But don't
+    // schedule a callback until after flushing layout work.
+    rootDoesHavePassiveEffects = false;
+    rootWithPendingPassiveEffects = root;
+    pendingPassiveEffectsLanes = lanes;
+    pendingPassiveEffectsRenderPriority =
+      renderPriorityLevel === NoLanePriority
+        ? DefaultLanePriority
+        : renderPriorityLevel;
+  }
+
+  // Read this again, since an effect might have updated it
+  remainingLanes = root.pendingLanes;
+
+  // 性能优化相关
+  if (remainingLanes !== NoLanes) {
+    ...
+  } else {
+    legacyErrorBoundariesThatAlreadyFailed = null;
+  }
+
+  // 性能优化相关
+  if (enableSchedulerTracing) {
+    if (!rootDidHavePassiveEffects) {
+      finishPendingInteractions(root, lanes);
+    }
+  }
+
+  // 检测无限循环的同步任务
+  if (includesSomeLane(remainingLanes, (SyncLane: Lane))) {
+    ...
+  } else {
+    nestedUpdateCount = 0;
+  }
+
+  ...
+
+  // Always call this before exiting `commitRoot`, to ensure that any additional work on this root is scheduled.
+  // 总是在退出' commitRoot '之前调用这个函数，确保任何附加的任务被调度
+  ensureRootIsScheduled(root, now());
+
+  if (hasUncaughtError) {
+    hasUncaughtError = false;
+    const error = firstUncaughtError;
+    firstUncaughtError = null;
+    throw error;
+  }
+
+  if ((executionContext & LegacyUnbatchedContext) !== NoContext) {
+    ...
+    return null;
+  }
+
+  // If layout work was scheduled, flush it now. -> 如果布局工作已经安排好了，现在就进行冲洗
+
+  // 执行同步任务，这样同步任务不需要等到下次事件循环再执行
+  // 比如在 componentDidMount 中执行 setState 创建的更新会在这里被同步执行
+  // 或useLayoutEffect
+  flushSyncCallbackQueue();
+
+  ...
+
+  return null;
+}
+```
+
+从上面可以看出：
+
+**before mutation 之前：**
+
+- 1. 主要做一些变量赋值，状态重置的工作
+- 2. 调度 useEffect
+
+#### 4.3.1 before mutation 阶段
+
+**主要功能：**
+
+- 1. 处理 DOM 节点渲染/删除后的 autoFocus、blur 逻辑
+
+- 2. 调用 getSnapshotBeforeUpdate 生命周期钩子
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">before mutation 阶段</code>从 [commitBeforeMutationEffects](https://github.com/facebook/react/blob/master/packages/react-reconciler/src/ReactFiberCommitWork.old.js#L270)开始。
+
+_commitBeforeMutationEffects 方法：_
+
+```js
+export function commitBeforeMutationEffects(
+  root: FiberRoot,
+  firstChild: Fiber
+) {
+  // focus blur相关
+  focusedInstanceHandle = prepareForCommit(root.containerInfo);
+
+  nextEffect = firstChild;
+  // 调用主函数
+  commitBeforeMutationEffects_begin();
+
+  // We no longer need to track the active instance fiber
+  const shouldFire = shouldFireAfterActiveInstanceBlur;
+  shouldFireAfterActiveInstanceBlur = false;
+  focusedInstanceHandle = null;
+
+  return shouldFire;
+}
+```
+
+同步调用如下函数：
+commitBeforeMutationEffects_begin ->
+commitBeforeMutationEffects_complete ->
+commitBeforeMutationEffectsOnFiber：主函数
+
+```js
+function commitBeforeMutationEffectsOnFiber(finishedWork: Fiber) {
+  const current = finishedWork.alternate;
+  const flags = finishedWork.flags;
+
+  ...
+
+  if ((flags & Snapshot) !== NoFlags) {
+    // 处理不同的 tag, 单独处理 ClassComponent 和 HostRoot
+    switch (finishedWork.tag) {
+      case FunctionComponent:
+      case ForwardRef:
+      case SimpleMemoComponent: {
+        break;
+      }
+      case ClassComponent: {
+        if (current !== null) {
+          const prevProps = current.memoizedProps;
+          const prevState = current.memoizedState;
+          const instance = finishedWork.stateNode;
+          ...
+          // 调用 🪝 getSnapshotBeforeUpdate生命周期钩子 🪝
+          const snapshot = instance.getSnapshotBeforeUpdate(
+            finishedWork.elementType === finishedWork.type
+              ? prevProps
+              : resolveDefaultProps(finishedWork.type, prevProps),
+            prevState
+          );
+          ...
+          instance.__reactInternalSnapshotBeforeUpdate = snapshot;
+        }
+        break;
+      }
+      case HostRoot: {
+        if (supportsMutation) {
+          const root = finishedWork.stateNode;
+          clearContainer(root.containerInfo);
+        }
+        break;
+      }
+      case HostComponent:
+      case HostText:
+      case HostPortal:
+      case IncompleteClassComponent:
+        break;
+      default: {
+        ...
+      }
+    }
+
+    resetCurrentDebugFiberInDEV();
+  }
+}
+```
+
+#### 4.3.2 mutation 阶段
+
+mutation 阶段从 commitMutationEffects 方法开始.
+
+最终调用主函数 commitMutationEffectsOnFiber 来处理不同类型（Flag 不同）的操作。
+
+**主要函数调用流程：**
+
+commitMutationEffects -> commitDeletion/commitMutationEffects_complete -> commitMutationEffectsOnFiber.
+
+_处理需要删除的元素：_
+
+```js
+...
+if (deletions !== null) {
+  for (var i = 0; i < deletions.length; i++) {
+    var childToDelete = deletions[i];
+
+    {
+      invokeGuardedCallback(null, commitDeletion, null, root, childToDelete, fiber, renderPriorityLevel);
+
+      if (hasCaughtError()) {
+        var error = clearCaughtError();
+        captureCommitPhaseError(childToDelete, fiber, error);
+      }
+    }
+  }
+}
+...
+```
+
+ClassComponent 的删除流程：
+
+commitDeletion -> unmountHostComponents -> commitUnmount -> safelyCallComponentWillUnmount -> callComponentWillUnmountWithTimer
+
+_删除时，classComponent 的卸载：_
+
+生命周期钩子 🪝 componentWillUnmount 会被调用。
+
+```js
+var callComponentWillUnmountWithTimer = function (current, instance) {
+  instance.props = current.memoizedProps;
+  instance.state = current.memoizedState;
+
+  {
+    instance.componentWillUnmount();
+  }
+};
+```
+
+_处理 mutation 的元素：_
+
+```js
+function commitMutationEffects_complete(
+  root: FiberRoot,
+  renderPriorityLevel: LanePriority
+) {
+  // 遍历 nextEffect
+  while (nextEffect !== null) {
+    const fiber = nextEffect;
+    if (__DEV__) {
+      ...
+    } else {
+      try {
+        // 调用 mutation 主函数
+        commitMutationEffectsOnFiber(fiber, root, renderPriorityLevel);
+      } catch (error) {
+        captureCommitPhaseError(fiber, fiber.return, error);
+      }
+    }
+
+    const sibling = fiber.sibling;
+    if (sibling !== null) {
+      ensureCorrectReturnPointer(sibling, fiber.return);
+      nextEffect = sibling;
+      return;
+    }
+
+    nextEffect = fiber.return;
+  }
+}
+```
+
+```js
+function commitMutationEffectsOnFiber(
+  finishedWork: Fiber,
+  root: FiberRoot,
+  renderPriorityLevel: LanePriority
+) {
+  const flags = finishedWork.flags;
+
+  // 根据 ContentReset effectTag重置文字节点
+  if (flags & ContentReset) {
+    commitResetTextContent(finishedWork);
+  }
+
+  // 更新ref
+  if (flags & Ref) {
+    const current = finishedWork.alternate;
+    if (current !== null) {
+      commitDetachRef(current);
+    }
+    if (enableScopeAPI) {
+      // TODO: This is a temporary solution that allowed us to transition away
+      // from React Flare on www.
+      if (finishedWork.tag === ScopeComponent) {
+        commitAttachRef(finishedWork);
+      }
+    }
+  }
+
+  // 处理不同 flags 的 Fiber节点
+  const primaryFlags = flags & (Placement | Update | Hydrating);
+  outer: switch (primaryFlags) {
+    // 插入 DOM
+    case Placement: {
+      commitPlacement(finishedWork);
+      // Clear the "placement" from effect tag so that we know that this is
+      // inserted, before any life-cycles like componentDidMount gets called.
+      // 从 effect tag 中清除 "placement"，这样我们就可以在任何生命周期（如componentDidMount）被调用之前，知道这个被插入了。
+      finishedWork.flags &= ~Placement;
+      break;
+    }
+    // 插入DOM 并 更新
+    case PlacementAndUpdate: {
+      // Placement
+      commitPlacement(finishedWork);
+      finishedWork.flags &= ~Placement;
+
+      // Update
+      const current = finishedWork.alternate;
+      commitWork(current, finishedWork);
+      break;
+    }
+    // SSR
+    case Hydrating: {
+      finishedWork.flags &= ~Hydrating;
+      break;
+    }
+    // SSR
+    case HydratingAndUpdate: {
+      finishedWork.flags &= ~Hydrating;
+
+      // Update
+      const current = finishedWork.alternate;
+      commitWork(current, finishedWork);
+      break;
+    }
+    // 更新
+    case Update: {
+      const current = finishedWork.alternate;
+      commitWork(current, finishedWork);
+      break;
+    }
+  }
+}
+```
+
+可以看到，mutation 阶段对每个 Fiber 节点执行如下三个操作：
+
+- 1. 重置文字节点（由 flags 类型决定）
+- 2. 更新 ref
+- 3. 根据 fiber 节点的 flags 做不同的处理（Placement | Update | Deletion | Hydrating)
+
+_Placement Flags:_
+
+```js
+function commitPlacement(finishedWork: Fiber): void {
+  if (!supportsMutation) {
+    return;
+  }
+
+  // Recursively insert all host nodes into the parent.
+  // 递归地将所有主机节点插入到父节点中
+  const parentFiber = getHostParentFiber(finishedWork);
+
+  // 注意：parent、isContainer 这两个变量必须一起更新
+  let parent;
+  let isContainer;
+  const parentStateNode = parentFiber.stateNode;
+  switch (parentFiber.tag) {
+    case HostComponent:
+      parent = parentStateNode;
+      isContainer = false;
+      break;
+    case HostRoot:
+      parent = parentStateNode.containerInfo;
+      isContainer = true;
+      break;
+    case HostPortal:
+      parent = parentStateNode.containerInfo;
+      isContainer = true;
+      break;
+    // eslint-disable-next-line-no-fallthrough
+    default:
+      invariant(
+        false,
+        "Invalid host parent fiber. This error is likely caused by a bug " +
+          "in React. Please file an issue."
+      );
+  }
+  if (parentFiber.flags & ContentReset) {
+    // 在进行任何插入之前，先重置父的文本内容
+    resetTextContent(parent);
+    // Clear ContentReset from the effect tag
+    parentFiber.flags &= ~ContentReset;
+  }
+
+  // 获取插入位置之前的兄弟节点
+  const before = getHostSibling(finishedWork);
+  // 我们只有被插入的顶部Fiber，但我们需要向下递归它的子节点，以找到所有的终端节点
+  if (isContainer) {
+    // 处理 container（应用 Fiber根节点，FiberNode）
+    insertOrAppendPlacementNodeIntoContainer(finishedWork, before, parent);
+  } else {
+    // 将需要插入的内容
+    insertOrAppendPlacementNode(finishedWork, before, parent);
+  }
+}
+```
+
+**从 insertOrAppendPlacementNodeXXX 方法名可以看到，它是和具体的 DOM 操作相关的。**
+
+```js
+// 插入or添加 PlacementNode 到 container
+function insertOrAppendPlacementNodeIntoContainer(node, before, parent) {
+  var tag = node.tag;
+  var isHost = tag === HostComponent || tag === HostText;
+
+  // Host组件（类HTML，如 div）
+  if (isHost) {
+    var stateNode = isHost ? node.stateNode : node.stateNode.instance;
+
+    if (before) {
+      insertInContainerBefore(parent, stateNode, before);
+    } else {
+      appendChildToContainer(parent, stateNode);
+    }
+  } else if (tag === HostPortal);
+  else {
+    // 处理 复合元素（如 APP，自定义组件）
+    var child = node.child;
+
+    if (child !== null) {
+      insertOrAppendPlacementNodeIntoContainer(child, before, parent);
+      var sibling = child.sibling;
+
+      while (sibling !== null) {
+        insertOrAppendPlacementNodeIntoContainer(sibling, before, parent);
+        sibling = sibling.sibling;
+      }
+    }
+  }
+}
+```
+
+```js
+// 执行具体的 DOM 操作
+function insertOrAppendPlacementNode(
+  node: Fiber,
+  before: ?Instance,
+  parent: Instance
+): void {
+  const { tag } = node;
+  const isHost = tag === HostComponent || tag === HostText;
+  // 处理 Host 元素（HTML 元素）
+  if (isHost) {
+    const stateNode = isHost ? node.stateNode : node.stateNode.instance;
+    if (before) {
+      insertBefore(parent, stateNode, before);
+    } else {
+      appendChild(parent, stateNode);
+    }
+  } else if (tag === HostPortal) {
+  } else {
+    // 处理 复合元素（自定义组件）
+    const child = node.child;
+    if (child !== null) {
+      // 递归处理 node.child
+      insertOrAppendPlacementNode(child, before, parent);
+      let sibling = child.sibling;
+      while (sibling !== null) {
+        insertOrAppendPlacementNode(sibling, before, parent);
+        sibling = sibling.sibling;
+      }
+    }
+  }
+}
+```
+
+#### 4.3.3 layout 阶段
+
+首先要知道，在 layout 阶段之前已经改变了 root.current 的指向。
+
+```js
+root.current = finishedWork;
+```
+
+**因为该阶段的代码都是在 DOM 渲染完成（mutation 阶段完成）后执行的。**
+
+**该阶段触发的生命周期钩子和 hook 可以直接访问到已经改变后的 DOM.**
+
+layout 阶段从 commitLayoutEffects() 开始。
+
+函数调用顺序：
+
+commitLayoutEffects ->
+commitLayoutEffects_begin ->
+commitLayoutMountEffects_complete ->
+commitLayoutEffectOnFiber
+
+**commitLayoutEffectOnFiber 方法：**
+
+会根据 fiber.tag 对不同类型的节点分别处理.
+
+- <span style="color: #ff0000; font-size: 16px;">执行了 ClassComponent 的生命周期钩子：</span>
+
+  componentDidMount（mount 时执行） 或 componentDidUpdate（update 时执行）
+
+## 参考
+
+- 卡颂老师的 React 源码文章[React 技术揭秘](https://react.iamkasong.com/#%E5%AF%BC%E5%AD%A6%E8%A7%86%E9%A2%91)
+
+- 你可能非常有必要读一下[stack reconciler 实现说明](https://zh-hans.reactjs.org/docs/implementation-notes.html)
+
+- React 官网推荐文章[an in-depth overview of the new reconciliation algorithm in React](https://blog.ag-grid.com/inside-fiber-an-in-depth-overview-of-the-new-reconciliation-algorithm-in-react/)

@@ -395,7 +395,7 @@ let a = new sum();
 
 <span style="color: #ff0000; font-size: 16px;">this</span> 是函数内部的一个关键字。
 
-### 4.1 this 的值是什么
+**this 指向什么？**
 
 不一定。
 
@@ -413,7 +413,7 @@ let a = new sum();
 
 讨论 this 的值自然离不开 执行上下文。
 
-#### 4.1.1 全局上下文
+### 4.1 全局上下文
 
 ```js
 // 在浏览器中
@@ -425,7 +425,7 @@ console.log(this === globalThis); // true
 
 **结论：**全局上下文中的 this 指向 全局对象。
 
-#### 4.1.2 函数上下文中的 this
+### 4.2 函数上下文中的 this
 
 🌰 _例 411-1：_
 
@@ -466,7 +466,7 @@ _浏览器运行结果：_
 
 - 严格模式下，在浏览器中直接执行函数，this 指向的是 undefined。
 
-#### 4.1.3 基类上下文中的 this
+### 4.3 基类上下文中的 this
 
 ```js
 class Example {
@@ -489,7 +489,7 @@ new Example(); // this: {name: "Name1"}
 
 - 在类的构造函数中，<span style="color: #ff0000; font-size: 16px;">this 指向新对象实例</span>，类中所有<code style="color: #708090; background-color: #F5F5F5;">非静态的方法</code>都会被添加到 this 的原型中。
 
-#### 4.1.4 派生类上下文中的 this
+### 4.4 派生类上下文中的 this
 
 ```js
 class Base {
@@ -519,7 +519,7 @@ let man = new Good();
 
 - 派生类中的 this 指向 new Base()
 
-#### 4.1.5 bind() 中的 this
+### 4.5 bind() 中的 this
 
 bind() 方法是函数原型上自带的方法。 Function.prototype.bind()。
 
@@ -559,7 +559,7 @@ console.log(o.a, o.f(), o.g(), o.h()); // 37, 37, azerty, azerty
 - bind() 中的 this 指向第一个参数，且 bind 只生效一次。
 - bind() 没有传参数时 this 指向 window
 
-#### 4.1.6 call() 和 apply() 中的 this
+### 4.6 call() 和 apply() 中的 this
 
 <code style="color: #708090; background-color: #F5F5F5;">call()</code> 和 <code style="color: #708090; background-color: #F5F5F5;">apply()</code> 方法使用一个指定的 this 值和传递的参数来<span style="color: #ff0000; font-size: 16px;">调用一个函数</span>。
 
@@ -593,7 +593,7 @@ bar.call("foo"); // [object String]
 - call() 没有传参数时 this 也指向 window
 - call() 传入的第一个参数是非对象时，该参数会被对象化
 
-#### 4.1.7 箭头函数中的 this
+### 4.7 箭头函数中的 this
 
 <code style="color: #708090; background-color: #F5F5F5;">箭头函数</code>中的 this 指向<span style="color: #ff0000; font-size: 16px;">被设置为他被创建时的环境</span>。
 
@@ -646,48 +646,85 @@ console.log(fn2()()); // 2
 - 箭头函数 中的 this 指向定义时环境对象
 - 注意父函数中的箭头函数，会随着父函数的执行上下文而变化
 
-#### 4.1.8 作为对象方法中的 this
+### 4.8 对象中的 this
 
 this 被设置为<span style="color: #ff0000; font-size: 16px;">调用该函数的对象</span>。
 
 ```js
+var prop = 3;
 var o = {
   prop: 37,
   f: function () {
     return this.prop;
   },
+  g: function (func) {
+    return func();
+  },
 };
 
 console.log(o.f()); // 37
+
+console.log(o.g(o.f)); // 3
+
+// 相当于
+let a = o.g();
+a(); // 3
 ```
 
 **结论**：
 
-- 作为对象方法被调用时，this 指向该对象
+- <span style="color: #ff0000; font-size: 16px;">作为对象方法且被对象直接调用时</span>，this 指向该对象
+- 不被对象直接调用时，this 由执行环境决定
 
-#### 4.1.9 DOM 事件中的 this
+### 4.9 DOM 事件中的 this
 
-```js
-// 被调用时，将关联的元素变成蓝色
-function bluify(e) {
-  // 总是 true
-  console.log(this === e.currentTarget);
-  // 当 currentTarget 和 target 是同一个对象时为 true
-  console.log(this === e.target);
-}
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Static Template</title>
+    <script>
+      // 定义函数
+      function test() {
+        // this -> window
+        console.log(this);
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div id="div">Div</div>
+      <div id="div1">DIV1</div>
+      <!-- 定义内联事件，⚠️ 这里的test不是事件回调函数，不存在事件对象e，要带“()”，只在点击触发时执行 -->
+      <div id="div2" onclick="test()">DIV2</div>
+      <!-- this -> div#div3 -->
+      <div id="div3" onclick="console.log(this)">DIV3</div>
+    </div>
 
-// 获取文档中的所有元素的列表
-var elements = document.getElementsByTagName("*");
-```
+    <script>
+      let div = document.getElementById("div");
+      // 给div的 onclick 绑定方法
+      div.onclick = function (e) {
+        console.log(this === e.currentTarget); // true
+      };
 
-```js
-<button onclick="alert(this.tagName.toLowerCase());">Show this</button>
+      let container = document.getElementById("div1");
+      // 给 div1 添加监听事件及事件回调
+      container.addEventListener("click", function (e) {
+        console.log(this === e.currentTarget); // true
+      });
+    </script>
+  </body>
+</html>
 ```
 
 **结论**：
 
-- 作为事件处理函数时，它的 this 指向触发事件的元素
-- 内联 on-event 处理函数 调用时，它的 this 指向监听器所在的 DOM 元素
+- 内联 on-event 处理函数 调用时，它的 this 指向函数执行环境（为 DOM 元素本身或 window）
+- 作为事件处理回调函数时，它的 this 指向触发事件的元素
 
 ## 5. 闭包
 
