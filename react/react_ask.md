@@ -97,8 +97,6 @@ scheduleUpdateOnFiber 接收的参数 lane 代表更新方式，legacy 模式下
 
 executionContext 不存在时才会满足，setTimeout 里执行的 this.setState(),此时满足 executionContext === NoContext。
 
-所以
-
 ```ts
 // 源码地址：packages/react-reconciler/src/ReactFiberWorkLoop.old.js
 export function scheduleUpdateOnFiber(
@@ -192,9 +190,28 @@ setState 是同步还是异步对我们来说没那么重要，因为如果我�
 ### 参考
 
 [小前端读源码 - React16.7.0(深入了解 setState)](https://zhuanlan.zhihu.com/p/56507101)
+[RFClarification: why is setState asynchronous?](https://github.com/facebook/react/issues/11527)
 
 ## 2. 函数组件和 class 组件有什么不同？
 
-## 3. React 是如何遍历更新的？
+**Class Component:**
 
-从根节点开始遍历更新。。。
+- 有生命周期（可以控制是否更新）
+
+**Function Component:**
+
+- 无生命周期，每次执行，必然会更新
+
+**从源码层理解二者区别：**
+
+Babel 最终会把 JSX 中的 Class Component 和 Function Component 分别解析成相应的对象；
+
+最后调用 React.createElement()方法生成对应的 React Element 对象.
+
+React 在 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Render 阶段</code>会把所有的组件生成 Fiber 节点，包括 Class Component 和 Function Component。
+
+## 3. 说一下 React.PureComponent？
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">React.PureComponent</code> 和 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">React.Component</code> 很相似，区别在于 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">React.PureComponent</code> 实现了 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">shouldComponentUpdate()</code> 这个**生命周期函数**。
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">shouldComponentUpdate()</code> 会对 props 和 state 进行**浅层比较**，并减少了跳过必要更新的可能性。

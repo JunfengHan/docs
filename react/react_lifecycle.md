@@ -41,7 +41,7 @@ function beginWork(current, workInProgress, renderLanes) {
 }
 ```
 
-我们重点看一下 updateClassComponent 这个方法，重方法名可以看出，它的主要功能就是**更新 Class Component**.
+我们重点看一下 updateClassComponent 这个方法，从方法名可以看出，它的主要功能就是**更新 Class Component**.
 
 _updateClassComponent 部分源码:_
 
@@ -175,6 +175,12 @@ commit 阶段的详细情况可以看我的另一篇文章[React 源码(一) 整
 
 ### 3.2 static getDerivedStateFromProps()
 
+**Execute**
+
+- 当 props 传入时
+- state 变化时
+- forceUpdate 被调用时
+
 **DO**
 
 - 适用于罕见的用例，即 state 的值在任何时候都取决于 props
@@ -203,7 +209,11 @@ commit 阶段的详细情况可以看我的另一篇文章[React 源码(一) 整
 
 **DON'T**
 
-- 任何其他事情
+- 任何其他事情（
+
+  > 如：不能 setState()会触发渲染，造成死循环
+  >
+  > 不能绑定（注册）事件，会被频繁绑定注册
 
 ### 3.5 getSnapshotBeforeUpdate(prevProps, prevState)
 

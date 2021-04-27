@@ -4,7 +4,14 @@
 
 ![react声明式](../_media/react-declarative.png)
 
+**JSX**是一个 JavaScript 的语法扩展。
+
+或者说是一个类似 XML 的 ECMAScript 语法扩展。
+
 ## 1. 为什么是 JSX
+
+- JSX 直观且高效
+- JSX 满足 React 团队对关注点分离的需求
 
 ### 1.1 JSX 直观且高效
 
@@ -133,7 +140,7 @@ function getGreeting(user) {
 }
 ```
 
-### 2.2 JSX 特定属性
+### 2.3 JSX 特定属性
 
 属性值指定为字符串字面量
 

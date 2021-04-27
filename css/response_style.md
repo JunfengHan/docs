@@ -495,7 +495,7 @@ _效果 ⬇️：_
 
 说明：以下示例基于 🌰 1 做修改。
 
-#### 3.7.1 flex-grow
+#### 3.7.1 flex-grow: 扩展剩余空间（默认 0）
 
 - **flex-grow**：Flex 元素 扩展剩余空间（剩余空间为总量为 1），flex-grow 的值为 0-1 的数（默认为 0）
 
@@ -537,7 +537,7 @@ _效果 ⬇️：_
 
   ![flex](../_media/flex_grow_half.png)
 
-#### 3.7.2 flex-shrink
+#### 3.7.2 flex-shrink: 空间不足时压缩 Flex 元素(默认 1，所有 Flex 元素收缩相同)
 
 - **flex-shrink**：当 flex 容器空间不足时候，操作 Flex 元素 的收缩比例
 
@@ -594,15 +594,15 @@ _效果 ⬇️：_
 
   ![flex](../_media/flex_shrink_0.png)
 
-#### 3.7.3 flex-basis
+#### 3.7.3 flex-basis: 定义 Flex 元素宽度
 
-- **flex-basis**: 定义了分配给 Flex 元素 的默认大小，相当于提前预定剩余空间
+- **flex-basis**: 定义了分配给 Flex 元素 的宽度（优先级高于 width）
 
-  默认值是 auto，就是自动；
+  默认值是 auto，就是元素原始宽度；
 
   flex-basis 为宽度单位，如 100px;
 
-  当容器有足够剩余空间时，Flex 元素 会按照占用该值大小的空间，当容器不足时会跟随其他 Flex 元素一起缩小
+  当容器有足够剩余空间时，Flex 元素 会按照占用该值大小的空间，当容器不足时会跟随其他 Flex 元素一起缩小.
 
   _剩余空间不足时，flex-basis 属性示例：_
 
@@ -677,9 +677,64 @@ _效果 ⬇️：_
 
   ![flex](../_media/flex_basis.png)
 
-#### 3.7.4 flex
+#### 3.7.4 flex: <flex-grow | flex-shrink | flex-basis> 的缩写
 
-- **flex**：flex-grow，flex-shrink 和 flex-basis 的缩写
+flex-grow，flex-shrink 和 flex-basis 的缩写。
+
+**flex 简写示例：**
+
+- 默认值 => flex: 0 1 auto; -> Flex 元素不放大、同时缩小、占用原始宽度。
+- flex: 1; => flex: 1 1 0%; -> Flex 放大占用所有剩余空间、同时缩小、不预定剩余空间。
+- flex: auto; => flex: 1 1 auto; -> Flex 放大占用所有剩余空间、同时缩小、占用原始宽度。
+- flex: none; flex: 0 0 auto; -> Flex 元素不放大、不缩小、占用原始宽度。
+- flex: 0%; flex: 1 1 0%; -> Flex 放大占用所有剩余空间、同时缩小、不预定剩余空间。
+- flex: 2 3; flex: 2 3 0%; -> Flex 放大占用所有剩余空间、3 倍缩小、不预定剩余空间。
+- flex: 2 3px; flex: 2 1 3px; -> Flex 元素 放大占用所有剩余空间、同时缩小、固定占用 3px 剩余空间。
+
+**flex: 1; 与 flex: auto; 区别：**
+
+flex: 1; 相当于 flex: 1 1 0%;
+
+> flex 元素宽度 = 所有剩余空间宽度 + 自身宽度（0）
+
+flex: auto; 相当于 flex: 1 1 auto;
+
+> flex 元素宽度 = 所有剩余空间宽度 + 自身宽度
+
+所以可以看出，**flex: auto** 比 **flex: 1** 多出一个自身宽度。
+
+_示例：_
+
+```html
+<div id="container">
+  <sapn class="item item1">1</sapn>
+  <sapn class="item item2">2</sapn>
+  <sapn class="item item3">3</sapn>
+</div>
+<style>
+  #container {
+    display: flex;
+    width: 500px;
+    height: 200px;
+    background: #ddd;
+  }
+  .item {
+    width: 100px;
+    height: 100px;
+    background: yellowgreen;
+    border: 1px solid red;
+    box-sizing: border-box;
+  }
+  .item1 {
+    flex: auto;
+  }
+  .item2 {
+    flex: 1;
+  }
+</style>
+```
+
+![flex](../_media/css_response_flex.png)
 
 #### 3.7.5 align-self
 
@@ -709,6 +764,10 @@ _效果 ⬇️：_
   _order: -1 效果 ⬇️_
 
   ![flex](../_media/flex_order.png)
+
+### 3.8 Flex 布局案例
+
+#### 3.8.1 实现
 
 **说明：**
 

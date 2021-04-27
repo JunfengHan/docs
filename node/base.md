@@ -42,6 +42,15 @@ _Node 的详细组成：_
 
 ![node](../_media/node_base_components.png)
 
+**Node 的组成依赖：**
+
+- 核心模块和 C++基础模块（提供接口供我们直接、间接使用）
+- V8（C++编写）：JS 引擎，负责 JS 的编译、执行、内存管理、垃圾回收等
+- libuv（C 语言编写）：负责处理异步 I/O（包括事件循环、异步 DNS 解析、异步文件操作、异步 TCP、管理异步的线程池等）
+- http-parser（C 语言编写）：HTTP 消息解析器
+- OpenSSL（C 语言编写）：实现了套接字加密功能（SSL、TLS）
+- zlib：资料压缩解压
+
 ## 3. Node 如何工作
 
 把 Node 比作一个餐厅，顾客（应用）向服务员点餐（发起请求任务），服务员把下单的菜给到厨房（处理请求），然后服务员就去服务下一桌顾客了，这种只处理了任务请求的过程是<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">异步</code>的，如果服务员把订单给到厨房，然后等厨房做完所有的菜（处理 query 等 IO 操作），这个就是<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">同步</code>的。
@@ -512,6 +521,21 @@ _独角伶盗龙：_
 _libuv 组成：_
 
 ![node](../_media/node_base_libuvArchitecture.png)
+
+**组成说明：**
+
+- 基于 epoll、kqueue、IOCP、event ports 实现的全能<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">事件循环</code>
+- 异步 TCP 和 UDP 套接字
+- 异步 DNS 解析
+- 异步文件和文件系统操作
+- 文件系统事件
+- ANSI 转义序列控制的 TTY
+- IPC 经由套接字共享，使用 Unix 域套接字或命名管道（Windows）
+- 子进程
+- 线程池（多线程处理 I/O 操作回调）
+- 信号处理
+- 高清晰度时钟
+- 线程和同步原语（primitive）
 
 可以说 libuv 是和 V8 同样重要的 Node 核心。
 

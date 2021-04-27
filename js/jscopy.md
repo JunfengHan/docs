@@ -92,7 +92,59 @@ JSON.parse(JSON.stringfy())方法的缺陷：
 2. 正则对象
 3. 循环引用
 
-JSON.stringfy()方法无法完全正确的序列号一个对象。
+_深拷贝：_
+
+**原理**：递归调用，单独处理正则和日期对象。利用 WeekMap 解决循环引用
+
+```js
+function deepClone(value) {
+  let map = new WeakMap();
+  function clone(value) {
+    if (value instanceof Object) {
+      if (map.has(value)) {
+        return map.get(value);
+      }
+
+      let newValue;
+      if (value instanceof Array) {
+        newValue = [];
+      } else if (value instanceof Function) {
+        newValue = function () {
+          // value 是函数时，继承父函数内 this 绑定的属性
+          return value.apply(this, arguments);
+        };
+      } else if (value instanceof RegExp) {
+        // 拼接正则
+        newValue = new RegExp(value.source, value.flags);
+      } else if (value instanceof Date) {
+        // 处理日期对象
+        newValue = new Date(value);
+      } else {
+        newValue = {};
+      }
+
+      // 克隆对象自身定义的属性
+      let desc = Object.getOwnPropertyDescriptors(value);
+      // 克隆对象原型上定义的属性
+      let prototypeValue = Object.getPrototypeOf(value);
+      let cloneValue = Object.create(prototypeValue, desc);
+      map.set(value, cloneValue);
+
+      // 循环递归调用clone
+      for (let key in value) {
+        if (value.hasOwnProperty(key)) {
+          newValue[key] = clone(value[key]);
+        }
+      }
+
+      return newValue;
+    }
+    return value;
+  }
+
+  return clone(value);
+}
+```
 
 [理解 JS 浅拷贝与深拷贝](https://juejin.im/post/5d235d1ef265da1b855c7b5d)
 

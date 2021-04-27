@@ -10,6 +10,8 @@
 
 **推荐 👍**
 
+- [React 全部 api 汇总](https://juejin.cn/post/6950063294270930980#heading-2)
+
 - [React 生命周期图](https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
 
 - [React In Depth --> React 深度好文，只有英文版](https://medium.com/react-in-depth)

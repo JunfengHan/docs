@@ -869,7 +869,7 @@ double(3);
 
 1000ms 之后，JavaScript 运行时会把回调函数推到自己的消息队列上去等待执行。
 
-推到任务队列后，回调函数什么时候出列被执行对于 JavaScript 代码就完全不可见了。
+推到任务队列后，**回调函数什么时候出列被执行对于 JavaScript 代码就完全不可见了**。
 
 而且，double()函数在 setTimeout 成功调度异步操作之后会立即退出。
 
@@ -939,7 +939,7 @@ console.log(Promise);
 // -> ƒ Promise() { [native code] }
 ```
 
-**可以看到 Promise 是个构造函数，是由浏览器实现**.
+**可以看到 Promise 是个对象，同时也是个构造函数**.
 
 仔细看看由哪些属性：
 
@@ -981,12 +981,12 @@ _图片来自@东予薏米，侵删_
 规则如下：
 
 - 每只兔子完成其中的一步，将完成的结果给下一只兔子
-- 每个兔子前都有三个灯（红、绿、黄），刚开始大家都是黄色灯，代表“工作中，不知道能不能做好这只月饼”，绿灯代表“做好了这个月饼”，红灯代表“做失败了”
+- 生产线上有三个灯（红、绿、黄），默认黄色灯亮，代表“制作中，不知道能不能做好这只月饼”，绿灯代表“做好了这个月饼”，红灯代表“做失败了”
 - 一旦完成或失败，月饼就交给下一个兔子，不能重新做
 - 如果流水线出现故障给主管
 - 做完自己的工作后，把月饼放到传送带给下一个兔子
 
-这里的做月饼是不是和上面 ⬆️ 说的异步回调嵌套有点像？就是把结果给下一个，失败了就终止这个过程。
+这里的做月饼是不是和上面 ⬆️ 说的异步回调嵌套有点像？做完自己的工作就是把结果给下一个，失败了就终止这个过程。
 
 Promise 就是利用这个原理来设计的，用来解决“回调地狱”的问题。
 
@@ -1067,7 +1067,84 @@ let p1 = new Promise((resolve, reject) => {
 
 > new Promise() 可以创造一个新的 Promise 对象。
 
-Promise() 构造函数用于包装还没添加 promise 支持的函数。
+<span style="color: #ff0000; font-size: 16px;">Promise() 构造函数接收一个“处理器函数”</span>；
+
+然后通过，<span style="color: #ff0000; font-size: 16px;">调用处理器函数的 resolve()或 reject() 方法改变 Promise 的状态，并返回结果或拒绝的原因</span>。
+
+创建一个 Promise 实例：
+
+```js
+const myFirstPromise = new Promise((resolve, reject) => {
+  // ?做一些异步操作，最终会调用下面两者之一:
+  //
+  //   resolve(someValue); // fulfilled
+  // ?或
+  //   reject("failure reason"); // rejected
+});
+```
+
+**处理器函数**接受两个函数作为参数：
+
+- resolve()
+
+  当“处理器函数”里的任务顺利完成且返回结果值时，可以调用 resolve 函数并把返回结果作为其参数；
+
+  如： resolve(data);
+
+- reject()
+
+  而当异步任务失败且返回失败原因（通常是一个错误对象）时，可以调用 reject 函数并传递一个错误原因作为其参数;
+
+  如：reject(error);
+
+> resolve() 或 reject() 必须被调用，否则，promise 不会往下执行的，因为状态是 pending.
+
+_没有调用 resolve()或 reject(),状态为 pending:_
+
+```js
+new Promise((resolve, reject) => {
+  console.log(1);
+}).then(() => {
+  // 状态是 pending,这里不会执行
+  console.log(2);
+});
+// > 1
+// > Promise {\<pending\>}
+```
+
+_调用 resolve(),状态为 fulfilled:_
+
+```js
+new Promise((resolve, reject) => {
+  console.log(1);
+  resolve(2);
+}).then((res) => {
+  console.log(res);
+  return res;
+});
+// > 1
+// > 2
+// > Promise {<fulfilled>: 2}
+```
+
+_调用 reject(),状态为 fulfilled:_
+
+```js
+new Promise((resolve, reject) => {
+  console.log(1);
+  reject("error");
+}).then(
+  (res) => {
+    console.log(res);
+  },
+  (res) => {
+    console.log("出错了："res);
+  }
+);
+// > 1
+// > 出错了：error
+// > Promise {<fulfilled>: undefined}
+```
 
 像我们熟悉的[Object()](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object)一样，Promise()也有自己的静态方法：
 
@@ -1082,26 +1159,6 @@ Promise() 构造函数用于包装还没添加 promise 支持的函数。
 - Promise.reject(reason)：返回一个状态为失败的 Promise 对象，并将给定的失败信息传递给对应的处理方法
 
 - Promise.resolve(value)：返回一个状态由给定 value 决定的 Promise 对象。
-
-创建一个 Promise 实例：
-
-```js
-const myFirstPromise = new Promise((resolve, reject) => {
-  // ?做一些异步操作，最终会调用下面两者之一:
-  //
-  //   resolve(someValue); // fulfilled
-  // ?或
-  //   reject("failure reason"); // rejected
-});
-```
-
-Promise 会把一个叫做“处理器函数”（executor function）的函数作为它的参数。
-
-这个“处理器函数”接受两个函数——resolve 和 reject ——作为其参数。
-
-当异步任务顺利完成且返回结果值时，可以调用 resolve 函数并把返回结果作为其参数；
-
-而当异步任务失败且返回失败原因（通常是一个错误对象）时，可以调用 reject 函数并传递一个错误原因作为其参数。
 
 _如果想要某个函数拥有 promise 功能，怎么办？？_
 
@@ -1293,7 +1350,7 @@ new Promise((resolve, reject) => {
 
 在 6.2.1 中我们知道 then() 就是 Promise.prototype.then，所以 Promise 构造函数 的实例都有这个方法。
 
-##### 利用 then()进行转换值
+**利用 then()进行<span style="color: #ff0000; font-size: 16px;">转换值</span>**
 
 ```js
 let promise = new Promise((resolve, reject) => {
@@ -1549,7 +1606,7 @@ const transition = (promise, state, result) => {
   promise.state = state;
   promise.result = result;
   // 改变状态后异步调用回调
-  setTimeout(() => handleCallbacks(promise.callbacks, state, result), 0);
+  queueMicrotask(() => handleCallbacks(promise.callbacks, state, result));
 };
 
 // 一些特殊的 value 被 resolve 时，要做特殊处理
@@ -1633,12 +1690,114 @@ function Promise(fn) {
   }
 }
 
-// 定义Promise 的 then()方法
-// then()接收两个参数，分别处理promise的成功和失败
-// 因此，如果onFulfilled, onRejected是函数，它们分别默认获取的参数是 value和 reason
+// 实现 Promise.resolve()
+// 返回一个以给定值解析后的 Promise对象
+// 根据传入的参数不同做不同的处理
+// 注意，不能在解析为自身的 thenable 上调用 Promise.resolve，会无限递归
+Promise.resolve = function (value) {
+  const promise = new Promise((resolve, reject) => {
+    function resolvePromise(promise, value, resolve, reject) {
+      let then;
+      let thenCalledOrThrow = false; // 判断是否调用了then方法，开关
+
+      // 处理 thenable循环调用
+      if (promise === x) {
+        return reject(new TypeError("thenable发生了循环调用！"))
+      }
+
+      // 处理引用类型数据
+      if (value !== null && typeof value === "object" || (typeof value === "function")) {
+        try {
+          then = value.then;
+          // 处理 thenable 或 promise
+          if (typeof then === "function") {
+            // 直接调用一次 then 方法
+            then.call(value, function resolve (thenValue) {
+              // 判断只调用一次then方法
+              if (thenCalledOrThrow) return;
+              thenCalledOrThrow = true;
+              return resolvePromise(promise, thenValue, resolve, reject)
+            }, function reject(thenError) {
+              if (thenCalledOrThrow) return;
+              thenCalledOrThrow = true;
+              return reject(thenError);
+            })
+          } else {
+            // 基本类型直接返回 resolve(value)
+            return resolve(value);
+          }
+        } cache (e) {
+          if (thenCalledOrThrow) return;
+          thenCalledOrThrow = true;
+          return reject(e);
+        }
+      } else { // 处理基本类型数据
+        return resolve(value);
+      }
+    }
+    resolvePromise(promise, value, resolve, reject);
+  });
+
+  return promise;
+};
+
+// 实现 Promise.all()
+// Promise.all() 接收一个数组，返回一个 promise 对象
+// 接收的数组不一定都是 Promise 对象
+// Promise.all() 接收的所有 promise 实例全部为 fullfilled 时调用 Promise.resolve()否则调用 Promise.reject()
+// 一定注意执行结果的顺序需要和传入的 promises一致
+Promise.all = function (promises) {
+  return new Promise(function (resolve, reject) {
+    if (!Array.isArray(promises)) {
+      return reject("参数错误，应该为数组");
+    } else {
+      let promisesLength = promises.length;
+      let resultPromises = new Array(promisesLength);
+      let resolvedCount = 0;
+      for (let i = 0; i < promisesLength; i++) {
+        (function (i) {
+          Promise.resolve(promises[i]).then(
+            function (value) {
+              resolvedCount++;
+              resultPromises[i] = value;
+              if (promisesLength === resolvedCount) {
+                return resolve(resultPromises);
+              }
+            },
+            function (error) {
+              return reject(error);
+            }
+          );
+        })(i);
+      }
+    }
+  });
+};
+
+// 实现 race()
+// Promise.race(iterable) 方法返回一个 promise
+// 一旦迭代器中的某个promise解决或拒绝，返回的 promise就会解决或拒绝
+Promise.race = function (promises) {
+  return new Promise((resolve, reject) => {
+    for (let i = 0; i < promises.length; i++) {
+      Promise.resolve(promises[i]).then(
+        function (value) {
+          return resolve(value);
+        },
+        function (error) {
+          return reject(error);
+        }
+      );
+    }
+  });
+};
+
+// 定义 Promise 的 then()方法
+// then()接收两个参数，分别处理 promise 的成功和失败
+// 因此，如果 onFulfilled, onRejected 是函数，它们分别默认获取的参数是 value 和 reason
 // onFulfilled, onRejected 这两个部分只能执行一个
-// then()可以多次被链式调用，因此，then()需要返回一个promise
-// then()可以被多次调用，但需要按顺序执行，因此，需要记录then()注册的的onFulfilled, onRejected顺序
+// then()可以多次被链式调用，因此，then()需要返回一个 promise
+// then()可以被多次调用，但需要按顺序执行，因此，需要记录 then()注册的的 onFulfilled, onRejected 顺序
 Promise.prototype.then = function (onFulfilled, onRejected) {
   return new Promise((resolve, reject) => {
     let callback = { onFulfilled, onRejected, resolve, reject };
@@ -1648,9 +1807,8 @@ Promise.prototype.then = function (onFulfilled, onRejected) {
       this.callbacks.push(callback);
     } else {
       // 状态不为 PENDING，then方法需要做具体逻辑处理
-      // 这里要实现异步操作，我们不是在JS引擎层面实现，只能用JS语言的异步来实现异步功能，这里选用了setTimeout,也可以用别的异步实现
-      // 注意：原生Promise 是V8 引擎实现的微任务，这里的setTimeout 是宏任务
-      setTimeout(() => handleCallback(callback, this.state, this.result), 0);
+      // queueMicrotask 入列微任务
+      queueMicrotask(() => handleCallback(callback, this.state, this.result));
     }
   });
 };
@@ -1833,6 +1991,10 @@ f3();
 [动态图演示 Promises & Async/Await 的过程](https://zhuanlan.zhihu.com/p/145442030)
 
 [100 行代码实现 Promises/A+ 规范](https://juejin.cn/post/6903725134977171463)
+
+[手动实现 Promise 及静态方法](https://github.com/xieranmaya/Promise3/blob/master/Promise3.js)
+
+[从一道让我失眠的 Promise 面试题开始，深入分析 Promise 实现细节](https://juejin.cn/post/6945319439772434469#heading-21)
 
 [Promise/A+](https://promisesaplus.com/)
 
