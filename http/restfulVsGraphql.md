@@ -1,4 +1,4 @@
-# RESTful VS GraphQL
+# RESTful API 对比 GraphQL
 
 > 不同的设计模式适应不同的需求。
 

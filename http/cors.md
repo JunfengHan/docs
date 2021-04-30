@@ -1,6 +1,6 @@
 # 跨域
 
-## 1. 开发总的跨域问题
+## 1. 跨域问题
 
 你写的前端项目跑在 “localhost:3999",然后，你向本地服务地址“localhost:8081”发起了一个 HTTP 请求,于是你快乐地喝着快乐水等着服务器返回结果。可是，居然报错了。💔
 
@@ -79,9 +79,13 @@ CORS 是一个 W3C 标准，全称是"跨域资源共享"（Cross-origin resourc
 
 <span style="color: #ff0000; font-size: 16px;">CORS 解决了因 HTTP 导致的跨域问题，如 XMLHttpRequest（Ajax、Axios） 发起的 HTTP 请求</span>。
 
-#### CORS 的功能概述
+_cors 示意图_
 
-跨源资源共享标准新增了一组 HTTP 首部字段，允许服务器声明哪些源站通过浏览器有权限访问哪些资源。
+![cors](../_media/http_cors_principle.png)
+
+#### 4.2.1 CORS 的功能概述
+
+**跨源资源共享标准**新增了一组 HTTP 首部字段，允许服务器声明哪些源站通过浏览器有权限访问哪些资源。
 
 如果浏览器发起一个<code style="color: #708090; background-color: #F5F5F5;">简单请求</code>，请求会直接发送给服务器。
 
@@ -95,11 +99,92 @@ CORS 是一个 W3C 标准，全称是"跨域资源共享"（Cross-origin resourc
 
 **除此之外的都是<span style="color: #ff0000; font-size: 16px;">非简单请求</span>。**
 
-非简单请求会先使用 OPTIONS 方法发起<span style="color: #ff0000; font-size: 16px;">预检请求</span>（preflight request），从而获知服务端是否允许该跨源请求。服务器确认允许之后，才发起实际的 HTTP 请求。
+非简单请求会先使用 **OPTIONS 方法**发起<span style="color: #ff0000; font-size: 16px;">预检请求</span>（preflight request），从而<span style="color: #ff0000; font-size: 16px;">获知服务端是否允许该跨源请求</span>。
 
-#### CORS 实战实现跨域案例
+服务器确认允许之后，才发起实际的 HTTP 请求。
+
+_预检请求示例：_
+
+![HTTP Options方法发起预检请求](../_media/http_cors_options.png)
+
+#### 4.2.2 CORS 头
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">CORS 策略</code>是通过一系列 HTTP Headers 实现的。
+
+**CORS 头有这些**：
+
+- Origin
+
+  指示获取资源的请求是从什么域发起的
+
+- Access-Control-Request-Method
+
+  用于**发起一个预请求**，告知服务器**实际请求所使用的 HTTP 方法**。
+
+- Access-Control-Request-Headers
+
+  用于**发起一个预请求**，告知服务器**实际请求所携带的自定义首部字段**。
+
+- Access-Control-Allow-Origin
+
+  <span style="color: #ff0000; font-size: 16px;">服务端指示资源可以被哪些域共享</span>
+
+- Access-Control-Allow-Credentials
+
+  指示当请求的凭证标记为 true 时，是否响应该请求
+
+- Access-Control-Allow-Headers
+
+  用在对**预请求**的响应中，指示实际的请求中可以使用哪些 HTTP 头
+
+- Access-Control-Allow-Methods
+
+  指定对**预请求**的响应中，哪些 HTTP 方法允许访问请求的资源
+
+- Access-Control-Max-Age
+
+  指示**预请求**的结果能被缓存多久
+
+_一个预检请求：_
+
+```js
+OPTIONS /resources/post-here/ HTTP/1.1
+Host: bar.other
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-us,en;q=0.5
+Accept-Encoding: gzip,deflate
+Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
+Connection: keep-alive
+Origin: http://foo.example
+Access-Control-Request-Method: POST
+Access-Control-Request-Headers: X-PINGOTHER, Content-Type
+```
+
+_一个预检请求的返回结果：_
+
+```js
+HTTP/1.1 200 OK
+Date: Mon, 01 Dec 2008 01:15:39 GMT
+Server: Apache/2.0.61 (Unix)
+Access-Control-Allow-Origin: http://foo.example
+Access-Control-Allow-Methods: POST, GET, OPTIONS
+Access-Control-Allow-Headers: X-PINGOTHER, Content-Type
+Access-Control-Max-Age: 86400
+Vary: Accept-Encoding, Origin
+Content-Encoding: gzip
+Content-Length: 0
+Keep-Alive: timeout=2, max=100
+Connection: Keep-Alive
+Content-Type: text/plain
+```
+
+#### 4.2.3 CORS 实战实现跨域案例
+
+TODO
 
 ### 4.3 nginx 代理跨域
+
+**nginx 代理**实现跨域需要在服务器启动一个 nginx 代理，通过 nginx 代理来实现对跨域请求的处理，nginx 转发请求到服务端，然后返回信息给客户端。
 
 ### 4.4 WebSocket 协议跨域
 
@@ -112,9 +197,9 @@ CORS 是一个 W3C 标准，全称是"跨域资源共享"（Cross-origin resourc
 
 ## 参考
 
-[浏览器的同源策略](https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy#%E8%B7%A8%E6%BA%90%E7%BD%91%E7%BB%9C%E8%AE%BF%E9%97%AE)
+[浏览器的同源策略 | MDN](https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy#%E8%B7%A8%E6%BA%90%E7%BD%91%E7%BB%9C%E8%AE%BF%E9%97%AE)
 
-[跨源资源共享（CORS）--> MDN](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS)
+[跨源资源共享（CORS）| MDN](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS)
 
 [跨域资源共享 CORS 详解](https://www.ruanyifeng.com/blog/2016/04/cors.html)
 
