@@ -640,3 +640,7 @@ _动态模块：_
 ## 6. DataBase (数据库)
 
 ## 7. NestJs 部署
+
+## 参考
+
+推荐 👍 , 系列教程 [Nest 框架教程](https://keelii.com/2019/07/03/nestjs-framework-tutorial-1/)

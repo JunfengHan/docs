@@ -43,7 +43,7 @@ Fiber(纤程) 和系统中的进程、线程，以及 generator 的 协程是不
 
 ### 2.1 指 Fiber 架构（Fiber Reconciler）
 
-扯远了，React 中的 Fiber 是指 Fiber 架构。
+React 中的 Fiber 是指 Fiber 架构。
 
 <span style="color: #ff0000; font-size: 16px;">Fiber 架构就是 Fiber Reconciler，它是一套协调计算组件更新变化的方法</span>。
 
@@ -151,4 +151,16 @@ _更新组件渲染 fiber 树：_
 
 react 核心团队成员文章：[React Fiber Architecture](https://github.com/acdlite/react-fiber-architecture)
 
+---
+
+**总结**：
+
+1. fiber 是
+2. fiber 原理是
+3. fiber 优势
+
 ## 参考
+
+[Fiber 架构心智模型](https://react.iamkasong.com/process/fiber-mental.html#%E4%BB%80%E4%B9%88%E6%98%AF%E4%BB%A3%E6%95%B0%E6%95%88%E5%BA%94)
+
+[这可能是最通俗的 React Fiber(时间分片) 打开方式](https://juejin.cn/post/6844903975112671239#heading-12)

@@ -211,15 +211,17 @@ Query 是个特殊的 GraphQL 类型，我们称它为 根类型（root type）,
 
 [GraphQL --> GraphQL 官网](https://graphql.cn/learn/)
 
----
+**Blog**
 
-[GraphQL vs. REST --> Apollo Blog](https://www.apollographql.com/blog/graphql-vs-rest-5d425123e34b/)
+推荐 👍，浅显易懂 -- [RESTful API 编写指南](https://blog.igevin.info/posts/restful-api-get-started-to-write/)
 
 [理解 RESTful 架构 --> 阮一峰](http://www.ruanyifeng.com/blog/2011/09/restful.html)
 
 [RESTful API 设计指南 --> 阮一峰](https://www.ruanyifeng.com/blog/2014/05/restful_api.html)
 
-[What’s GraphQL --> 豪翔天下](https://haofly.net/graphql-tutorial-1/)
+推荐 👍，这是个系列文章 -- [What’s GraphQL | 豪翔天下](https://haofly.net/graphql-tutorial-1/)
+
+[GraphQL vs. REST --> Apollo Blog](https://www.apollographql.com/blog/graphql-vs-rest-5d425123e34b/)
 
 [GraphQL 搭配 Koa 最佳入门实践](https://blog.naice.me/article/5abbbf0dca213a7b6b266f06)
 

@@ -220,7 +220,7 @@ Date.parse();
 
   - Map 可以使用任意数据类型作为键
   - Map 会维护键值对插入顺序
-  - Map 和 Object 没什么大的差别，处了使用方式不同，Object 的查询性能略好，Map 增、删、改性能更好
+  - Map 和 Object 没什么大的差别，除了使用方式不同，Object 的查询性能略好，Map 增、删、改性能更好
 
 - WeakMap
 - Set：允许你存储任何类型的唯一值，<span style="color: #ff0000; font-size: 16px;">Set 中的元素是唯一的</span>
@@ -269,7 +269,7 @@ _方法 1: 运用新 API flat()_
 [].flat(Infinity): 展开任意深度.
 
 ```js
-const arr1 = [0, 1, 2, [3, [5, 6]]];
+let arr1 = [0, 1, 2, [3, [5, 6]]];
 
 console.log(arr1.flat()); // [0, 1, 2, 3, [5, 6]]
 console.log(arr1.flat(Infinity)); // [0, 1, 2, 3, 5, 6]
@@ -278,13 +278,13 @@ console.log(arr1.flat(Infinity)); // [0, 1, 2, 3, 5, 6]
 _方法 2: 运用 forEach 或 for 循环 + 递归_
 
 ```js
-function flatten(arr) {
-  const result = [];
+function flatArr(arr) {
+  let result = [];
 
   arr.forEach((ele) => {
     // 递归
     if (Array.isArray(ele)) {
-      result.push(...flatten(ele));
+      result = result.concat(flatArr(ele));
       // 跳出递归
     } else {
       result.push(ele);
@@ -295,7 +295,19 @@ function flatten(arr) {
 }
 ```
 
-_方法 3: Generator function_
+_方法 3: 利用 toString() 处理_
+
+```js
+function flatArr(arr) {
+  if (Array.isArray(arr)) {
+    return Array.from(arr.toString().split(","));
+  }
+
+  return;
+}
+```
+
+_方法 4: Generator function_
 
 ```js
 function* flatten(array) {

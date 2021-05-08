@@ -252,6 +252,10 @@ _官方 API 参考目录：_
 
 ### 2.4 中间件
 
+中间件的原理是什么 ❓
+
+TODO
+
 ### 2.5 路由
 
 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">路由</code>用于确定应用程序如何响应对特定端点的客户机请求。
