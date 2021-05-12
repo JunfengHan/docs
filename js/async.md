@@ -186,7 +186,7 @@ Worker thread: Task C -----------> |      |
 如：
 
 - Promise 允许我们让一些操作运行（如：从服务器上获取图片）,然后**等到结果返回后再进行其他操作**
-- setTimeout(callback, time) 允许我们在一定的时间只有处理某个任务（callback）
+- setTimeout(callback, time) 允许我们在一定的时间后处理某个任务（callback）
 
 ```js
 Main thread: Task A                   Task B
@@ -230,13 +230,13 @@ _浏览器工作原理：_
 DOM 绑定事件方法**直接调用时是同步任务**，只有**用户操作时才是异步任务**。
 
 ```js
-// 直接调用，同步执行
 let btn = document.querySelector("button");
 btn.onclick = function () {
   let time = new Date().getTime();
   while (new Date().getTime() - time < 2000) {}
   console.log("1");
 };
+// 直接调用，同步执行
 btn.click();
 console.log("2");
 // 1 （约2后）
@@ -244,7 +244,7 @@ console.log("2");
 ```
 
 ```js
-// 用户点击btn元素，异步执行
+// 用户点击btn元素时，异步执行
 let btn = document.querySelector("button");
 btn.onclick = function () {
   console.log("1");
@@ -329,7 +329,7 @@ JS 异步大概经历了 4 个时期：
 
   ES8 中新增，**async 函数**和 **await 关键字**，**让异步代码的写法同步化**。
 
-async 其实是一个语法糖，它的实现就是将 Generator 函数和自动执行器（co），包装在一个函数中。
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">async</code>其实是一个<span style="color: #ff0000; font-size: 16px;">语法糖</span>，它的实现就是<span style="color: #ff0000; font-size: 16px;">将 Generator 函数和自动执行器（co），包装在一个函数中</span>。
 
 目前认为这种方案应该是 JS 异步的最终版。
 
@@ -337,7 +337,7 @@ _缺陷：_
 
 1. await 关键字会阻塞其后的代码，直到 promise 完成，就像执行同步操作一样。
 
-**如果多个异步代码没有依赖性**却使用了 await 会导致性能上的降低，代码没有依赖性的话，完全可以使用 **Promise.all** 的方式；
+**如果多个异步代码没有依赖性**却使用了 await 会导致性能上的降低，代码没有依赖性的话，完全可以使用 **Promise.all** 的方式；🌟🌟
 
 2. 不能在非 async 函数内或代码的顶级上下文环境中使用 await 运算符。这有时会导致需要创建额外的函数封包。
 
@@ -407,7 +407,7 @@ setTimeout(callback2, 3000);
 _如上代码：_
 
 - 我们定义了一个函数，和两个异步任务（setTimeout);
-- 代码执行时，约 1s 后，callback 会入栈并执行，可是，遇到了 **alert()**，代码会发生阻塞
+- 代码执行时，约 1s 后，callback 会入栈并执行，可是，遇到了**alert()**，代码会发生阻塞
 - 如果我们不点击 alert 弹窗的确认按钮，代码就不会继续执行，即 console.log(1) 不会执行
 - 假如我们 5s 后关闭弹窗，会发生什么？console.log(1) 会执行，callback2 也会立即执行。
 - 为什么 callback2 会立即执行呢？因为，**alert()阻塞了主线程**，setTimeout 的计时工作并不在主线程，约 3s 后 callback2 会被添加到调用栈，一旦主线程阻塞停止（我们手动关闭了 alert 弹窗），已经在调用栈内的 callback2 会同步执行

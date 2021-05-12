@@ -107,11 +107,36 @@ _打印结果：_
 **new 关键字做了如下操作：**🌟🌟🌟
 
 - 1. 内存中创建一个简单对象 {}
-- 2. 将新对象内部的 [[Prototype]] 指针赋值为构造函数的 prototype 属性，实现继承
-- 3. 将新对象内部的 [[Prototype]] 的 constructor 属性指向构造函数
-- 4. 构造函数内，this 指向新对象实例
+- 2. 将新对象内部的 [[Prototype]] 指针赋值为构造函数的 prototype 属性，实现继承(即：car1.\_\_proto\_\_ === Car.prototype)；
+- 3. 将新对象内部的 [[Prototype]] 的 constructor 属性指向构造函数（即：car1.\_\_proto\_\_.constructor === Car）；
+- 4. 构造函数内，this 指向新对象实例，（即：Car1.bind(car));
 - 5. 执行构造函数内代码（给新对象添加属性）
 - 6. 如果该函数没有返回对象，则返回 this，即返回了新对象
+
+_手写一个 new 操作符：_
+
+```js
+function _new(Constructor, ...args) {
+  // 基本边界判断
+  if (typeof Constructor !== "function") return false;
+
+  // 1. 创建新的简单对象
+  let obj = new Object();
+  // 2. 简单对象继承 Constructor原型
+  obj.__proro__ = Object.create(Constructor.prototype);
+  // 3. 修改简单对象 内部的 [[Prototype]] 的 constructor
+  obj.__proto__.constructor = Constructor;
+  // 4、5 执行 Constructor 代码，且修改其内部 this 指向 obj;
+  let res = Constructor.apply(obj, ...args);
+
+  // 6. 判断 Constructor 执行后返回结果
+  let isObject = typeof res === "object" && res !== null;
+  let isFunction = typeof res === "function";
+
+  // 6. 返回的是对象（Object/Function）则放回res，否则直接返回 obj
+  return isObject || isFunction ? res : obj;
+}
+```
 
 #### 1.1.2 箭头函数
 
@@ -521,21 +546,28 @@ let man = new Good();
 
 ### 4.5 bind() 中的 this
 
-bind() 方法是函数原型上自带的方法。 Function.prototype.bind()。
+bind() 方法是函数原型上自带的方法, Function.prototype.bind()。
 
-调用 f.bind(someObject)会创建一个与 f 具有相同函数体和作用域的函数，
+调用 f.bind()会<span style="color: #ff0000; font-size: 16px;">创建</span>一个与 f 具有相同函数体和作用域的函数;
 
-但是在这个新函数中，**this 将永久地被绑定到了 bind 的第一个参数**，
+- 新函数的**this 将永久地被绑定到了 bind 的第一个参数**
 
-<span style="color: #ff0000; font-size: 16px;">无论这个函数是如何被调用的</span>。
+  <span style="color: #ff0000; font-size: 16px;">无论这个函数是如何被调用的</span>
+
+- 如果没有指定任何参数，就相当于复制了一个 f 而已
+
+_示例：_
 
 ```js
 function a() {
-  console.log("this", this);
+  console.log("this:", this);
 }
 
+// bind 没有添加任何参数
+// 函数 c 相当于直接复制了一个全新的函数 a
 let c = a.bind();
-// window
+// 全局作用域下 this 指向 window
+c(); // => this: window
 ```
 
 ```js
@@ -558,6 +590,30 @@ console.log(o.a, o.f(), o.g(), o.h()); // 37, 37, azerty, azerty
 
 - bind() 中的 this 指向第一个参数，且 bind 只生效一次。
 - bind() 没有传参数时 this 指向 window
+
+_手写一个 bind:_
+
+```js
+Function.prototype._bind = function (context, ...args) {
+  // self 指调用 _bind方法 的函数实例，如上面的 函数f、函数g
+  var self = this;
+  var fnBound = function () {
+    // 执行函数实例，修改函数实例 this 指向为 context
+    self.apply(
+      this instanceof self ? this : context,
+      args.concat(Array.prototype.slice.call(arguments))
+    );
+  };
+
+  // 设置 fnBound 原型
+  if (this.prototype) {
+    fnBound.prototype = Object.create(this.prototype);
+  }
+
+  // 返回新函数
+  return fnBound;
+};
+```
 
 ### 4.6 call() 和 apply() 中的 this
 
@@ -592,6 +648,38 @@ bar.call("foo"); // [object String]
 - call() 中的 this 指向第一个参数，然后调用函数
 - call() 没有传参数时 this 也指向 window
 - call() 传入的第一个参数是非对象时，该参数会被对象化
+- call() 和 apply() 被调用时会立即执行
+
+_手动实现一个 call：_
+
+```js
+Function.prototype._call = function (context, ...args) {
+  let context = context || window;
+  // 给 context 添加方法
+  // this 指调用 _call 的函数实例，如（func._call()中的 func）
+  context.fn = this;
+  // 调用 context 的 fn
+  const res = eval("context.fn(...args)");
+  delete context.fn;
+
+  // 返回执行结果
+  return res;
+};
+```
+
+_手动实现一个 apply：_
+
+**apply** 和 **call** 的唯一区别是参数不同，**apply**接收一个数组为参数。
+
+```js
+Function.prototype._apply = function (context, args) {
+  ...
+};
+```
+
+_bind 对比 call 和 apply_:
+
+![bind 对比 call 和 apply](../_media/js_function_bindCompare.png)
 
 ### 4.7 箭头函数中的 this
 
@@ -728,7 +816,7 @@ a(); // 3
 
 ## 5. 闭包
 
-闭包指的是那些引用了另一个函数作用域中变量的函数,通常在嵌套函数中实现.
+闭包指的是--<span style="color: #ff0000; font-size: 16px;"></span>引用了另一个函数作用域中变量</span>的**函数**,通常在嵌套函数中实现。
 
 ```js
 function createUser(user) {
@@ -753,7 +841,7 @@ let user = createUser({ name: "boy", age: 12 })();
 
 外部函数的活动对象时内部函数作用域链上的第二个对象。
 
-这个作用域链一直向外串起了所有包含函数的活动对象，知道全局执行上下文才终止。
+这个作用域链一直向外串起了所有包含函数的活动对象，直到全局执行上下文才终止。
 
 函数执行时，要从作用域链中查找变量，以便读、写值。
 

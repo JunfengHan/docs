@@ -66,9 +66,9 @@ console.log(b.age); // 30
 console.log(a.age); // 24
 ```
 
-### 1.1 数据类型判断
+### 1.2 数据类型判断
 
-#### typeof
+#### 1.2.1 typeof
 
 > typeof 操作符返回一个字符串，表示未经计算的操作数的类型。
 
@@ -92,7 +92,7 @@ console.log(typeof console.log); // function
 - typeof 能判断基本数据类型（null 除外）
 - typeof 判断引用类型只能判断出函数为 function,其他引用类型数据都为 object
 
-#### instanceof
+#### 1.2.2 instanceof
 
 > instanceof 运算符用于检测构造函数的 prototype 属性是否出现在某个实例对象的原型链上.
 
@@ -119,7 +119,7 @@ console.log(console.log instanceof Function); // true
 - instanceof 能有效判断引用数据类型
 - instanceof 不能准确判断基础数据类型
 
-#### Object.prototype.toString()
+#### 1.2.3 Object.prototype.toString()
 
 > Object.prototype.toString() 方法返回一个表示该对象的字符串.
 
@@ -139,7 +139,7 @@ Object.prototype.toString.call(document); //"[object HTMLDocument]"
 Object.prototype.toString.call(window); //"[object Window]"
 ```
 
-#### 实现一个数据类型判断函数
+#### 1.2.4 实现一个数据类型判断函数
 
 ```js
 function getType(obj) {
@@ -158,6 +158,133 @@ function getType(obj) {
 console.log(getType("8")); // string
 console.log(getType("8")); // number
 console.log(getType([])); // array
+```
+
+### 1.3 数据类型转换
+
+**强制数据类型转换**：
+
+- Number()
+
+  创建一个 Number 对象
+
+- parseInt()
+
+  parseInt(string, radix);
+
+  解析一个**字符串**并返回**指定基数**的**十进制整数**
+
+- parseFloat()
+
+  **全局方法**，解析一个参数（必要时先转换为字符串）并返回一个**浮点数**
+
+- toString()
+
+  将参数转化为 String 对象
+
+  将参数转化为 String 对象；每个构造函数都有自己的 toString 方法，如 Function.prototype.toString()
+
+- String()
+
+  创建一个 String 对象
+
+- Boolean()
+
+  创建一个 Boolean 对象；
+
+  undefined、null、false、“”、0、NaN 会转化为 false，其他则都为 true
+
+_强制--数据类型转换_:
+
+```js
+console.log(Number("1")); // -> 1
+console.log(Number("1test")); // -> NaN
+console.log(Number(null)); // -> 0
+console.log(Number("")); // -> 0
+console.log(Number(undefined)); // -> NaN
+
+console.log(parseInt("")); // -> NaN
+
+// parseFloat() 返回 3.14
+console.log(parseFloat(3.14)); // -> 3.14
+console.log(parseFloat("3.14")); // -> 3.14
+console.log(parseFloat("   3.14   ")); // -> 3.14
+console.log(parseFloat("314e-2")); // -> 3.14
+console.log(parseFloat("0.0314E+2")); // -> 3.14
+console.log(parseFloat("3.14some non-digit characters")); // -> 3.14
+console.log(parseFloat({ toString: function() { return "3.14" } }); // -> 3.14
+// parseFloat() 返回 NaN
+console.log(parseFloat("abc123")); // -> NaN
+
+// parseInt() 返回 16
+parseInt("0xF", 16); // -> 16
+parseInt("F", 16); // -> 16
+parseInt("17", 8); // -> 16
+parseInt(021, 8); // -> 16
+parseInt("015", 10);  // -> 16
+parseInt(15.99, 10); // -> 16
+parseInt("15,123", 10); // -> 16
+parseInt("FXX123", 16); // -> 16
+parseInt("1111", 2); // -> 16
+parseInt("15 * 3", 10); // -> 16
+// parseInt() 返回 NaN
+console.log(parseFloat("abc"), 8); // -> NaN （”abc“不是数字）
+console.log(parseFloat("123"), 2); // -> NaN (格式错误导致)
+
+console.log(Boolean("")); // -> false
+console.log(Boolean(null)); // -> false
+console.log(Boolean(NaN)); // -> false
+console.log(Boolean("1")); // -> true
+
+
+```
+
+**隐式数据类型转换**：
+
+- 运算符: +、-、\*、/
+- 逻辑运算符: &&、||、!
+- 关系操作符: >、<、<=、>=
+- 相等运算: ==
+- 条件语句: if/while
+
+_隐式--数据类型转换_:
+
+```js
+// 一方为 null 或 undefined，只用另一方同样为 null 或 undefined 才返回 true
+null == undefined; // => true
+null == 0; // => false
+null == ""; // => false
+
+// 有 Symbol 则返回 false
+Symbol() == "";
+
+// 一方为 Number，一方为 Boolean，会将 Boolean 转换为 Number
+0 == false; // true
+1 == true; // => true
+2 == true; // => false
+
+// 一方为 String, 一方为 Number，将 String 转换为 Number
+"123" == 123; // => true
+```
+
+#### 1.3.1 手动实现一个 JSON.stringify 方法
+
+我们知道 JSON.stringify() 方法将一个 JavaScript **对象**或**值**转换为 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">JSON 字符串</code>.
+
+**JSON.stringify 转化规则**：
+
+![stringify1](../_media/js_base_stringify1.png)
+![stringify2](../_media/js_base_stringify2.png)
+
+```js
+function jsonStringify(data) {
+  let type = typeof data;
+
+  // 根据不同数据类型做转换
+  if (type !== "object") {
+    let result = data;
+  }
+}
 ```
 
 ## 2. 引用类型
@@ -242,25 +369,92 @@ console.log(mySet); // {1, 2, 3}
 
 Array 应该是 JS 中第二常用的数据类型吧，第一是 Object。
 
-_数组方法不完全汇总：_
+#### 3.1.1 数组 API 汇总
+
+_数组方法分类：_
+
+![Array method](../_media/js_base_arrayMethods.png)
+
+_数组方法汇总：_
 
 ![Array method](../_media/array_method.png)
 
 [脑图地址，拿走不谢](https://www.processon.com/view/link/60453082e401fd4f9cbc6f5d)
 
-#### 3.1.1 数组的操作方法
+#### 3.1.2 类数组
 
-#### 3.1.2 数组去重
+JS 中存在一种**类数组**的对象。
 
-_方法 1: 运用 Set 特性_
+他们不能直接调用数组的所有方法，但具有数组的某些特征。
+
+**常见的类数组**：
+
+- 函数中的 arguments
+- getElementsByTagName/ClassName 等获得的 HTML 集合
+- querySelect 获得的 NodeList
+
+_示例：_
+
+```js
+function sum(a, b) {
+  let args = [...arguments];
+
+  console.log(args.reduce((sum, cur) => sum + cur));
+}
+sum(1, 2);
+// => 3
+```
+
+```js
+function sum(...args) {
+  console.log(args.reduce((sum, cur) => sum + cur));
+}
+sum(1, 2);
+// => 3
+```
+
+#### 3.1.3 数组去重
+
+_方法 1: 傻瓜方法 for/forEach 遍历_
+
+```js
+function remArr(arr) {
+  let res = [];
+
+  for (let i = 0; i < arr.length; i++) {
+    if (res.indexOf(arr[i]) === -1) res.push(arr[i]);
+  }
+
+  return res;
+}
+```
+
+_方法 2: 运用 Set 特性_
 
 ```js
 const numbers = [2, 3, 4, 4, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 5, 32, 3, 4, 5];
-// new Set去重，... 将 set再次转变为数组
+// new Set去重，... 或 Array.from() 将 set再次转变为数组
 console.log([...new Set(numbers)]);
+console.log(Array.from(new Set(numbers)));
 ```
 
-#### 3.1.3 数组扁平化
+_方法 3：运用 reduce 方法：_
+
+```js
+function remArr(arr) {
+  if (!Array.isArray(arr)) return "Error: args Type Error";
+
+  return arr.reduce((acc, cur) => {
+    console.log(acc, cur);
+    if (acc.indexOf(cur) === -1) {
+      acc.push(cur);
+    }
+    return acc;
+  }, []);
+}
+```
+
+#### 3.1.4 数组扁平化
 
 _方法 1: 运用新 API flat()_
 
@@ -289,7 +483,7 @@ function flatArr(arr) {
     } else {
       result.push(ele);
     }
-  });
+  }); 
 
   return result;
 }
@@ -302,8 +496,6 @@ function flatArr(arr) {
   if (Array.isArray(arr)) {
     return Array.from(arr.toString().split(","));
   }
-
-  return;
 }
 ```
 
@@ -324,7 +516,7 @@ var arr = [1, 2, [3, 4, [5, 6]]];
 const flattened = [...flatten(arr)];
 ```
 
-#### 3.1.4 数组排序
+#### 3.1.5 数组排序
 
 _方法 1: 原生方法 sort_
 
@@ -332,6 +524,8 @@ _方法 1: 原生方法 sort_
 // 升序排列
 let c = a.sort((a, b) => (a <= b ? -1 : 1));
 ```
+
+#### 3.1.6 数组遍历
 
 ### 3.2 对象的操作
 

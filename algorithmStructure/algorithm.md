@@ -514,7 +514,7 @@ _执行过程演示：_
 
 ![sort](../_media/algorithm_sort.jpg)
 
-### 4.1 冒泡排序
+### 5.1 冒泡排序
 
 - 冒泡排序只会操作**相邻**的两个数据
 - 一次冒泡会让至少一个元素移动到它应该在的位置
@@ -572,7 +572,7 @@ function sortBubble(num) {
 
 - 冒泡排序的时间复杂度（最好为 O(n)，最坏为 O(n^2)）
 
-### 4.2 插入排序
+### 5.2 插入排序
 
 插入排序也包含两种操作，一种是**元素的比较**，一种是**元素的移动**。
 
@@ -631,7 +631,7 @@ function sortInsert(num) {
 
 - 插入排序的时间复杂度（最好为 O(n)，最坏为 O(n^2)）
 
-### 4.3 选择排序
+### 5.3 选择排序
 
 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">选择排序</code>每次会<span style="color: #ff0000; font-size: 16px;">从未排序区间中找到**最小**的元素，将其放到已排序区间的**末尾**</span>。
 
@@ -696,13 +696,15 @@ function sortSelect(num) {
 
 - 1. <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">冒泡排序</code>的数据交换要比<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">插入排序</code>的数据移动要复杂，差不多是后者的 3 倍，效率略低。
 
-### 4.4 归并排序与快速排序
+### 5.4 归并排序与快速排序
 
 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">归并排序</code>和<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">快速排序</code>利用了算法的<span style="color: #ff0000; font-size: 16px;">分治</span>思想。
 
 这两种排序算法**适合大规模的数据排序**，同时也更加**常用**。
 
-<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Array.prototype.sort()</code> 方法在 Chrome(V8 引擎)中就是使用 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">快速排序</code> 实现的，在 FirFox 中是使用 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">归并排序</code>实现的。
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Array.prototype.sort()</code> 方法在 Chrome(V8 引擎)中使用了 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">快速排序</code> 实现的，在 FirFox 中是使用了 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">归并排序</code>实现的。需要知道的是，V8 对排序做了优化，会根据需要数量的大小选择不同的排序算法，如 n < 10 时使用的是<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">插入排序</code>。
+
+#### 5.4.1 归并排序
 
 _归并排序：_
 
@@ -719,37 +721,129 @@ _示例：_
 
 ```js
 // 归并排序--从小到大
-// 归并排序主函数
+// 分解数组
 function mergeSort(array) {
+  // 递归调用基线，最总得到长度为 1 的数组
   if (array.length > 1) {
     const { length } = array;
     // 分解数组
     const middle = Math.floor(length / 2);
     const left = mergeSort(array.slice(0, middle));
     const right = mergeSort(array.slice(middle, length));
+    // 数组合并并排序，所有分解完成后执行这里
     array = merge(left, right);
   }
 
   return array;
 }
 
-// 合并左右数组
+// 合并并排序数组
 function merge(left, right) {
   let i = 0;
   let j = 0;
   const result = [];
 
   while (i < left.length && j < right.length) {
-    result.push(left[i] < right[i] ? left[i++] : right[j++]);
+    // 排序 left 和 right
+    result.push(left[i] < right[j] ? left[i++] : right[j++]);
   }
 
+  // concat 剩下的值，并返回
   return result.concat(i < left.length ? left.slice(i) : right.slice(j));
 }
+// mergeSort([45, 111, 45, 77, 11, 666])
+// 输出：[11, 45, 45, 77, 111, 666]
 ```
 
 **归并排序特性：**
 
-- 归并排序
+- <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">归并排序</code>是一个稳定的排序算法
+
+- <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">归并排序</code>时间复杂度 O(nlogn)
+
+- <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">归并排序</code>空间复杂度 O(n)
+
+#### 5.4.2 快速排序（快排）
+
+_快速排序：_
+
+![sort](../_media/algorithm_sort_quick.jpg)
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">快速排序</code>的关键是利用**不同的**<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">支点</code>把数据<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">分区</code>后进行排序。
+
+```js
+// 快速排序，从小到大 -- 非原地排序版本，定义了pivot、left、right等变量，但简单
+function quickSort(arr) {
+  // 递归终止条件
+  if (arr.length <= 1) {
+    return arr;
+  }
+
+  // 取第一个数为基准(基准可以是arr的任意值，第一个较为简单)
+  let pivotIndex = 0;
+  // 注意这里使用 splice 改变了原数组，即数组变短了
+  let pivot = arr.splice(pivotIndex, 1)[0];
+  let left = [];
+  let right = [];
+  for (let i = 0; i < arr.length; i++) {
+    // 注意，这里是稳定排序
+    // 因为当 arr[i] 是第一个元素，当 arr[i] === pivot 时，arr[i]位置仍在其右侧
+    if (arr[i] < pivot) {
+      left.push(arr[i]);
+    } else {
+      right.push(arr[i]);
+    }
+  }
+
+  // quickSort(left) 得到左侧区间
+  // quickSort(right) 得到右侧区间
+  // 合并分区
+  return quickSort(left).concat([pivot], quickSort(right));
+}
+// console.log(quickSort([4564, 454, 1855, 45, 0, -45]));
+// 输出：[-45, 0, 45, 454, 1855, 4564]
+```
+
+_原地排序版本：_
+
+```js
+function quick (start ,end){
+  var mid = start , temp = arr[start];
+  for(var i = start+1 ; i if(arr[i] arr[mid]=arr[i];// >> mid+1 i-1
+  var j = i ;
+  mid++;
+  while(j!=mid){arr[j]=arr[j-1];j--}
+}
+}
+arr[mid]= temp ;
+return mid;
+}
+
+function sort (start , end ){
+  if(end>start){
+  var mid = quick(start ,end);console.log(mid)
+  sort(start,mid-1);sort(mid+1,end);
+  }
+}
+
+sort(0,arr.length)
+console.log(arr);
+```
+
+**快速排序特性：**
+
+- <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">快速排序</code>是一个稳定的排序算法
+
+- <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">快速排序</code>是不是原地排序取决于如何设计
+
+- <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">快速排序</code>平均时间复杂度 O(nlogn)，刚好原数据倒叙时最差为 O(n^2)
+
+- <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">快速排序</code>空间复杂度 O(1)
+
+#### 5.4.3 快排 VS 选择排序
+
+- 快排和选择排序都是利用分治思想实现的
+- 快排使用原地排序（空间复杂度为 O(1)），解决了选择排序占用较多空间的问题
 
 ## 6. 搜索算法
 
@@ -776,3 +870,5 @@ _示例：_
 推荐购买学习 👍 -- [数据结构与算法之美 ｜ 极客时间(付费课程)](https://time.geekbang.org/column/intro/126)
 
 [递归函数 ｜ MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Functions#%E9%80%92%E5%BD%92)
+
+[快速排序（Quicksort）的 Javascript 实现 | 阮一峰](http://www.ruanyifeng.com/blog/2011/04/quicksort_in_javascript.html)

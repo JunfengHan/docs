@@ -6,10 +6,10 @@
 - [JavaScript](/js/ "原生JavaScript")
 
   - [JS 基本概念](/js/concept.md "JavaScript 基础概念")
-  - [JS 基础](/js/base.md "JavaScript 知识点")
+  - [JS 基础 -- 数据类型](/js/base.md "JavaScript 数据类型")
   - [JS 深拷贝与浅拷贝](/js/jscopy.md "JavaScript 深拷贝与浅拷贝")
   - [JS 中的面向对象、继承和 Class(类)](/js/object.md "JavaScript Object 对象")
-  - [JS 函数](/js/function.md "JavaScript function 函数")
+  - [JS 基础 -- 函数](/js/function.md "JavaScript function 函数")
   - [搞清楚 JS 异步是什么](/js/async.md "JavaScript 异步")
   - [Event Loop (事件循环)](/js/event_loop.md "JavaScript event loop 事件循环")
   - [正则](/js/regexp.md "JavaScript regexp 正则表达式")
@@ -37,11 +37,11 @@
 - [NodeJS](/node/ "nodeJs")
 
   - [深入了解 NodeJs](/node/base.md "认识 Node.js")
-  - [events -- 事件触发器](/node/fs.md "NodeJs fs模块")
+  <!-- - [events -- 事件触发器](/node/events.md "NodeJs events 事件") -->
   - [理解 Buffer](/node/buffer.md "NodeJs buffer")
-  - [理解 Stream (流)](/node/fs.md "NodeJs fs模块")
+  <!-- - [理解 Stream (流)](/node/stream.md "NodeJs Stream 流") -->
   - [fs -- 文件系统](/node/fs.md "NodeJs fs模块")
-  - [process、child process 和 cluster](/node/fs.md "NodeJs fs模块")
+  <!-- - [process、child process 和 cluster](/node/process.md "NodeJs 进程") -->
   - [Express -- NodeJs 使用最广泛的 Web 框架](/node/express.md "express")
   - [Koa -- 下一代 Node.js Web 框架](/node/koa.md "koa")
   - [Nest -- 真正的 NodeJs 框架](/node/nest.md "nest")

@@ -362,11 +362,11 @@ Person.prototype.sayName = function () {
   console.log(this.name);
 };
 
-// 此时，obj1 和 obj2 的原型对象都是 Person.prototype
+// 此时，person1 和 person2 的原型对象都是 Person.prototype
 let person1 = new Person();
 let person2 = new Person();
 
-// 说明 obj1.getName 和 obj2.getName 指向同一个地址
+// 说明 person1.getName 和 person2.getName 指向同一个地址
 console.log(person1.sayName === person2.sayName); // true
 ```
 
@@ -500,6 +500,8 @@ ECMAScript 中的函数是没有签名的，所以 JS 没有接口继承。
 关键点：<span style="color: #ff0000; font-size: 16px;">对象的指针 [[Prototype]]（浏览器中的 \_\_proto\_\_）函数的原型对象 prototype</span>
 
 具体如何指向请看[JS 的原型链继承图](https://www.processon.com/view/link/5fe31092e0b34d299ffac6b1)
+
+详细解读看这里[函数是什么](https://www.shushuo.me/#/js/function?id=_2函数是什么)
 
 ### 4.2 简单的原型链继承
 

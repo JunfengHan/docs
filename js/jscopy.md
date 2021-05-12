@@ -4,9 +4,9 @@
 
 > JavaScript 是一种弱类型或者说动态语言。这意味着你不用提前声明变量的类型，在程序运行过程中，类型会被自动确定。
 
-原始数据类型：在内存中占据固定大小，保存在 ==栈内存== 中（不包含闭包中的变量）。
+原始数据类型：在内存中占据固定大小，保存在**栈内存**中（不包含闭包中的变量）。
 
-引用类型：引用类型的值是对象，保存在 ==堆内存== 中，调用时通过指针来访问。
+引用类型：引用类型的值是对象，保存在**堆内存**中，调用时通过指针来访问。
 
 ## 2.什么是浅拷贝
 
@@ -32,7 +32,39 @@ console.log(obj1); // {a:4, b: {b1: 3}}
 
 #### 2.1 JS 有哪些浅拷贝方法
 
-- **Array.prototype.slice**: 这一对象是一个由 begin 和 end 决定的原数组的浅拷贝（包括 begin，不包括 end）。原始数组不会被改变。
+- 1. **Object.assign()**
+
+  浅拷贝对象到目标对象
+
+  ```js
+  const target = { a: 1, b: 2 };
+  const source = { b: 4, c: 5 };
+
+  const returnedTarget = Object.assign(target, source);
+
+  console.log(target);
+  // expected output: Object { a: 1, b: 4, c: 5 }
+  ```
+
+- 2. **...扩展运算符**（MDN 叫展开语法，Spread syntax）
+
+可以在**函数调用**、**数组构造**时, 将数组表达式或者 string 在语法层面展开；
+
+扩展运算符的浅拷贝实例：
+
+```javascript
+let obj = { a: 1, b: { c: 1 } };
+let obj2 = { ...obj };
+obj.a = 2;
+console.log(obj); //{a:2,b:{c:1}}
+console.log(obj2); //{a:1,b:{c:1}}
+
+obj.b.c = 2;
+console.log(obj); //{a:2,b:{c:2}}
+console.log(obj2); //{a:1,b:{c:2}}
+```
+
+- 3. **Array.prototype.slice**: 这一对象是一个由 begin 和 end 决定的原数组的浅拷贝（包括 begin，不包括 end）。原始数组不会被改变。
 
 MDN 里的实例：
 
@@ -49,22 +81,9 @@ console.log(animals.slice(1, 5));
 // expected output: Array ["bison", "camel", "duck", "elephant"]
 ```
 
-- Array.prototype.concat
-- ...扩展运算符（MDN 叫剩余参数）
+- 4. **Array.prototype.concat()**
 
-扩展运算符的浅拷贝实例：
-
-```javascript
-let obj = { a: 1, b: { c: 1 } };
-let obj2 = { ...obj };
-obj.a = 2;
-console.log(obj); //{a:2,b:{c:1}}
-console.log(obj2); //{a:1,b:{c:1}}
-
-obj.b.c = 2;
-console.log(obj); //{a:2,b:{c:2}}
-console.log(obj2); //{a:1,b:{c:2}}
-```
+  合并两个或多个数组，返回一个新和成的数组。
 
 ## 3.什么是深拷贝
 
@@ -94,18 +113,27 @@ JSON.parse(JSON.stringfy())方法的缺陷：
 
 _深拷贝：_
 
-**原理**：递归调用，单独处理正则和日期对象。利用 WeekMap 解决循环引用
+**原理**：递归调用，单独处理正则和日期对象；利用 WeekMap 解决循环引用；
+
+> WeakMap 如何解决循环引用？
+>
+> WeakMap 的**键**必须是对象，**值**可以是任何值；
+> WeakMap 持有的是每个键对象的**弱引用**，没有其他引用存在时垃圾回收能正确进行；
+> 正由于这样的弱引用，WeakMap 的 key 是不可枚举的；
 
 ```js
 function deepClone(value) {
   let map = new WeakMap();
   function clone(value) {
+    // 用 instanceof 方法判断是否为引用类型
     if (value instanceof Object) {
+      // 防止循环引用
       if (map.has(value)) {
         return map.get(value);
       }
 
       let newValue;
+      // 处理不同引用类型
       if (value instanceof Array) {
         newValue = [];
       } else if (value instanceof Function) {
@@ -130,7 +158,7 @@ function deepClone(value) {
       let cloneValue = Object.create(prototypeValue, desc);
       map.set(value, cloneValue);
 
-      // 循环递归调用clone
+      // 循环递归调用 clone
       for (let key in value) {
         if (value.hasOwnProperty(key)) {
           newValue[key] = clone(value[key]);
