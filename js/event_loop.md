@@ -129,11 +129,14 @@ _JS 运行环境详细：_
 
 首先要明确一点，[JS 运行时](https://developer.mozilla.org/zh-CN/docs/Web/API/HTML_DOM_API/Microtask_guide/In_depth#javascript%E8%BF%90%E8%A1%8C%E6%97%B6)的任务队列有两条，分别是<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">宏任务队列</code>和<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">微任务队列</code>。
 
+![microTack&Task](../_media/js_event_loopTask.png)
+
 **微任务：**
 
 - Promise 函数
 - queueMicrotask()
-- process.nextTick（NodeJS）、MutationObserver(html5 新特性)
+- process.nextTick（NodeJS）、
+- MutationObserver(html5 新特性)
 
 **宏任务：**
 
@@ -145,14 +148,62 @@ _JS 运行环境详细：_
 
 **微任务和宏任务区别 ❓**
 
-微任务总是在宏任务之前执行。
+<span style="color: #ff0000; font-size: 16px;">宏任务会发起 Tick，微任务不会发起新一轮 Tick，一个 Tick 中的所有微任务清空才算执行完一个 Tick</span>。
 
-例如：在执行一个宏任务时生成了一个微任务，这个微任务会被添加到微任务队列，在下一次迭代开始后将执行微任务队列中新添加的这个微任务。
+例如：在执行一个宏任务时生成了一个微任务，这个微任务会被添加到微任务队列，新添加的微任务会在该。
 
 ### 4.1 异步任务例题分析
 
 ```js
+async function async1() {
+  console.log("async1 start");
 
+  let res = await resolveAfter2Seconds();
+
+  console.log(res);
+
+  await async2();
+
+  console.log("async1 end");
+}
+
+function resolveAfter2Seconds(x) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(x);
+    }, 2000);
+  });
+}
+
+async function async2() {
+  console.log("async2");
+}
+
+async1();
+
+setTimeout(() => {
+  console.log("timeout");
+}, 0);
+
+new Promise(function (resolve) {
+  console.log("promise1");
+
+  resolve();
+}).then(function () {
+  console.log("promise2");
+});
+
+console.log("script end");
+
+//async1 start
+// promise1
+// script end
+// promise2
+// undefined
+// timeout
+// undefined
+// async2
+// async1 end
 ```
 
 ## 参考

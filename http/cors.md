@@ -2,7 +2,7 @@
 
 ## 1. 跨域问题
 
-你写的前端项目跑在 “localhost:3999",然后，你向本地服务地址“localhost:8081”发起了一个 HTTP 请求,于是你快乐地喝着快乐水等着服务器返回结果。可是，居然报错了。💔
+你的前端项目运行在“localhost:8081”，你项目的本地服务跑在 “localhost:3999"。前端项目向服务发起了一个 HTTP 请求,于是你快乐地喝着快乐水等着服务器返回结果。可是，居然报错了。💔
 
 ![跨域报错](../_media/cross_domain.png)
 
@@ -53,19 +53,84 @@ URL 中以上 3 个内容必须全部相同，否则就是不同源。
 
 #### 4.1.1 JSONP 跨域
 
-我们尝试用 script 标签来实现跨域。
+因为<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">\<script\></code>标签不受同源策略影响，我们可以用 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">\<script\></code> 标签来实现跨域。
 
-你没看错，这种特殊的跨域方式有名字叫 <span style="color: #ff0000; font-size: 16px;">JSONP</span>。
+你没看错，这种特殊的跨域方式有名字叫 <span style="color: #ff0000; font-size: 16px;">JSONP</span>(JSON with Padding)。
+
+**jsonp 原理**：
+
+- 1. **客户端**发送 HTTP 请求时携带一个**函数**
+- 2. **服务端**接收到请求后将 JSON 填充到**函数**，并返回该函数
+- 3. **客户端**执行该函数，获取到 JSON 数据
+
+_服务端处理接口，并填充 JSON_：
+
+```js
+// 处理成功失败返回格式的工具
+const { successBody } = require("../utli");
+class CrossDomain {
+  static async jsonp(ctx) {
+    // 前端传过来的参数
+    const query = ctx.request.query;
+    // 设置一个cookies
+    ctx.cookies.set("tokenId", "1");
+    // query.cb是前后端约定的方法名字
+    ctx.body = `${query.cb}(${JSON.stringify(
+      // // 填充JSON给函数
+      successBody({ msg: query.msg }, "success")
+    )})`;
+  }
+}
+module.exports = CrossDomain;
+```
+
+_前端封装一个请求_：
+
+```js
+const request = ({ url, data }) => {
+  return new Promise((resolve, reject) => {
+    // 处理传参成xx=yy&aa=bb的形式
+    const handleData = (data) => {
+      ...
+    };
+    // 动态创建script标签
+    const script = document.createElement("script");
+    // 回调函数
+    window.jsonpCb = (res) => {
+      document.body.removeChild(script);
+      delete window.jsonpCb;
+      // 返回结果
+      resolve(res);
+    };
+    script.src = `${url}?${handleData(data)}&cb=jsonpCb`;
+    document.body.appendChild(script);
+  });
+};
+```
+
+_如何使用_：
+
+```js
+request({
+  url: "http://localhost:9871/api/jsonp",
+  data: {
+    // 传参
+    msg: "helloJsonp",
+  },
+}).then((res) => {
+  console.log(res);
+});
+```
 
 **结论：**
 
 > 实现简单，但是只能发起 GET 请求。
 
-#### 4.1.2 iframe 标签实现跨域
+#### 4.1.2 iframe 标签 + form 表单实现跨域
 
 **结论：**
 
-> 实现简单，但是只能发起 GET 请求。
+> iframe 和 form 结合可以发起 POST 跨域请求。
 
 ### 4.2 CORS(跨域资源共享)
 
@@ -185,8 +250,6 @@ TODO
 ### 4.3 nginx 代理跨域
 
 **nginx 代理**实现跨域需要在服务器启动一个 nginx 代理，通过 nginx 代理来实现对跨域请求的处理，nginx 转发请求到服务端，然后返回信息给客户端。
-
-### 4.4 WebSocket 协议跨域
 
 ## 总结
 

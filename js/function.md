@@ -928,12 +928,12 @@ console.log((obj.getIdentityFunc = obj.getIdentityFunc)(); // 'The Window'
 ```js
 let x = 3;
 
-setTimeOut(() => (x = x + 3), 1000);
+setTimeOut((x) => (x = x + 3), 1000);
 
 console.log(x); // -> 3
 ```
 
-执行这段代码，最终我们会打印出 x = 3,因为 setTimeout()是个异步函数，第一次执行到 setTimeout 时系统计时器会开始计时，然后系统计时器会在 1s 后会执行入队的异步中断（将() = x = x + 3 插入消息队列），至于何时会触发这个中断（即执行 x = x + 3），这对 JavaScript 来说是个黑盒，我们无法预知。
+执行这段代码，最终我们会打印出 x = 3,因为 setTimeout()是个 async 函数，第一次执行到 setTimeout 时系统计时器会开始计时，然后系统计时器会在 1s 后会执行入队的异步中断（将() = x = x + 3 插入消息队列），至于何时会触发这个中断（即执行 x = x + 3），这对 JavaScript 来说是个黑盒，我们无法预知。
 
 异步任务可以保证在当前线程的同步任务之后执行，但在排定异步任务后基本就没法知道系统状态何时变化。
 
@@ -963,7 +963,7 @@ double(3);
 
 #### 6.1.1 异步调用的嵌套
 
-> 回调可以获取异步函数的返回值
+> 回调可以获取 async 函数的返回值
 
 给异步操作提供一个回调，这个回调中包含要使用异步返回值（作为回调的参数）的代码。
 
@@ -972,7 +972,7 @@ function double(value, callback) {
   setTimeout(() => callback(value * 2), 1000);
 }
 
-double(3, (x) => console.log(`I was given: {x}`));
+double(3, (x) => console.log(`I was given: ${x}`));
 
 // I was given: 6 (约1s后)
 ```
@@ -1086,7 +1086,7 @@ Promise 就是利用这个原理来设计的，用来解决“回调地狱”的
 
 #### 6.2.3 Promise 怎么用？
 
-> 我们来看看 Promise 是怎么做月饼的吧，哦不，是怎么处理异步函数的。
+> 我们来看看 Promise 是怎么做月饼的吧，哦不，是怎么处理 async 函数的。
 
 一个“回调地狱”：
 
@@ -1902,15 +1902,282 @@ Promise.prototype.then = function (onFulfilled, onRejected) {
 };
 ```
 
-### 6.3 异步函数 async/await
+### 6.3 迭代器与生成器
 
-> 异步函数的作用是提高 Promise 的易用性.
+#### 6.3.1 迭代协议
 
-可以利用它们像编写同步代码那样编写基于 Promise 的代码，而且还不会阻塞主线程。 它们可以让异步代码“智商”下降、可读性提高。
+[迭代协议 | MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Iteration_protocols#iterator)
 
-因此有人说这是 JavaScript 异步的“终极形式”（有待商榷）。
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">迭代协议</code>是**ES6**中新增的一组补充规范，迭代协议由<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">可迭代协议</code>和<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">迭代器协议</code>组成。
 
-异步函数的写法：
+对象（或者它原型链上的某个对象）必须有一个键为 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">@@iterator</code> 的属性，可通过常量 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Symbol.iterator</code> 访问该属性。
+
+- **可迭代协议**：
+
+  允许 JS 对象定义他们的迭代行为，如：在 for...of 循环中哪些可以被遍历。
+
+  常见的内置可迭代对象：
+
+  - String
+  - Array
+  - TypedArray(ES8)
+  - Map
+  - Set
+
+- **迭代器协议**：
+
+  定义了产生一系列值的标准方式。
+
+  实现了<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">next()</code>方法的对象才能成为迭代器。
+
+  next()方法必须有两个属性：
+
+  - done: Boolean
+  - value: 任意值
+
+_定义一个可迭代对象：_
+
+```js
+var myIterator = {
+  // 定义 迭代器协议 的next() 方法
+  next: function () {
+    // ...
+  },
+  // 定义 可迭代协议 的 @@iterator
+  [Symbol.iterator]: function () {
+    return this;
+  },
+};
+```
+
+#### 6.3.2 可迭代对象
+
+上面说了，内置可迭代对象有 **String**、**Array**、**TypedArray(ES8)**、**Map**、**Set**。
+
+**自定义可迭代对象**：
+
+```js
+var myIterable = {};
+myIterable[Symbol.iterator] = function* () {
+  yield 1;
+  yield 2;
+  yield 3;
+};
+[...myIterable]; // [1, 2, 3]
+```
+
+**接受可迭代对象的内置 API**：
+
+- new Map([iterable])
+- new WeakMap([iterable])
+- new Set([iterable])
+- new WeakSet([iterable])
+- Promise.all(iterable)
+- Promise.race(iterable)
+- Array.from(iterable)
+
+**接受可迭代对象的方法**：
+
+- for...of
+- ...(展开语法)
+- yield\*
+- 结构赋值
+
+```js
+for (let value of ["a", "b", "c"]) {
+  console.log(value);
+}
+// "a"
+// "b"
+// "c"
+
+[..."abc"]; // ["a", "b", "c"]
+
+function* gen() {
+  yield* ["a", "b", "c"];
+}
+gen().next(); // { value: "a", done: false }
+
+[a, b, c] = new Set(["a", "b", "c"]);
+a; // "a"
+```
+
+#### 6.3.3 创建生成器对象
+
+**普通函数创建生成器对象**：
+
+```js
+function makeIterator(array) {
+  let nextIndex = 0;
+  return {
+    next: function () {
+      return nextIndex < array.length
+        ? {
+            value: array[nextIndex++],
+            done: false,
+          }
+        : {
+            done: true,
+          };
+    },
+  };
+}
+
+// it 就是一个生成器对象
+let it = makeIterator(["哟", "呀"]);
+
+console.log(it.next().value); // '哟'
+console.log(it.next().value); // '呀'
+console.log(it.next().done); // true
+```
+
+**使用生成器来创建生成器对象**：
+
+```js
+function* makeSimpleGenerator(array) {
+  let nextIndex = 0;
+
+  while (nextIndex < array.length) {
+    yield array[nextIndex++];
+  }
+}
+
+let gen = makeSimpleGenerator(["哟", "呀"]);
+
+console.log(gen.next().value); // '哟'
+console.log(gen.next().value); // '呀'
+console.log(gen.next().done); // true
+```
+
+> 生成器对象是什么 ❓
+
+答：<code style="color: #708090; background-color: #F5F5F5; font-size: 18px"> </code>生成器对象</code>即是<code style="color: #708090; background-color: #F5F5F5; font-size: 18px"> </code>迭代器</code>，也是<code style="color: #708090; background-color: #F5F5F5; font-size: 18px"> </code>可迭代对象</code>。
+
+```js
+let aGeneratorObject = (function* () {
+  yield 1;
+  yield 2;
+  yield 3;
+})();
+
+typeof aGeneratorObject.next;
+// 返回"function", 因为有一个next方法，所以这是一个迭代器
+
+typeof aGeneratorObject[Symbol.iterator];
+// 返回"function", 因为有一个@@iterator方法，所以这是一个可迭代对象
+
+aGeneratorObject[Symbol.iterator]() === aGeneratorObject;
+// 返回true, 因为@@iterator方法返回自身（即迭代器），所以这是一个格式良好的可迭代对象
+```
+
+#### 6.3.4 生成器函数（Generator function）
+
+[生成器函数](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Iterators_and_Generators#%E7%94%9F%E6%88%90%E5%99%A8%E5%87%BD%E6%95%B0)
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">function\*</code>这种形式会定义一个**生成器函数**，它返回一个<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">生成器(Generator)对象</code>。
+
+```js
+// 定义生成器函数
+function* generator(i) {
+  console.log(1);
+  yield i;
+  yield i + 10;
+}
+
+// 最初调用生成器函数时，返回一种称为 Generator 的迭代器
+const gen = generator(10);
+
+// 调用迭代器 gen 的 next() 方法，执行 generator函数，直到遇见 yield 语句
+console.log(gen.next().value);
+// log: 1
+// expected output: 10
+
+// 继续调用迭代器 gen 的 next() 方法，执行 generator函数，直到遇见下一个 yield 语句
+console.log(gen.next().value);
+// expected output: 20
+```
+
+**小结**：
+
+---
+
+1. **迭代器**是一个具有 next() 方法的对象
+2. **生成器**是一个函数，会返回一个**生成器对象**
+3. **生成器对象**即是**迭代器**也是**可迭代对象**
+4. 通过执行**迭代器**的 next()方法，<span style="color: #ff0000; font-size: 16px;">可以控制**生成器**函数的执行与暂停</span>
+
+---
+
+#### 6.3.5 生成器函数（Generator function）与异步编程
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">生成器(Generator)函数</code>是<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">协程</code>在 ES6 的实现，最大特点就是<span style="color: #ff0000; font-size: 16px;">可以交出函数的执行权（即暂停执行）</span>。
+
+整个 Generator 函数就是一个封装的异步任务，或者说是异步任务的容器。
+
+异步操作需要暂停的地方，都用 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">yield 语句</code>注明。
+
+```js
+// 定义 生成器函数 gen，它是一个协程
+function* gen(x) {
+  console.log("begin");
+  // y 是下一个 yield的参数，y = g1.value
+  var y = yield x + 2;
+  console.log(y);
+  yield y;
+}
+var g = gen(1);
+// next方法的作用是分阶段执行生成器函数
+// log: "begin"
+// output: {value: 1, done: false}
+let g1 = g.next();
+console.log(g1);
+// g1.value 作为参数传递给下一个 yield
+g.next(g1.value);
+```
+
+**异步任务的封装**：
+
+```js
+var fetch = require("node-fetch");
+
+function* gen() {
+  var url = "https://api.github.com/users/github";
+  var result = yield fetch(url);
+  console.log(result.bio);
+}
+
+// 执行生成器函数 gen
+var g = gen();
+// 消费执行生成器函数 gen 的 next()
+var result = g.next();
+
+result.value
+  .then(function (data) {
+    return data.json();
+  })
+  .then(function (data) {
+    // 再次消费 gen 的 next，并传递参数给 gen
+    g.next(data);
+  });
+```
+
+**CO 模块**：
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Generator 函数</code>的一大弊端就是无法自动执行，需要手动调用 next()方法，CO 模块解决了这个问题，用于 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Generator 函数</code>的自动执行。
+
+### 6.4 async 函数
+
+> async 函数的作用是提高 Promise 的易用性。
+
+ES8 中引入了 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">async 函数</code>，可以利用它们像编写同步代码那样编写基于 Promise 的代码，而且还不会阻塞主线程。
+
+它们可以让异步代码“智商”下降、可读性提高。
+
+> async 函数是什么？
+>
+> 一句话，它就是 Generator 函数包装了 Promise 的语法糖。
+
+_async 函数的写法：_
 
 ```js
 async function myAsyncFunc() {
@@ -1928,7 +2195,7 @@ async function myAsyncFunc() {
 
 如果 Promise 执行，则会返回值。 如果 Promise 拒绝，则会抛出拒绝的值。
 
-#### 示例： 记录获取日志
+_async 函数示例：记录获取日志_
 
 Promise 写法：
 
@@ -1945,7 +2212,7 @@ function logFetch(url) {
 }
 ```
 
-异步函数 写法：
+async 函数写法：
 
 ```js
 async function logFetch(url) {
@@ -1958,7 +2225,7 @@ async function logFetch(url) {
 }
 ```
 
-#### 其他异步函数的写法
+#### 其他 async 函数的写法
 
 箭头函数：
 
@@ -2000,9 +2267,9 @@ const storage = new Storage();
 storage.getAvatar('jaffathecake').then(…);
 ```
 
-#### 异步函数的执行规则
+#### async 函数的执行规则
 
-**async 定义一个异步函数。**
+**async 定义一个 async 函数。**
 
 **await 操作符用于等待一个 Promise 对象。**
 
@@ -2044,7 +2311,7 @@ f1();
 
 // 1 （立即执行）
 // 222 （约2s后）
-// 333 （约4s后）
+// 333 （再过2s后）
 ```
 
 如果该值不是一个 Promise，await 会把该值转换为已正常处理的 Promise，然后等待其处理结果。
@@ -2074,7 +2341,7 @@ f3();
 
 [JavaScript Promises: An introduction](https://web.dev/promises/)
 
-[异步函数 - 提高 Promise 的易用性](https://developers.google.com/web/fundamentals/primers/async-functions)
+[async 函数 - 提高 Promise 的易用性](https://developers.google.com/web/fundamentals/primers/async-functions)
 
 [动态图演示 Promises & Async/Await 的过程](https://zhuanlan.zhihu.com/p/145442030)
 

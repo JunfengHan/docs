@@ -7,9 +7,9 @@
 
   - [JS 基本概念](/js/concept.md "JavaScript 基础概念")
   - [JS 基础 -- 数据类型](/js/base.md "JavaScript 数据类型")
+  - [JS 基础 -- 深入理解函数](/js/function.md "JavaScript function 函数")
+  - [JS 基础 -- 面向对象、继承和 Class(类)](/js/object.md "JavaScript Object 对象")
   - [JS 深拷贝与浅拷贝](/js/jscopy.md "JavaScript 深拷贝与浅拷贝")
-  - [JS 中的面向对象、继承和 Class(类)](/js/object.md "JavaScript Object 对象")
-  - [JS 基础 -- 函数](/js/function.md "JavaScript function 函数")
   - [搞清楚 JS 异步是什么](/js/async.md "JavaScript 异步")
   - [Event Loop (事件循环)](/js/event_loop.md "JavaScript event loop 事件循环")
   - [正则](/js/regexp.md "JavaScript regexp 正则表达式")
@@ -89,6 +89,7 @@
   - [数据结构](/algorithmStructure/structure.md "数据结构")
   - [算法](/algorithmStructure/algorithm.md "算法")
   - [算法实战](/algorithmStructure/algorithms.md "算法实战")
+  - [慕课网算法视频学习笔记](/algorithmStructure/mooc.md "算法 慕课网 学习笔记")
 
 - [计算机基础知识](/base/ "计算机基础知识")
 

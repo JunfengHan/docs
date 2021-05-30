@@ -1,6 +1,6 @@
 # 阿里云 Serverless 实践
 
-**阿里云的无服务器计算叫[函数计算（Function Compute）](https://www.aliyun.com/product/fc)。**
+**阿里云的无服务器计算(Serverless Computing)叫[函数计算（Function Compute）](https://www.aliyun.com/product/fc)。**
 
 **函数计算**是<span style="color: #ff0000; font-size: 16px;">一个事件驱动的全托管 Serverless 计算服务</span>。
 
@@ -139,7 +139,7 @@ _[使用流程](https://help.aliyun.com/document_detail/73329.html?spm=a2c4g.111
 
   可以在函数计算控制台上查看服务监控。
 
-### 2.1 创建服务
+### 2.1 创建服务与函数
 
 创建服务官方文档已经写的很具体，请直接点击链接查看官方文档吧！
 
@@ -153,6 +153,64 @@ _[使用流程](https://help.aliyun.com/document_detail/73329.html?spm=a2c4g.111
 
 1. 创建的服务可以本地调试，但是需要安装 Docker
 2. 本地调试第一次执行会拉取执行环境的镜像到本地，耗时较长
+
+_1.新建服务页面_
+
+![创建服务与函数](../_media/serverless_start_createServer.png)
+
+_2.选择函数类型_
+
+![选择函数类型](../_media/serverless_ali_createFunc.png)
+
+- **事件函数**：可以通过事件触发，如 OSS 上传成功事件
+
+- **http 函数**：HTTP 请求可以触发，可以自己配置触发器
+
+_http 入口函数 handler_:
+
+![入口函数](../_media/serverless_ali_funcIndex.png)
+
+### 2.2 如何安装依赖
+
+Serverless 应用的依赖安装比较困难，因为它运行在 FaaS 平台上。
+
+FaaS 平台的运行环境是有云厂商提供的，我们只能**做有限的定制**。
+
+_FaaS 平台中函数实例_:
+
+![函数实例](../_media/serverless_ali_funcExample.png)
+
+可以看出，函数实例的运行环境在容器中，我们能控制的只有<code style="color: #708090; background-color: #F5F5F5; font-size: 18px"> 函数代码</code>。
+
+不同语言的项目依赖是不同的，如：Java 项目需要在部署前编译，因此，我们可以直接将依赖在编译时安装好。
+
+Node.js 项目的依赖一般放在项目文件的 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">node_modules</code> 目录中，使用 NPM 安装即可。
+
+但是，<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">node_modules</code>通常依赖较为复杂，包的体积通常很大，需要使用 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Webpack</code> 等进行打包优化，只打包需要的模块。
+
+## 3. 性能优化
+
+_函数的调用链路用时：_
+
+![serverless应用耗时](../_media/serverless_ali_performance.png)
+
+- InvokeFunction：函数执行总时间
+- ClodStart：是函数冷启动时间（热启动不会有这个阶段）
+- PrepareCode：冷启动过程中，下载代码或下载自定义镜像的时间
+- RuntimeInitialize：是执行环境启动的时间，包括启动容器和函数运行环境
+- Invocation：是执行函数的时间
+
+可以看出，<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Serverless 应用</code>的性能优化主要是优化**冷启动**。
+
+**提升性能方法**：
+
+- 1. 提前给函数预热（对明确流量高峰期的应用比较适用，如：外卖平台、电商活动）
+- 2. 适用预留资源
+- 3. 减少代码体积、减少不必要的依赖（会加快冷启动下载时间）
+- 4. 执行上下文重用
+- 5. 为函数设置并发
+- 6. 选择冷启动耗时少的语言（Java 冷启动耗时较多，Node.js、PHP、Python 耗时较少）
+- 7. 为函数选择合适的内存（内存越大启动越快，但费用高）
 
 --- 持续更新中...
 

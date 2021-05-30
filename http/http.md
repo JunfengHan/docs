@@ -577,6 +577,25 @@ http://xxx/search?keyword="><script>alert('XSS');</script>
 
 关于这几种方法对比，请查看另一篇文章[Ajax 对比 fetch](https://shushuo.me/#/http/ajaxVsFetch)
 
+## 7. HTTP1.1 与 HTTP2.0
+
+**HTTP1.1 相对于 HTTP1.0 的优势：**
+
+- 缓存处理： 多了 Entity tag、If-Unmodified-Since、If-Match、If-None-Match 等缓存信息
+
+  Http1.0 是 If-Modified-Since、Expires
+
+- 增加了更多的请求头和响应头（如：Host）
+
+- 长连接： HTTP1.1 中默认开启 Connection： keep-alive，一定程度上弥补了 HTTP1.0 每次请求都要创建 TCP 连接的缺点
+
+**HTTP2 相对于 HTTP1.1 的优势：**
+
+- HTTP2 采用二进制传递数据（HTTP1.X 是字符串传递）
+- HTTP2 支持多路复用（允许同时通过单一的 HTTP/2 连接发起多重的请求-响应消息）
+- HTTP2 头部压缩，传输效率更高
+- HTTP2 可以服务端推送
+
 ## 参考
 
 《图解 HTTP》

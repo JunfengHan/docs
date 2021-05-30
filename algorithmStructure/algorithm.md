@@ -14,9 +14,7 @@ _算法与数据结构分类：_
 
 > 复杂度帮助我们了解算法的好坏程度，不理解复杂度就无法判断算法的好坏。
 
-<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">复杂度</code>帮助我们分析、统计算法的**执行效率**和**资源消耗**。
-
-<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">复杂度</code>可以衡量算法的执行效率，可以从两个维度来衡量：
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">复杂度</code>帮助我们分析、统计算法的**执行效率**和**资源消耗**，可以从两个维度来衡量：
 
 - **1. 时间复杂度**
 
@@ -263,10 +261,11 @@ while (x < 10) {
 
 ```js
 function loop(x) {
-  if (x > 10) { // 退出条件
+  if (x > 10) {
+    // 退出条件
     return;
   } else {
-    loop(x+1; // 递归调用
+    loop(x + 1); // 递归调用
   }
 }
 loop(0);
@@ -514,6 +513,12 @@ _执行过程演示：_
 
 ![sort](../_media/algorithm_sort.jpg)
 
+**概述：**：🌟🌟🌟
+
+- 冒泡排序：遍历所有未排序元素，<span style="color: #ff0000; font-size: 16px;">相邻元素做比较</span>，每次遍历将**最大的元素放在已排序元素前**
+- 选择排序：遍历所有未排序元素，<span style="color: #ff0000; font-size: 16px;">选择出最小的元素</span>，每次遍历将**最小的元素和未排序的第一个元素交换**
+- 插入排序：遍历所有未排序元素，<span style="color: #ff0000; font-size: 16px;">和已排序元素做比较</span>，每次遍历将**元素插入到一排序的合适位置**
+
 ### 5.1 冒泡排序
 
 - 冒泡排序只会操作**相邻**的两个数据
@@ -537,29 +542,30 @@ _执行过程演示：_
 _冒泡排序：_
 
 ```js
-// 冒泡排序--从大到小
+// 冒泡排序--正序排列
 function sortBubble(num) {
-  // 判断是否有数据位置交换
-  let changed = false;
-  if (num.length <= 1) return;
+  if (num.length <= 1) return num;
+  let swapped = false;
 
+  // step1: 循环排序所有元素
   for (let i = 0; i < num.length; i++) {
+    // step2: 循环未排序的元素
     for (let j = 0; j < num.length - i - 1; j++) {
-      if (num[j] < num[j + 1]) {
-        let numJ = num[j];
-        // 数据交换
-        num[j] = num[j + 1];
-        num[j + 1] = numJ;
-
-        changed = true;
+      // step3: 未排序元素数据交换
+      if (num[j] > num[j + 1]) {
+        [num[j], num[j + 1]] = [num[j + 1], num[j]];
+        swapped = true;
       }
     }
-    // 没有数据交换，退出循环
-    if (!changed) break;
+    // 未排序元素没有数据交换，说明排序已经完成
+    if (!swapped) return num;
   }
 
   return num;
 }
+
+sortBubble([45, 111, 48, 77, 11, 666]);
+// [11, 45, 48, 77, 111, 666]
 ```
 
 **冒泡排序特性：**
@@ -572,7 +578,61 @@ function sortBubble(num) {
 
 - 冒泡排序的时间复杂度（最好为 O(n)，最坏为 O(n^2)）
 
-### 5.2 插入排序
+### 5.2 选择排序
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">选择排序</code>每次会<span style="color: #ff0000; font-size: 16px;">从未排序区间中找到**最小**的元素，将其放到已排序区间的**末尾**</span>。
+
+_选择排序：_
+
+![sort](../_media/algorithm_sort_select.jpg)
+
+_示例：_
+
+```js
+// 选择排序--升序排列
+function sortSelect(num) {
+  let length = num.length;
+  if (length <= 1) return num;
+
+  // step1: 循环前 n-1 个元素
+  for (let i = 0; i < length - 1; i++) {
+    // step2: 缓存第一个为排序元素
+    let minIndex = i;
+    // step3: 循环未排序元素
+    for (let j = i + 1; j < length; j++) {
+      // step3: 找出未排序最小值
+      if (num[j] < num[minIndex]) {
+        minIndex = j;
+      }
+    }
+    // step4: 最小值数和第一个未排序据交换
+    if (minIndex !== i) {
+      [num[minIndex], num[i]] = [num[i], num[minIndex]];
+    }
+  }
+
+  return num;
+}
+
+sortSelect([45654, 45, 788, 455, 0, -454]);
+// => [-454, 0, 45, 455, 788, 45654]
+```
+
+**选择排序特性：**
+
+- 选择排序是**原地排序算法**
+
+  选择排序算法的空间复杂度是 O(1)，也就是说，这是一个原地排序算法。
+
+- 选择排序是**不是稳定**的排序算法(每次都要交换数据，可能破坏稳定性)
+
+  如：5，8，5，2，9 这样一组数据，第一选择排序，需要找出最小值（2），和最左侧的值（5）交换位置；那么第一个 5 和第二个 5 的位置就发生了变化
+
+- 选择排序的时间复杂度（平均 O(n^2)，最坏为 O(n^2)）
+
+### 5.3 插入排序
+
+遍历未排序的元素，插入到排序元素的后面。
 
 插入排序也包含两种操作，一种是**元素的比较**，一种是**元素的移动**。
 
@@ -592,32 +652,38 @@ function sortBubble(num) {
 _插入排序：_
 
 ```js
-// 插入排序--从小到大
+// 插入排序--升序
 function sortInsert(num) {
   if (num.length <= 1) return num;
 
+  // step1: 遍历所有未排序元素（第一个元素标记为已排序）
   for (let i = 1; i < num.length; i++) {
-    // 当前需要被插入的数
-    let currentValue = num[i];
-    // 可能被插入的位置
-    let j = i - 1;
-    for (; j >= 0; j--) {
-      // 找到需要插入的位置
-      if (num[j] > currentValue) {
-        // 移动数据
-        num[j + 1] = num[j];
-        // 插入数据
-        num[j] = currentValue;
-      } else {
-        break;
-      }
+    let j = i;
+    let temp = num[i];
+    // step2: 遍历已排序元素,找到插入位置
+    while (j > 0 && num[j - 1] > temp) {
+      // step3: 右移已排序元素
+      num[j] = num[j - 1];
+      j--;
     }
+
+    // for循环写法替代while
+    // for (; j > 0; j--) {
+    //   if (num[j - 1] > temp) {
+    //     num[j] = num[j - 1];
+    //   } else {
+    //     break;
+    //   }
+    // }
+
+    // step4: 插入未排序元素到特定位置
+    num[j] = temp;
   }
 
   return num;
 }
 
-// sortInsert([456, 455, 7894, 78, 556, 0])
+sortInsert([456, 455, 7894, 78, 556, 0]);
 // => [0, 78, 455, 456, 556, 7894]
 ```
 
@@ -631,70 +697,9 @@ function sortInsert(num) {
 
 - 插入排序的时间复杂度（最好为 O(n)，最坏为 O(n^2)）
 
-### 5.3 选择排序
-
-<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">选择排序</code>每次会<span style="color: #ff0000; font-size: 16px;">从未排序区间中找到**最小**的元素，将其放到已排序区间的**末尾**</span>。
-
-_选择排序：_
-
-![sort](../_media/algorithm_sort_select.jpg)
-
-_示例：_
-
-```js
-// 选择排序--从小到大
-function sortSelect(num) {
-  if (num.length <= 1) return num;
-
-  for (let i = 0; i < num.length; i++) {
-    let j = i;
-    // 最小值
-    let minNum = num[j];
-    // 最小值索引
-    let minIndex = j;
-    // 找出最小未排序值
-    for (; j < num.length; j++) {
-      if (num[j] < minNum) {
-        minNum = num[j];
-        minIndex = j;
-      }
-    }
-    // 最小值数据交换
-    let numI = num[i];
-    num[i] = minNum;
-    num[minIndex] = numI;
-  }
-
-  return num;
-}
-
-// sortSelect([45654,45,788,455,0,-454])
-// => [-454, 0, 45, 455, 788, 45654]
-```
-
-**选择排序特性：**
-
-- 选择排序是**原地排序算法**
-
-  选择排序算法的空间复杂度是 O(1)，也就是说，这是一个原地排序算法。
-
-- 选择排序是**不是稳定**的排序算法(每次都要交换数据，可能破坏稳定性)
-
-  如：5，8，5，2，9 这样一组数据，第一选择排序，需要找出最小值（2），和最左侧的值（5）交换位置；那么第一个 5 和第二个 5 的位置就发生了变化
-
-- 选择排序的时间复杂度（平均 O(n^2)，最坏为 O(n^2)）
-
----
-
-**小结**：
-
-- 冒泡排序： <span style="color: #ff0000; font-size: 16px;">未排序</span>数据位置交换；
-- 插入排序： <span style="color: #ff0000; font-size: 16px;">移动已排序</span>数据，直到找到需要<span style="color: #ff0000; font-size: 16px;">插入的位置</span>；
-- 选择排序：找<span style="color: #ff0000; font-size: 16px;">未排序</span>元素中最小值，和<span style="color: #ff0000; font-size: 16px;">未排序最前面的元素交换</span>
-
 > 冒泡排序和插入排序的时间复杂度都是 O(n^2)，都是原地排序算法，为何插入排序比冒泡排序更受欢迎 ❓
 
-- 1. <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">冒泡排序</code>的数据交换要比<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">插入排序</code>的数据移动要复杂，差不多是后者的 3 倍，效率略低。
+> <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">冒泡排序</code>的数据交换要比<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">插入排序</code>的数据移动要复杂，差不多是后者的 3 倍，效率略低。
 
 ### 5.4 归并排序与快速排序
 
@@ -714,22 +719,24 @@ _归并排序：_
 
 因此，归并排序的过程大致如下：
 
-- 1. 分：将数据**递归分解**成较小的块（每个块只含有 2-3 个元素）
+- 1. 分：将数据**递归分解**成大小为 1
 - 2. 合：将较小的块**递归合并**，并重新排序
 
 _示例：_
 
 ```js
-// 归并排序--从小到大
-// 分解数组
+// 归并排序--升序排列
+// step1: 分解数组
 function mergeSort(array) {
-  // 递归调用基线，最总得到长度为 1 的数组
+  // 递归调用基线，最终得到长度为 1 的数组
   if (array.length > 1) {
     const { length } = array;
     // 分解数组
     const middle = Math.floor(length / 2);
     const left = mergeSort(array.slice(0, middle));
     const right = mergeSort(array.slice(middle, length));
+
+    console.log(left, right);
     // 数组合并并排序，所有分解完成后执行这里
     array = merge(left, right);
   }
@@ -751,8 +758,62 @@ function merge(left, right) {
   // concat 剩下的值，并返回
   return result.concat(i < left.length ? left.slice(i) : right.slice(j));
 }
-// mergeSort([45, 111, 45, 77, 11, 666])
+mergeSort([45, 111, 45, 77, 11, 666]);
 // 输出：[11, 45, 45, 77, 111, 666]
+```
+
+_合并成一个函数：_
+
+```js
+Array.prototype.mergeSort = function () {
+  const rec = (arr) => {
+    // 跳出递归调用
+    if (arr.length === 1) {
+      return arr;
+    }
+
+    // step1: 用分解数组
+    const mid = Math.floor(arr.length / 2);
+    const left = arr.slice(0, mid);
+    const right = arr.slice(mid, arr.length);
+    // 递归调用
+    const orderLeft = rec(left);
+    const orderRight = rec(right);
+
+    const res = [];
+    // step2: 合并、排序分解后的数组
+    // es6写法
+    res = res.concat(orderLeft, orderRight).sort((a, b) => a - b);
+    // 手动写法
+    // while (orderLeft.length || orderRight.length) {
+    //   if (orderLeft.length && orderRight.length) {
+    //     res.push(
+    //       orderLeft[0] < orderRight[0] ? orderLeft.shift() : orderRight.shift()
+    //     );
+    //   } else if (orderLeft.length) {
+    //     res.push(orderLeft.shift());
+    //   } else if (orderRight.length) {
+    //     res.push(orderRight.shift());
+    //   }
+    // }
+
+    return res;
+  };
+
+  // 执行rec
+  const res = rec(this);
+  // 修改原数组实例
+  res.forEach((cur, index) => {
+    console.log(this);
+    this[index] = cur;
+  });
+
+  return res;
+};
+
+let a = [45, 111, 48, 77, 11, 666];
+a.mergeSort();
+//
 ```
 
 **归并排序特性：**
@@ -772,20 +833,19 @@ _快速排序：_
 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">快速排序</code>的关键是利用**不同的**<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">支点</code>把数据<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">分区</code>后进行排序。
 
 ```js
-// 快速排序，从小到大 -- 非原地排序版本，定义了pivot、left、right等变量，但简单
+// 快速排序，正序排列 -- 非原地排序版本，定义了pivot、left、right等变量，但简单
 function quickSort(arr) {
-  // 递归终止条件
+  // step1: 设置递归终止条件，所有值被递归为 1 的长度
   if (arr.length <= 1) {
     return arr;
   }
 
-  // 取第一个数为基准(基准可以是arr的任意值，第一个较为简单)
-  let pivotIndex = 0;
-  // 注意这里使用 splice 改变了原数组，即数组变短了
-  let pivot = arr.splice(pivotIndex, 1)[0];
+  // step2: 取第一个数为基准(基准可以是arr的任意值)
+  let pivot = arr[0];
+  // step3: 分区
   let left = [];
   let right = [];
-  for (let i = 0; i < arr.length; i++) {
+  for (let i = 1; i < arr.length; i++) {
     // 注意，这里是稳定排序
     // 因为当 arr[i] 是第一个元素，当 arr[i] === pivot 时，arr[i]位置仍在其右侧
     if (arr[i] < pivot) {
@@ -795,39 +855,11 @@ function quickSort(arr) {
     }
   }
 
-  // quickSort(left) 得到左侧区间
-  // quickSort(right) 得到右侧区间
-  // 合并分区
-  return quickSort(left).concat([pivot], quickSort(right));
+  // step4: 合并分区
+  return quickSort(left).concat(pivot, quickSort(right));
 }
 // console.log(quickSort([4564, 454, 1855, 45, 0, -45]));
 // 输出：[-45, 0, 45, 454, 1855, 4564]
-```
-
-_原地排序版本：_
-
-```js
-function quick (start ,end){
-  var mid = start , temp = arr[start];
-  for(var i = start+1 ; i if(arr[i] arr[mid]=arr[i];// >> mid+1 i-1
-  var j = i ;
-  mid++;
-  while(j!=mid){arr[j]=arr[j-1];j--}
-}
-}
-arr[mid]= temp ;
-return mid;
-}
-
-function sort (start , end ){
-  if(end>start){
-  var mid = quick(start ,end);console.log(mid)
-  sort(start,mid-1);sort(mid+1,end);
-  }
-}
-
-sort(0,arr.length)
-console.log(arr);
 ```
 
 **快速排序特性：**
@@ -847,21 +879,93 @@ console.log(arr);
 
 ## 6. 搜索算法
 
-## 7. 查找算法
+### 6.1 顺序搜索
 
-### 7.1 二分法
-
->
-
-_示例：_
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">顺序搜索</code>是指遍历数组，然后挨个做匹配。
 
 ```js
+orderSearch (arr, item) {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === item) {
+      return i;
+    }
+  }
 
+  return -1;
+}
 ```
 
-## 8. 字符串匹配算法
+### 6.2 二分搜索
 
-## 9. 其他算法
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">二分搜索</code>是一个高效搜索算法，但是，其搜索的对象必须是**有序的**。
+
+```js
+function binarySearch(arr, item) {
+  let low = 0;
+  let high = arr.length - 1;
+  // 循环条件
+  while (low <= high) {
+    let middle = Math.floor((low + high) / 2);
+    if (item > item[middle]) {
+      low = middle;
+    } else if (item < item[middle]) {
+      high = middle;
+    } else {
+      return middle;
+    }
+  }
+
+  return -1;
+}
+```
+
+## 8. 动态规划
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">动态规划</code>(Dynamic Programming, DP)算法的核心思想是 -- **将复杂问题分解成相互依赖更小的问题来解决**。
+
+> **动态规划**和**分治**的方法不同之处是：
+>
+> 动态规划的**子问题具有依赖性**，分治法的**子问题没有相互依赖性**。
+
+## 8.1 动态规划概念
+
+用**动态规划**解决问题时，要注意三个步骤：
+
+1. 定义子问题
+2. 递归执行来解决子问题的部分
+3. 识别并求解基线条件
+
+## 8.2 动态规划常见案例
+
+- 背包问题
+
+  给出一组项，各自有值和容量，目标是**找出总值最大的项目集合**。问题的限制是，总容量小于等于**背包**容量。
+
+- 最长公共子序列
+
+  找出一组序列的最长公共子序列
+
+- 矩阵链相乘
+
+  给出一些列矩阵，目标是找到这些矩阵相乘的最高效办法
+
+- 硬币找零
+
+  给出面额为 d1、d2、d3 ... dn 的一定数量的硬币和要找零的钱数，找出有多少种找零的方法。
+
+- 图的全源最短路径
+
+  对所有定点对（u, v），找出从顶点 u 到顶点 v 的最短路径
+
+## 9. 贪心算法
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">贪心算法</code>期盼通过每个阶段的**局部最优解**，从而达到**全局最优解**。
+
+要知道的是，**贪心算法**的结果不一定是真正的最优解。
+
+## 推荐
+
+👍👍 可视化，超牛 [数据结构和算法动态可视化](https://visualgo.net/zh)
 
 ## 参考
 

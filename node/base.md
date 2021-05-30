@@ -468,13 +468,15 @@ Promise.resolve()
   - 执行 setTimeout 2
 
     - 输出 “setTimeout 2”
-    - 执行 Promise.resole().then()
+    - Microtask Queue: ["promise 5", "promise 6", clearInterval()]
+
+      执行 **Microtask Queue** 中的任务：
 
       - 输出 => "promise 5"
       - 输出 => "promise 6"
       - clearInterval(interval)，取消 Macrotask Queue 中的 setInterval
 
-      > Macrotask Queue: []
+  > Macrotask Queue: []
 
 _最终结果：_
 
@@ -665,8 +667,7 @@ _这样做的目的：_
 
 - 作用域隔离：保持了顶层的变量（用 var、 const 或 let 定义）作用在模块范围内，而不是全局对象
 - 有助于提供一些看似全局的但实际上是**模块特定的变量**，如：
-  module / exports
-  \_\_filename / \_\_dirname: 模块绝对文件名和目录路径
+  module 、 exports 、 \_\_filename 、 \_\_dirname: 模块绝对文件名和目录路径
 
 经过原生方法处理后，<span style="color: #ff0000; font-size: 16px;">模块的 exports 属性被返回给了调用方</span>。
 
@@ -768,7 +769,7 @@ _Node 模块的依赖关系：_
 
 #### 9.4.2 核心模块的引入流程
 
-如何让 C/C++ 模块复合 CommonJS 模块规范 ❓
+如何让 C/C++ 模块符合 CommonJS 模块规范 ❓
 
 整个过程相当复杂，以 **os** 核心模块为例,
 
@@ -792,7 +793,7 @@ _模块间的调用关系图：_
 
 说明：
 
-- 是红色虚线是文件模块使用 process。binding() 方法直接调用 C/C++内建模块，不推荐
+- 是红色虚线是文件模块使用 process.binding() 方法直接调用 C/C++内建模块，不推荐
 - 第三方编写的 C/C++ 扩展模块，为了提高性能，一般只由 JavaScript 文件模块调用
 
 ## 10. NPM

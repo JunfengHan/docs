@@ -20,7 +20,7 @@ _内存 IC 引脚：_
 
 - 1. 内存的内部是由各种**IC 电路**组成的
 - 2. **内存 IC** 是一个完整的结构，它内部也有**电源**、**地址信号**、**数据信号**、**控制信号**和用于寻址的 **IC 引脚**来进行数据的读写
-- 3. A0 - A9 是地址信号的引脚，数据就存储在它上面。地址信号共十个，表示可以指定 00000 00000 - 11111 11111 共 2 的 10 次方 = 1024 个地址。每个地址都会存放 1 byte 的数据，因此，**内存 IC** 的容量是 1 byte \* 1024 = 1 KB
+- 3. A0 - A9 是地址信号的引脚，数据就存储在它上面。地址信号共十个，表示可以指定 00000 00000 - 11111 11111 共 2 的 10 次方 = 1024 个地址。<span style="color: #ff0000; font-size: 16px;">每个地址都会存放 1 byte 的数据</span>，因此，**内存 IC** 的容量是 1 byte \* 1024 = 1 KB
 - 4. 512 MB 的内存，这就相当于是 512000（512 \* 1000） 个**内存 IC**
 - 5. D0 - D7 表示的是数据信号，也就是说，一次可以输入输出 8 bit（比特） = 1 byte（字节）的数据，例如，字母“A”的二进制表示为<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">01000001</code>，它占用的内存大小是 1 byte(字节).
 
@@ -62,11 +62,114 @@ _非线性表数据结构图示：_
 
 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">数组</code>为了保持内存数据的连续性，会导致<span style="color: #ff0000; font-size: 16px;">插入、删除这两个操作比较低效</span>。
 
+#### 数组的使用
+
+JS 中有<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">数组</code>这一数据结构，而且在 JS 中它的应用十分广泛。
+
+_定义一个数组_：
+
+```js
+let arr = new Array();
+let arr2 = [];
+```
+
+_操作数组_：
+
+```js
+let arr = [1, 2, 3];
+
+// 数组新增项
+arr.push(4); // arr => [1, 2, 3, 4];
+
+// 删除项
+arr.splice(1, 1); // arr => [1, 3, 4]
+```
+
 ### 2.2 链表
 
-<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">链表</code>（Array）是一种**线性表**数据结构。它用一组**非连续**的内存空间，因此，**链表可以存储在内存的任何地方**。
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">链表</code>是一种**线性表**数据结构。它用一组**非连续**的内存空间，因此，**链表可以存储在内存的任何地方**。
 
 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">链表</code>通过**指针**来存储它的下一个元素地址，从而**使一系列随机的内存地址串在一块儿**。
+
+#### 2.2.1 ES6 实现一个链表
+
+JavaScript 中没有链表结构，我们可以通过对象来实现一个链表。
+
+链表具有如下属性：
+
+- value: 链表的值；
+
+- next: 链表的指针(指向下一个元素)
+
+```js
+class Link {
+  constructor(arg) {
+    this.res = {
+      value: arg || null,
+      next: null,
+    };
+  }
+}
+
+let a = new Link("a");
+let b = new Link("b");
+let c = new Link("c");
+
+a.res.next = b.res;
+b.res.next = c.res;
+
+console.log(a.res.next.next);
+
+// 遍历链表
+let p = a.res;
+while (p) {
+  console.log(p.value);
+  p = p.next;
+}
+// a
+// b
+// c
+
+// 链表插入
+let d = new Link("d");
+b.res.next = d.res;
+d.res.next = c.res;
+// 再次遍历查看整个链表
+let p2 = a.res;
+while (p2) {
+  console.log(p2.value);
+  p2 = p2.next;
+}
+// a
+// b
+// d
+// c
+
+// 链表删除
+// 直接修改 a 的 next 指针，指向 b 的 next，即：把 b 删除
+a.res.next = d.res;
+// 再次遍历查看整个链表
+let p3 = a.res;
+while (p3) {
+  console.log(p3.value);
+  p3 = p3.next;
+}
+// a
+// d
+// c
+```
+
+#### 2.2.1 数组(Array) VS 链表(Linked List)
+
+数组和链表区别：
+
+- 1. <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">数组</code>支持随机访问，根据下标随机访问的时间复杂度为 O(1)
+
+- 2. <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">链表</code>的**插入**、**删除**只是修改其指针指向，时间复杂度为 O(1)
+
+![非线性表数据结构](../_media/structure_arrayVsLink.jpg)
+
+**结论**：<span style="color: #ff0000; font-size: 16px;">数组**更擅长**查询**操作，**链表**更擅长**插入**、**删除**操作**</span>
 
 ### 2.3 栈(Stack)
 
@@ -74,22 +177,540 @@ _非线性表数据结构图示：_
 
 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">栈</code>常用**一维数组**或**链表**来实现。
 
+#### 2.3.1 使用 ES6 实现一个栈的类
+
+Stack 类需要实现如下方法：
+
+- push(): 入栈
+- pop(): 出栈
+- peek(): 获取栈最低层元素
+
+```js
+class Stack {
+  constructor(...args) {
+    this.stack = [...args];
+  }
+
+  pop() {
+    return this.stack.pop();
+  }
+
+  push(item) {
+    return this.stack.push(item);
+  }
+
+  peek() {
+    return this.stack[0];
+  }
+}
+
+// 使用示例
+let stack1 = new Stack(1, 3, 5);
+console.log(stack1.stack); // [1, 3, 5]
+stack1.push(4);
+console.log(stack1.stack); // [1, 3, 5, 4]
+```
+
 ### 2.4 队列(Queue)
 
-## 3. 数组(Array) VS 链表(Linked List)
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">队列</code>最大特点：**先进先出**。
 
-数组和链表区别：
+根据其特征可以知道，队列适合解决**按顺序执行**的问题。
 
-- 1. <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">数组</coe>支持随机访问，根据下标随机访问的时间复杂度为 O(1)
+应用场景：**浏览器事件队列**等。
 
-- 2. <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">链表</coe>的**插入**、**删除**只是修改其指针指向，时间复杂度为 O(1)
+JavaScript 中<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">队列</code>常用**数组**来实现。
 
-![非线性表数据结构](../_media/structure_arrayVsLink.jpg)
+```js
+let a = [];
 
-**结论**：<span style="color: #ff0000; font-size: 16px;">数组**更擅长**查询**操作，**链表**更擅长**插入**、**删除**操作**</span>
+// 入列
+a.push(1);
+console.log(a); // [1]
 
-## 4. 队列(Queue) VS 栈(Stack)
+// 出列
+a.shift();
+console.log(a); // []
+```
+
+### 2.5 集合
+
+集合是一种**无序且唯一**的数据结构。
+
+ES6 中新增的<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Set</code>就是集合。
+
+**集合的应用**：
+
+- 去重
+- 判断某元素是否在集合中
+- 求交集(与数组集合来处理)
+
+```js
+// 数组去重
+let arr = [1, 1, 2, 2, 3, 4];
+let setArr = [...new Set(arr)];
+// setArr -> [1, 2, 3, 4]
+
+// 字符串去重
+let str = "abcccdde";
+let setStr = [...new Set(str)].join("");
+// setStr -> "abcde"
+
+// 判断是否存在某个元素
+let has1 = new Set(arr).has(1);
+// has1 -> true
+
+// 求交集、并集、差集
+let a = new Set([1, 2, 3]);
+let b = new Set([2, 3, 4]);
+
+// 并集
+let union = new Set([...a, ...b]);
+
+// 交集
+let intersect = new Set([...a].filter((x) => b.has(x)));
+
+// 差集
+let diff = new Set([...a].filter((x) => !b.has(x)));
+```
+
+### 2.6 字典
+
+与<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">集合</code>类似，<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">字典</code>也是一种**存储唯一值**的数据结构，它是通过<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">键值对</code>的形式来存储的。
+
+ES6 中新增的<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Map</code>就是<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">字典</code>。
+
+### 2.7 树
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">树</code>是一种非顺序<span style="color: #ff0000; font-size: 16px;">分层</span>数据结构，<span style="color: #ff0000; font-size: 16px;">适用于存储需要快速查找的数据</span>。
+
+![树](../_media/structure_tree1.png)
+
+**前端工作中常见的树**：
+
+- DOM 树
+- 级联选择（如：地区选项卡）
+- 树形控件
+
+JavaScript 中没有<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">树</code>，可以使用 Object 和 Array 来构建树。
+
+_模拟多叉树：_
+
+```js
+{
+  value: 'hubei',
+  label: 'hubei',
+  children: [
+    {
+      value: 'wuhan',
+      label: 'wuhan',
+      children: [
+        {
+          value: 'hongshan',
+          label: 'hongshan',
+        },
+        {
+          value: 'gaoxin',
+          label: 'gaonxin',
+        }
+      ]
+    }
+  ]
+}
+```
+
+_模拟二叉树：_
+
+```js
+{
+  value: 1,
+  left: {
+    value: 2,
+    left: {
+      value: 3,
+      left: null,
+      right: null,
+    },
+    right: {
+      value: 4,
+      left: null,
+      right: null,
+    },
+  },
+  right: {
+    value: 5,
+    left: {
+      value: 6,
+      left: null,
+      right: null,
+    },
+    right: null,
+  }
+}
+```
+
+**树的操作主要有：**
+
+- 搜索
+- 遍历
+
+#### 2.7.1 树的遍历
+
+**（多叉）树的遍历：**
+
+- 深度优先遍历：沿着层级遍历，即：先往下一层级遍历，再回到同层，最后上层
+- 广度优先遍历：先遍历层级低的，即：先同层，再下层
+
+**二叉树的深度遍历又分为三种：**
+
+- 先序遍历：从根节点开始，先左子节点，后右子节点（递归）
+
+  ![先序遍历](../_media/structure_tree_traverseFront.gif)
+
+  ```js
+  const preOrder = (root) => {
+    if (!root) return;
+
+    // 打印(访问)当前节点的值
+    console.log(root.value);
+
+    // 分别遍历左右节点
+    preOrder(root.left);
+    preOrder(root.right);
+  };
+  // 遍历👆模拟二叉树
+  //打印结果： 1, 2, 3, 4, 5, 6
+  ```
+
+- 中序遍历：从最左侧子节点开始，左 -> 中 -> 右
+
+  ![中序遍历](../_media/structure_tree_traverseMiddle.gif)
+
+  ```js
+  const inOrder = (root) => {
+    if (!root) return;
+
+    // 先遍历左节点
+    inOrder(root.left);
+    // 打印(访问)当前节点的值
+    console.log(root.value);
+    // 最后遍历右节点
+    inOrder(root.right);
+  };
+  // 遍历👆模拟二叉树
+  //打印结果： 3, 2, 4, 1, 6, 5
+  ```
+
+- 后续遍历：从最左侧子节点开始，先左，后右，最后中
+
+  ![后序遍历](../_media/structure_tree_traverseEnd.gif)
+
+  ```js
+  const postOrder = (root) => {
+    if (!root) return;
+
+    // 先遍历左节点
+    postOrder(root.left);
+    // 然后遍历右节点
+    postOrder(root.right);
+    // 打印(访问)当前节点的值
+    console.log(root.value);
+  };
+  // 遍历👆模拟二叉树
+  //打印结果： 3, 4, 2, 6, 5, 1
+  ```
+
+**树的遍历本质：**
+
+_树的节点示意图_:
+
+![树的节点示意图](../_media/structure_tree_traverse.png)
+
+除了**根结点**和**叶子结点**，其他所有结点都有三个箭头指向它。
+
+这些有 3 个箭头的中间节点被遍历了 3 遍，三种遍历方式<span style="color: #ff0000; font-size: 16px;">不同点是哪一步访问了它</span>。
+
+- 先序遍历：第一次箭头穿过，即：父节点过来的箭头访问了它
+- 中序遍历：第二次箭头穿过，即：左子节点过来的箭头访问了它
+- 中序遍历：第三次箭头穿过，即：右子节点过来的箭头访问了它
+
+**广度优先遍历**：
+
+_广度优先遍历步骤：_
+
+- 1. 新建一个队列，把根节点入队
+- 2. 把队头出队并访问
+- 3. 把队头的 children 逐个入队
+- 4. 重复 2-3 步，知道队列为空
+
+#### 2.7.2 深度优先处理 JSON
+
+```js
+const json = {
+  a: {
+    b: { c: 1 },
+  },
+  d: [1, 2],
+};
+
+// n => 当前节点的值
+// 当前节点的 key路径
+const dfs = (n, path) => {
+  console.log(n, path);
+  Object.keys().forEach((key) => {
+    dfs(n[key], path.concat(key));
+  });
+};
+// 初始路径为[]
+dfs(json, []);
+```
+
+### 2.8 堆（二叉堆和堆排序）
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">堆</code>是<span style="color: #ff0000; font-size: 16px;">一种特殊的二叉树</span>，也叫**二叉堆**。
+
+**二叉堆**是一种非常著名的数据结构，特点是**可以高效、快速找到最大和最小值**。
+
+常被用于**优先队列**、**堆排序算法**中。
+
+_二叉堆特性_：
+
+- **结构特性**：二叉堆是一个**完全二叉树**，即：每一层都有左侧和右侧节点，除子节点外（可以只有一个左节点）
+- **堆特性**：所有节点都大于等于（最大堆）或小于等于（最小堆）
+
+_二叉堆合法示例：_
+
+![二叉堆](../_media/structure_tree2_heap.jpg)
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">JavaScript</code> 中通常用**数组**表示<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">堆</code>。
+
+左侧子节点的位置是 2 \* index + 1,右侧子节点的位置是 2 \* index + 2,父节点的位置是 （index - 1）/ 2。
+
+_用数组表示最小堆：_
+
+![数组表示堆](../_media/structure_heap_arr.png)
+
+#### 2.8.1 创建一个最小堆的 Class
+
+```js
+class MinHeap {
+  constructor() {
+    this.heap = [];
+  }
+
+  // 插入
+  insert(value) {
+    if (value != null) {
+      this.heap.push(value);
+      // 上移
+      this.siftUp(this.heap.length - 1);
+      return true;
+    }
+    return false;
+  }
+
+  // 上移
+  siftUp(index) {
+    let parent = this.getParentIndex(index);
+    while (index > 0 && this.heap[parent] > this.heap[index]) {
+      // 交换数据
+      [heap[a], heap[b]] = [heap[b], heap[a]];
+      index = parent;
+      parent = this.getParentIndex(index);
+    }
+  }
+
+  // 操作堆的 index
+  getLeftIndex(index) {
+    return 2 * index + 1;
+  }
+  getRightIndex(index) {
+    return 2 * index + 2;
+  }
+  getParentIndex(index) {
+    if (index === 0) {
+      return undefined;
+    }
+
+    return Math.floor((index - 1) / 2);
+  }
+}
+```
+
+> 为何上移？
+>
+> 我们用数组表示最小堆，新插入的值应该小于父节点。
+
+_最大堆的堆节点上移：_
+
+![堆节点上移](../_media/structure_heap_swap.jpg)
+
+#### 2.8.2 堆的应用--找第 K 大/小的值
+
+### 2.9 图
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">图</code>是网络结构的抽象模型，是<span style="color: #ff0000; font-size: 16px;">一组由边和节点的连接</span>。
+
+图可以表示**任何二元关系**，如：道路、航班，社交网络中的关系（如：微信好友）。
+
+#### 2.9.1 实现一个 Graph 类
+
+```js
+class Graph {
+  constructor(isDirected = false) {
+    this.isDirected = isDirected; // 表示图是否有向
+    this.vertices = []; // 数组存储所有顶点
+    this.adjList = new Directed(); // 一个字典(Map实例)存储邻接表
+  }
+
+  // 向图中添加顶点
+  addVertex(v) {
+    if (!this.vertices.includes(v)) {
+      this.vertices.push(v);
+      this.adjList.set(v, []);
+    }
+  }
+
+  // 向图中添加边
+  // v,w都是顶点
+  addEdge(v, w) {
+    if (!this.adjList.get(v)) {
+      this.addVertex(v);
+    }
+
+    if (!this.adjList.get(w)) {
+      this.addVertex(w);
+    }
+
+    this.adjList.get(v).push(w);
+    if (!this.isDirected) {
+      this.adjList.get(w).push(v);
+    }
+  }
+
+  // 获取顶点列表
+  getVertices() {
+    return this.vertices;
+  }
+
+  // 获取邻接表
+  getAdjList() {
+    return this.adjList;
+  }
+}
+```
+
+#### 2.9.2 图的表示法
+
+JavaScript 中没有图，可以用 Object 和 Array 构建图。
+
+图的表示法有：邻接矩阵、邻接表、关联矩阵...
+
+1. 邻接矩阵
+
+_JS 中使用二维数组表示邻接矩阵_：
+
+![邻接矩阵](../_media/structure_graph_arr2.png)
+
+图中共 5 个节点，6 个边，二维数组中，**交集为 1 代表两个节点的连接**。
+
+```js
+[
+  [0, 1, 0, 0, 0],
+  [0, 0, 1, 1, 0],
+  [0, 0, 0, 0, 1],
+  [1, 0, 0, 0, 0],
+  [0, 0, 0, 1, 0],
+];
+```
+
+**二维数组**的缺点是不够灵活。
+
+2. 邻接表
+
+JS 可以使用对象实现**邻接表**。
+
+_使用邻接表表示上班的二维数组：_
+
+```js
+let graph = {
+  0: [1],
+  1: [2, 3],
+  2: [4],
+  3: [0],
+  4: [3],
+};
+```
+
+#### 2.9.3 图的深度优先遍历
+
+- 1. 访问跟节点
+- 2. 对跟节点的**没访问过的相邻节点**（防止循环遍历）挨个进行深度优先遍历
+
+_一个“图“实例：_
+
+![邻接矩阵](../_media/structure_graph_search.png)
+
+左侧为一个“图”，右侧为遍历步骤。
+
+```js
+// 邻接矩阵表示图
+let graph = {
+  0: [1, 2],
+  1: [2],
+  2: [0, 3],
+  3: [3],
+};
+
+const visited = new Set();
+
+const dfs = (graph, node) => {
+  console.log(node);
+  visited.add(node);
+  graph[node].forEach((c) => {
+    if (!visited.has(c)) {
+      dfs(c);
+    }
+  });
+};
+
+dfs(graph, 2);
+// 2, 0, 1, 3
+```
+
+#### 2.9.4 图的广度优先遍历
+
+- 1. 新建一个队列，把根节点入队
+- 2. 把对头出队并访问
+- 3. 把队头的**没访问过得的相邻节点**入队
+- 4. 重复 2，3 步，直到队列为空
+
+```js
+const bfs = (graph, node) => {
+  // 初始化访问缓存集合
+  const visited = new Set(node);
+  // 初始化队列，把起始点入队
+  const queue = [node];
+
+  // 广度优先遍历
+  while (queue.length) {
+    const n = queue.shift();
+    console.log(n);
+
+    graph[n].forEach((item) => {
+      if (!visited.has(item)) {
+        queue.push(item);
+        visited.add(item);
+      }
+    });
+  }
+};
+
+bfs(graph, 2);
+```
 
 ## 参考
 
 推荐 👍 -- [程序员需要了解的硬核知识之内存](https://www.cnblogs.com/cxuanBlog/p/11751609.html)
+
+[理解二叉树的三种遍历--前序、中序、后序 +层序（简明易懂）](https://blog.csdn.net/weixin_44032878/article/details/88070556)

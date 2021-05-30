@@ -125,51 +125,44 @@ DOM 中元素几何尺寸发生了变化，浏览器需要重新排列所有元�
 
 [防抖](https://zh-hans.reactjs.org/docs/faq-functions.html#debounce)确保函数不会在上一次被调用之后一定量的时间内被执行。
 
-对一些一些费时的计算来**响应快速派发的事件**时（比如鼠标滚动或键盘事件时），防抖是非常有用的。
+对一些费时的计算来**响应快速派发的事件**时（比如鼠标滚动或键盘事件时），防抖是非常有用的。
 
 **防抖场景：**
 
-触发一次即可。
+连续(小于延迟时间)的操作，触发最后一次即可。
 
 - 搜索框搜索输入。只需用户最后一次输入完，再发送请求
 - 手机号、邮箱验证输入检测
 - 窗口大小 Resize。只需窗口调整完成后，计算窗口大小。防止重复渲染。
 
-_以 250ms 的延迟来改变文本输入：_
+_延迟触发文本输入事件：_
 
 ```js
-import debounce from "lodash.debounce";
-
-class Searchbox extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.emitChangeDebounced = debounce(this.emitChange, 250);
-  }
-
-  componentWillUnmount() {
-    this.emitChangeDebounced.cancel();
-  }
-
-  render() {
-    return (
-      <input
-        type="text"
-        onChange={this.handleChange}
-        placeholder="Search..."
-        defaultValue={this.props.value}
-      />
-    );
-  }
-
-  handleChange(e) {
-    this.emitChangeDebounced(e.target.value);
-  }
-
-  emitChange(value) {
-    this.props.onChange(value);
-  }
+function debounce(fn, delay) {
+  // 维护一个 timer，使用了闭包
+  var timer;
+  return function () {
+    // 取debounce执行作用域的this
+    var _this = this;
+    var args = arguments;
+    if (timer) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(function () {
+      // 用apply指向 调用debounce 的对象
+      fn.apply(_this, args);
+      // fn中的this 指向 window
+      // fn(args);
+    }, delay);
+  };
 }
+function sayHi(e) {
+  console.log(e);
+  console.log(this);
+}
+
+var inp = document.getElementById("inp");
+inp.addEventListener("input", debounce(sayHi, 500)); // 防抖
 ```
 
 **函数节流：**
@@ -187,36 +180,38 @@ class Searchbox extends React.Component {
 _节流 “click” 事件处理器，使其每秒钟的只能调用一次:_
 
 ```js
-import throttle from "lodash.throttle";
-
-class LoadMoreButton extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleClick = this.handleClick.bind(this);
-    this.handleClickThrottled = throttle(this.handleClick, 1000);
-  }
-
-  componentWillUnmount() {
-    this.handleClickThrottled.cancel();
-  }
-
-  render() {
-    return <button onClick={this.handleClickThrottled}>Load More</button>;
-  }
-
-  handleClick() {
-    this.props.loadMore();
-  }
+function throttle(fn, delay) {
+  var timer;
+  return function () {
+    var _this = this;
+    var args = arguments;
+    // 节流，timer存在时不执行
+    if (timer) {
+      return;
+    }
+    timer = setTimeout(function () {
+      fn.apply(_this, args);
+      // 在delay后执行完 fn 之后清空timer
+      timer = null;
+    }, delay);
+  };
 }
+
+// 测试
+function testThrottle(e, content) {
+  console.log(e, content);
+}
+var testThrottleFn = throttle(testThrottle, 1000); // 节流函数
+document.onmousemove = function (e) {
+  testThrottleFn(e, "throttle"); // 给节流函数传参
+};
 ```
 
 **区别：**
 
-函数防抖 关注一定时间连续触发的事件只在**最后执行一次**，而函数节流侧重于**一段时间内只执行一次**。
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">函数防抖</code>关注一定时间连续触发的事件只在**最后执行一次**，因此<span style="color: #ff0000; font-size: 16px;">每次调用防抖函数都会重置 timer</span>;
 
-```js
-
-```
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">函数节流</code>侧重于**一段时间内只执行一次**，因此要<span style="color: #ff0000; font-size: 16px;">在防抖函数的 setTimeout 回调中清除 timer</span>。
 
 ### 6.2 其他技巧
 

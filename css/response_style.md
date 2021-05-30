@@ -310,7 +310,6 @@ _效果 ⬇️：_
 .container {
   border: 2px solid red;
   display: flex;
-  justify-content: center;
   justify-content: space-between:
 }
 ```
@@ -323,7 +322,6 @@ _效果 ⬇️：_
 .container {
   border: 2px solid red;
   display: flex;
-  justify-content: center;
   justify-content: space-around:
 }
 ```
@@ -336,7 +334,6 @@ _效果 ⬇️：_
 .container {
   border: 2px solid red;
   display: flex;
-  justify-content: center;
   justify-content: space-around;
   align-items: center;
 }
@@ -385,7 +382,6 @@ align-items: center 在这里实现了 Flex 元素的 垂直居中。
       width: 700px;
       border: 2px solid red;
       display: flex;
-      justify-content: center;
       justify-content: space-around;
       align-items: center;
     }
@@ -438,7 +434,6 @@ flex-wrap 的值：
 .container {
   border: 2px solid red;
   display: flex;
-  justify-content: center;
   justify-content: space-around;
   align-items: center;
   flex-wrap: wrap;
@@ -471,11 +466,10 @@ align-content 属性的值：
   height: 800px;
   border: 2px solid red;
   display: flex;
-  justify-content: center;
   justify-content: space-around;
   align-items: center;
-  flex-wrap: wrap;
   align-content: space-around;
+  flex-wrap: wrap;
 }
 ```
 

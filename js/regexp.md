@@ -69,13 +69,13 @@
 
 ## 3. PCRE 表达式
 
-正则表达式有不同的写法，使用最广泛的是 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">PCER</code>。
+正则表达式有不同的写法，使用最广泛的是 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">PCRE</code>。
 
-<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">PCER</code> 的全称是 Perl Compatible Regular Expression，即 Perl 兼容的正则表达式。
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">PCRE</code> 的全称是 Perl Compatible Regular Expression，即 Perl 兼容的正则表达式。
 
 各种编程语言如 Java、Python、C#、JavaScript 实现的就是这种正则表达式。
 
-**PCER 表达式(部分)：**
+**PCRE 表达式(部分)：**
 
 | 字符        | 描述                                                                                   | 示例                                                                                                                 |
 | ----------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
