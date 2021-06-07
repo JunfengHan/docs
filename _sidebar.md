@@ -99,10 +99,3 @@
 - [综合](/synthesize/ "综合")
 
   - [url 处理](/synthesize/url.md "url")
-
-<!-- - [前端面试题目汇总](/interview/ "前端面试 题目")
-
-  - [HTML](/interview/html.md "HTML 面试题")
-  - [CSS](/interview/css.md "CSS 面试题")
-  - [JS](/interview/js.md "JS 面试题")
-  - [React](/interview/react.md "JS react 面试题") -->
