@@ -43,8 +43,6 @@ export default ComponentA;
 
 > 组件的状态很复杂，需要进行特别的管理。
 
-
-
 ## 3. 何时需要 Redux？
 
 由于上面两个问题，我们可能需要**状态管理工具**来帮助我们管理 State.
@@ -81,7 +79,7 @@ _官网截图：_
 
 Redux 要做的只有一件事，<span style="color: #ff0000; font-size: 16px;">管理可预见的 State</span>.
 
-为了达到**可预见**的目的，Redux 引入了三个核心概念，和一系列原则，
+为了达到**可预见**的目的，Redux 引入了三个核心概念，和一系列原则.
 
 ### 4.1 Redux 三个核心概念
 
@@ -432,6 +430,21 @@ Redux 官网里写的很清楚了，看这里或许能解决你很多疑惑 👉
 - 持久化和从状态启动（如视频播放进度等）
 
 ## 9. 手写一个简单的 Redux
+
+**明确需求，实现简易的核心功能**：
+
+- 使用纯函数
+- createStore() 新建 store，用于存储 state
+- dispatch() 派发 action
+- reducer() 处理 action + state 生成新的 state
+
+```js
+
+```
+
+_思维导图：_
+
+![redux 思维导图](../_media/react_redux_map.png)
 
 ## 教程推荐
 

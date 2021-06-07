@@ -24,7 +24,7 @@ function square(number) {
 
 ```js
 // 函数表达式定义函数
-// 注意这里是有分号的
+// 注意最后面是有分号的
 const square = function (number) {
   return number * number;
 };
@@ -376,7 +376,7 @@ ES5 中,函数执行时内部存在两个特殊对象 arguments 和 this。
 ES6 中新增了 new.target 属性。
 
 - arguments: 类数组，包含调用函数时的参数，箭头函数没有这个属性
-- this：this 在标准函数中，this 引用的是把函数当成方法调用的上下文；箭头函数中，this 引用的是定义箭头函数的上下文；函数作为对象中的方法时，this 指向这个对象
+- this：this 在标准函数中，<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">this</code>**引用的是把函数当成方法调用的上下文**；箭头函数中，this 引用的是定义箭头函数的上下文；函数作为对象中的方法时，this 指向这个对象.
 - new.target: 通过 new 运算调用时返回构造函数,默认为 undefined
 
 ```js
@@ -548,7 +548,7 @@ let man = new Good();
 
 bind() 方法是函数原型上自带的方法, Function.prototype.bind()。
 
-调用 f.bind()会<span style="color: #ff0000; font-size: 16px;">创建</span>一个与 f 具有相同函数体和作用域的函数;
+调用 f.bind()会<span style="color: #ff0000; font-size: 16px;">返回</span>一个与 f 具有相同函数体和作用域的函数;
 
 - 新函数的**this 将永久地被绑定到了 bind 的第一个参数**
 
@@ -593,16 +593,26 @@ console.log(o.a, o.f(), o.g(), o.h()); // 37, 37, azerty, azerty
 
 _手写一个 bind:_
 
+MDN 手动实现的 bind：[Polyfill](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#polyfill)
+
 ```js
 Function.prototype._bind = function (context, ...args) {
-  // self 指调用 _bind方法 的函数实例，如上面的 函数f、函数g
+  // this 指向调用 _bind 方法的普通函数实例
   var self = this;
+  if (typeof self !== "function") {
+    throw new TypeError("Function.prototype._bind - error");
+  }
+
   var fnBound = function () {
+    // es5写法，arguments是类数组，只有length属性，想使用Array的其他方法只能借用
+    // let arg = Array.prototype.slice.call(arguments);
+    // es6写法
+    let arg = Array.from(arguments); // 或 [...arguments]
+
     // 执行函数实例，修改函数实例 this 指向为 context
-    self.apply(
-      this instanceof self ? this : context,
-      args.concat(Array.prototype.slice.call(arguments))
-    );
+    // this 的原型链中含有 self 的原型，说明对 fnBound 使用了new关键字，如 new (func1._bind(thisContext, args))
+    // 当使用new关键字的时候要忽略 _bind 指定的this
+    self.apply(this instanceof self ? this : context, arg);
   };
 
   // 设置 fnBound 原型
@@ -613,6 +623,15 @@ Function.prototype._bind = function (context, ...args) {
   // 返回新函数
   return fnBound;
 };
+
+// 使用示例 ⬇️
+function a1() {
+  console.log(this.num);
+}
+let a2 = a1._bind({ num: 1 });
+
+a1(); // undefined
+a2(); // 1
 ```
 
 ### 4.6 call() 和 apply() 中的 this
@@ -654,8 +673,8 @@ _手动实现一个 call：_
 
 ```js
 Function.prototype._call = function (context, ...args) {
-  let context = context || window;
-  // 给 context 添加方法
+  context = context || window;
+  // 给 context 添加方法 fn（fn作为 context对象的一个方法）
   // this 指调用 _call 的函数实例，如（func._call()中的 func）
   context.fn = this;
   // 调用 context 的 fn
@@ -816,7 +835,9 @@ a(); // 3
 
 ## 5. 闭包
 
-闭包指的是--<span style="color: #ff0000; font-size: 16px;"></span>引用了另一个函数作用域中变量</span>的**函数**,通常在嵌套函数中实现。
+> 什么是闭包？
+>
+> 函数 A 内部有一个函数 B，函数 B 访问了函数 A 中的变量，这样，**函数 B 和函数 A 中的变量就形成了一个闭包**。
 
 ```js
 function createUser(user) {
@@ -833,23 +854,23 @@ let user = createUser({ name: "boy", age: 12 })();
 
 ### 5.1 理解闭包
 
-理解作用域链对理解闭包很有帮助.
+理解<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">作用域链</code>对理解闭包很有帮助.
 
-在调用一个函数时，会为函数调用创建一个执行上下文，并创建一个作用域链。
+在调用一个函数时，会为函数调用创建一个**执行上下文**，并创建一个<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">作用域链</code>。
 
-然后用 arguments 和其它命名参数来初始化这个函数的<span style="color: #ff0000; font-size: 16px;">活动对象</span>。
+然后用 **arguments** 和其它**命名参数**来初始化这个函数的<span style="color: #ff0000; font-size: 16px;">活动对象</span>。
 
-外部函数的活动对象时内部函数作用域链上的第二个对象。
+外部函数的活动对象是内部函数<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">作用域链</code>上的第二个对象，即：<span style="color: #ff0000; font-size: 16px;">作用域链这个链表上是一层层的活动对象</span>。
 
-这个作用域链一直向外串起了所有包含函数的活动对象，直到全局执行上下文才终止。
+这个<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">作用域链</code>一直向外串起了所有包含函数的活动对象，直到全局执行上下文才终止。
 
-函数执行时，要从作用域链中查找变量，以便读、写值。
+函数执行时，要从<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">作用域链</code>中**逐层**查找变量，以便读、写值。
 
 ```js
-function compare (val1, val2) {
+function compare(val1, val2) {
   if (val1 < val2) {
     return -1;
-  } else if (val1 < val2>){
+  } else if (val1 > val2) {
     return 1;
   } else {
     return 0;
@@ -859,7 +880,7 @@ function compare (val1, val2) {
 let result = compare(5, 10);
 ```
 
-**这里调用 compare()函数是在全局作用域下的，第一次调用 compare 时，会为它创建一个包含 arguments、val1、val2 的活动对象，这个对象其实是作用域链上的第一个对象，而全局上下文的变量对象则是 compare()作用域链上的第二个对象，其中包含 this、result 和 compare**。
+**这里调用 compare()函数是在全局作用域下的，第一次调用 compare 时，会为它创建一个包含 arguments、val1、val2 的活动对象，这个对象其实是作用域链上的第一个对象，而全局上下文的变量对象则是 compare()作用域链上的第二个对象，其中包含 result 和 compare**。
 
 标准函数作用域链示意图 👇：
 ![标准函数作用域链](../_media/function_scope.png)
@@ -868,11 +889,41 @@ let result = compare(5, 10);
 
 ![闭包函数作用域链](../_media/function_scope_package.png)
 
-### 5.2 闭包中的 this
+### 5.2 闭包的作用
+
+**闭包主要作用：**
+
+- 可以读取函数内部的变量
+- 让闭包引用的变量始终保持在内存中
+
+函数可以访问它的**局部变量**和**作用域链上的所有变量**。
+
+但是，如何在函数外部访问函数内部的变量呢？
+
+我们可以在函数 A 内部再新建一个函数 B，我们可以让新建的函数 B 返回函数 A 中变量。
+
+```js
+function init() {
+  // name 是一个被 init 创建的局部变量，外部无法访问
+  var name = "Mozilla";
+  function displayName() {
+    // displayName() 是内部函数，一个闭包
+    return name; // 使用了父函数中声明的变量
+  }
+  return displayName();
+}
+
+// 可以访问到 init中的变量 name了
+let initName = init();
+console.log(initName);
+// Mozilla
+```
+
+### 5.3 闭包中的 this
 
 > 闭包中使用 this 会让代码变得复杂。
 
-我们知道，在函数外部是不能访问函数的 this 的，闭包作为函数内部的函数，同样不能访问它的包含函数的 this。
+我们知道，在函数外部是不能访问函数的 this 的，闭包作为函数内部的函数，同样**不能访问它父函数的 this**。
 
 例如：
 
@@ -917,7 +968,15 @@ console.log((obj.getIdentityFunc = obj.getIdentityFunc)(); // 'The Window'
 
 (obj.getIdentityFunc) 和 obj.getIdentityFunc 是等价的，所以都打印出 ‘My Object’;
 
-(obj.getIdentityFunc = obj.getIdentityFunc) 这里执行了一次赋值，赋值表达式的值是函数本身，this 不再于任何对象绑定，所以会打印出‘The Window’。
+(obj.getIdentityFunc = obj.getIdentityFunc) 这里执行了一次赋值，赋值表达式的值是函数本身，this 不再与任何对象绑定，所以会打印出‘The Window’。
+
+### 5.4 闭包注意事项
+
+1. 闭包内存消耗大：因为要保持闭包引用的变量一直在内存中
+
+2. 闭包可以在外部改变其父函数中的变量，如果父函数中的变量是引用类型，应当注意
+
+没有明确需求，不要乱用闭包。
 
 ## 6. 异步函数
 

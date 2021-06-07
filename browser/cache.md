@@ -84,8 +84,9 @@ Disk Cache 不会随着浏览器 Tab 页关闭而释放。
 注意 ⚠️：
 
 > 1. 目前 ServiceWorker 是一个实验功能，Chrome 实现了它，Youtube 也在使用。
-> 2. ServerWorker 对协议是有要求的，必须以 https 协议为前提
->    _ServiceWorker 兼容性不是很好：_
+> 2. ServerWorker 对协议是有要求的，必须以 https 协议为前提。
+
+_ServiceWorker 兼容性不是很好：_
 
 ![youtube缓存示例](../_media/browser_cache_compatibility.png)
 
@@ -248,7 +249,7 @@ Cache-control: must-revalidate -> 该指令就意味着使用一个陈旧的资�
 Cache-control: no-transform
 Cache-control: proxy-revalidate
 Cache-Control: max-age=<seconds> -> 设置缓存存储最大周期（超过周期即算过期，时间是相对于请求时间）
-Cache-control: s-maxage=<seconds> -> 覆盖 max-age 或 Expires 头（**优先级最高**🌟），适用于public(共享缓存)，通常是服务器使用，私有缓存则会忽略它
+Cache-control: s-maxage=<seconds> -> **优先级最高**，🌟 会覆盖 max-age 或 Expires；但只适用于public(共享缓存)，通常是服务器使用，private（私有缓存）则会忽略它
 ```
 
 **注意**⚠️：
@@ -375,7 +376,7 @@ http
   })
   .listen(8080);
 
-console.log("server is listening on 8080 port!");
+console.log("server is listening on port: 8080");
 ```
 
 ## 参考

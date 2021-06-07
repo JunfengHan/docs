@@ -9,7 +9,8 @@
   - [JS 基础 -- 数据类型](/js/base.md "JavaScript 数据类型")
   - [JS 基础 -- 深入理解函数](/js/function.md "JavaScript function 函数")
   - [JS 基础 -- 面向对象、继承和 Class(类)](/js/object.md "JavaScript Object 对象")
-  - [JS 深拷贝与浅拷贝](/js/jscopy.md "JavaScript 深拷贝与浅拷贝")
+  - [深入理解 JS 的执行过程](/js/deep.md "JavaScript 深入理解JS执行")
+  - [JS 深拷贝与浅拷贝](/js/jsCopy.md "JavaScript 深拷贝与浅拷贝")
   - [搞清楚 JS 异步是什么](/js/async.md "JavaScript 异步")
   - [Event Loop (事件循环)](/js/event_loop.md "JavaScript event loop 事件循环")
   - [正则](/js/regexp.md "JavaScript regexp 正则表达式")
@@ -32,7 +33,7 @@
   - [一次搞懂 React Router（含源码分析）](/react/react_router.md "react router 路由 源码")
   - [一次搞懂 Redux（含源码分析）](/react/react_redux.md "react redux 状态管理")
   - [React 项目中的样式处理](/react/react_style.md "react CSS Modules 样式 模块化")
-  - [React 问答](/react/react_ask.md "react 问答 源码")
+  - [React 常见面试题](/react/react_interview.md "react 面试题")
 
 - [NodeJS](/node/ "nodeJs")
 
@@ -87,17 +88,21 @@
 - [算法与数据结构](/algorithmStructure/ "算法 数据结构")
 
   - [数据结构](/algorithmStructure/structure.md "数据结构")
-  - [算法](/algorithmStructure/algorithm.md "算法")
+  - [算法基础](/algorithmStructure/algorithm.md "算法")
   - [算法实战](/algorithmStructure/algorithms.md "算法实战")
-  - [慕课网算法视频学习笔记](/algorithmStructure/mooc.md "算法 慕课网 学习笔记")
 
 - [计算机基础知识](/base/ "计算机基础知识")
 
   - [计算机基础知识](/base/computerBase.md "计算机 基础知识")
   - [进程与线程](/base/thread.md "进程 线程")
 
+- [综合](/synthesize/ "综合")
+
+  - [url 处理](/synthesize/url.md "url")
+
 - [前端面试题目汇总](/interview/ "前端面试 题目")
 
   - [HTML](/interview/html.md "HTML 面试题")
   - [CSS](/interview/css.md "CSS 面试题")
   - [JS](/interview/js.md "JS 面试题")
+  - [React](/interview/react.md "JS react 面试题")

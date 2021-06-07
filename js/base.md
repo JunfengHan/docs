@@ -142,22 +142,29 @@ Object.prototype.toString.call(window); //"[object Window]"
 #### 1.2.4 实现一个数据类型判断函数
 
 ```js
-function getType(obj) {
-  let type = typeof obj;
-  if (type !== "object") {
-    // 先进行typeof判断，如果是基础数据类型，直接返回
-    return type;
+function getType(data) {
+  // 先使用typeof判断基础数据类型
+  let type = typeof data;
+  if (type === "object") {
+    // 使用
+    type = Object.prototype.toString
+      .call(data)
+      .replace(/^\[object (\S+)\]$/, "$1") // 注意正则中间有个空格
+      .toLowerCase(); // 返回转化为小写的数据类型，和 typeof 一样
   }
-  // 对于typeof返回结果是object的，再进行如下的判断，正则返回结果
-  let toStringType = Object.prototype.toString
-    .call(obj)
-    .replace(/^\[object (\S+)\]$/, "$1"); // 注意正则中间有个空格
-  // 返回转化为小写的数据类型
-  return toStringType && toStringType.toLowerCase();
+
+  return type;
 }
-console.log(getType("8")); // string
-console.log(getType("8")); // number
-console.log(getType([])); // array
+
+console.log(getType("abc"));
+console.log(getType(1));
+console.log(getType(console));
+console.log(getType([]));
+
+// string
+// number
+// console
+// array
 ```
 
 ### 1.3 数据类型转换
@@ -353,6 +360,16 @@ Date.parse();
 - Set：允许你存储任何类型的唯一值，<span style="color: #ff0000; font-size: 16px;">Set 中的元素是唯一的</span>
 - WeakSet
 
+**注意**：
+
+> 1.Map 和 Set 本质上都是**哈希表**，Object 同样也是
+>
+> 2.Map 像 Object，略有区别
+>
+> 3.Set 像 Array，Set 中元素具有唯一性
+>
+> 4.Set 没有索引且无序，因为他数据结构属于哈希表；而 Array 的数据结构属于链表
+
 ```js
 // Set
 let mySet = new Set([1, 2, 3, 1]);
@@ -483,7 +500,7 @@ function flatArr(arr) {
     } else {
       result.push(ele);
     }
-  }); 
+  });
 
   return result;
 }

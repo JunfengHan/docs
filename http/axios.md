@@ -440,7 +440,7 @@ axios.post("/foo", qs.stringify({ bar: 123 }));
 
 ### 3.1 axios 目录结构
 
-**node_modules 中 4axios 目录结构**：
+**node_modules 中 axios 目录结构**：
 
 ![axios](../_media/http_axios_directory.png)
 
@@ -463,7 +463,7 @@ axios.post("/foo", qs.stringify({ bar: 123 }));
 module.exports = require("./lib/axios");
 ```
 
-index.js 只是导出了“./lib/axios”，看了我们真正的入口文件是它。
+index.js 只是导出了“./lib/axios”，看来我们真正的入口文件是它。
 
 2. 真正的入口文件 ./lib/axios.js
 
@@ -528,7 +528,7 @@ module.exports.default = axios;
 
 3. 如何创建 axios 实例
 
-_createInstance 方法创建 axios 实例_：
+**createInstance 方法创建 axios 实例**：
 
 ```js
 function createInstance(defaultConfig) {
@@ -718,6 +718,7 @@ config = mergeConfig(this.defaults, config);
 ...
 function getDefaultAdapter() {
   var adapter;
+  // ⚠️ 判断是采用 XMLHttpRequest 还是 Node.js 的 http 模块 🌟🌟🌟
   if (typeof XMLHttpRequest !== "undefined") {
     // For browsers use XHR adapter
     adapter = require("./adapters/xhr");
@@ -744,7 +745,7 @@ var cookies = require("./../helpers/cookies");
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
     ...
-
+    // 客户端实例化 request 对象 🌟🌟🌟
     var request = new XMLHttpRequest();
     ...
     // Set the request timeout in MS
