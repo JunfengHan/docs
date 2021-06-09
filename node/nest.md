@@ -29,6 +29,8 @@ NodeJs 框架可谓是百花齐放，目前主流的有：
 
 _npm 包的下载量对比：_
 
+![node框架对比](../_media/node_plateform.png)
+
 ## 3. 为什么选择 Nest
 
 > Nest 是框架，它组织和规范我们的代码结构。Express\Koa 是封装了 NodeJS HTTP 模块 的库，方便我们使用 NodeJs 的 API 而已。
@@ -640,6 +642,8 @@ _动态模块：_
 ## 6. DataBase (数据库)
 
 ## 7. NestJs 部署
+
+// 待完善...
 
 ## 参考
 

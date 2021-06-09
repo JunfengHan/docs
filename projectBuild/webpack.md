@@ -117,9 +117,34 @@ Gulp 优点是好用又不失灵活，既可以单独完成构建，也可以和
 
 output 属性告诉 webpack 在哪里输出它所创建的 bundles，以及如何命名这些文件.
 
-#### 4.3 <font color=red> chunk </font>
+### 4.3 module
 
-chunk 是 webpack 中的重要概念，webpack 有一个入口文件，入口文件的依赖及各文件的依赖都称为 chunk. 所以我们看到类似的配置：
+在 Webpack 里**一切皆模块**，<span style="color: #ff0000; font-size: 16px;">一个模块对应一个文件</span>。
+
+**什么是 webpack 模块？**
+
+Webpack <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">模块</code>能够以各种方式表达它们的依赖关系，几个例子如下：
+
+- ES2015 import 语句
+- CommonJs require 语句
+- AMD define 和 require 语句
+- css/sass/less 文中的 @import 语句
+- 样式 （url(...)）或 HTML 文件（<img src=...>）中的图片链接（image url）
+
+**支持的模块类型有哪些？**
+
+- CoffeeScript
+- TypeScript
+- ESNext（Babel）
+- Sass
+- Less
+- Stylus
+
+### 4.4 chunk
+
+<span style="color: #ff0000; font-size: 16px;">Chunk 指<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">代码块</code>,一个 Chunk 由多个模块组合而成,用于**代码合并与分割**</span>。
+
+例如：webpack 有一个入口文件，入口文件的依赖及各文件的依赖都称为 chunk. 所以我们看到类似的配置：
 
 ```js
 // 入口文件
@@ -140,7 +165,7 @@ output: {
 }
 ```
 
-### 4.4 loader
+### 4.5 loader
 
 webpack 自身只支持 JavaScript。而 loader 能够让 webpack 处理那些非 JavaScript(如：css 文件) 文件，并且先将它们转换为有效模块，然后添加到依赖图中，这样就可以提供给应用程序使用。
 
@@ -149,36 +174,13 @@ webpack 的配置中 loader 有两个特征：
 1. test 属性: 用于标识出应该被对应的 loader 进行转换的某个或某些文件
 2. use: 表示进行转换时，应该使用哪个 loader
 
-### 4.5 plugin
+### 4.6 plugin
 
-loader 被用于转换某些类型的模块，而插件则可以用于执行范围更广的任务，插件的范围包括：打包优化、资源管理和注入环境变量。
+loader 被用于转换某些类型的模块，而插件则可以用于执行范围更广的任务，插件的范围包括：打包优化、资源管理和注入环境变量等。
 
-### 4.6 mode
+### 4.7 mode
 
 通过将 mode 参数设置为 development, production 或 none，可以启用对应环境下 webpack 内置的优化。默认值为 production
-
-### 4.7 modules
-
-在模块化编程中，开发者将程序分解成离散功能块(discrete chunks of functionality)，并称之为*模块*。每个模块具有比完整程序更小的接触面，使得校验、调试、测试轻而易举。 精心编写的*模块*提供了可靠的抽象和封装界限，使得应用程序中每个模块都具有条理清楚的设计和明确的目的。
-
-**什么是 webpack 模块？**
-
-webpack *模块*能够以各种方式表达它们的依赖关系，几个例子如下：
-
-- ES2015 import 语句
-- CommonJs require 语句
-- AMD define 和 require 语句
-- css/sass/less 文中的 @import 语句
-- 样式 （url(...)）或 HTML 文件（<img src=...>）中的图片链接（image url）
-
-**支持的模块类型有哪些？**
-
-- CoffeeScript
-- TypeScript
-- ESNext（Babel）
-- Sass
-- Less
-- Stylus
 
 ### 4.8 模块的解析
 
@@ -301,3 +303,5 @@ webpack 开箱即用，但是会假定项目的入口起点为 src/index，然�
 ## 参考
 
 [webpack 主流程源码阅读以及实现一个 webpack](https://github.com/6fedcom/fe-blog/tree/master/webpack/webpack)
+
+[webpack 打包原理 ? 看完这篇你就懂了 !](https://segmentfault.com/a/1190000021494964)

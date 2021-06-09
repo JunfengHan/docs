@@ -32,6 +32,8 @@
   - [React 生命周期（含源码分析）](/react/react_lifecycle.md "react 生命周期")
   - [一次搞懂 React Router（含源码分析）](/react/react_router.md "react router 路由 源码")
   - [一次搞懂 Redux（含源码分析）](/react/react_redux.md "react redux 状态管理")
+  - [Antd 分析](/react/react_antd.md "react antd")
+  - [React 项目中的组件规划](/react/react_component.md "react component")
   - [React 项目中的样式处理](/react/react_style.md "react CSS Modules 样式 模块化")
   - [React 常见面试题](/react/react_interview.md "react 面试题")
 
@@ -49,6 +51,7 @@
 
 - [浏览器](/browser/ "浏览器")
 
+  - [从输入 URL 到页面显示的过程](/browser/urlToView.md "浏览器 从URL到页面显示")
   - [DOM 操作与重排(reflow)、重绘(repaint)](/browser/reflow_repaint.md "浏览器 重排 reflow 重绘 repaint")
   - [缓存](/browser/cache.md "浏览器 缓存")
   - [本地存储](/browser/storage.md "浏览器 本地存储")
@@ -77,6 +80,7 @@
 
   - [webpack 概念与原理](/projectBuild/webpack.md "webpack")
   - [Webpack 实战与配置详解](/projectBuild/webpack_case.md "webpack")
+  - [模块化](/projectBuild/modules.md "JS module")
 
 - [技术方案](/scheme/ "技术方案")
 

@@ -181,7 +181,7 @@ int cal(int n) {
 
 ### 2. 空间复杂度
 
-算法的<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">空间复杂度</code>是指算法需要**消耗的空间资源**。
+算法的<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">空间复杂度</code>是指算法需要**消耗的存储空间与数据规模之间的增长关系**。
 
 与时间复杂度类似，一般都用复杂度的**渐近性**来表示。
 
@@ -661,9 +661,10 @@ function sortInsert(num) {
   // step1: 遍历所有未排序元素（第一个元素标记为已排序）
   for (let i = 1; i < num.length; i++) {
     let j = i;
-    let temp = num[i];
+    // 当前未排序元素
+    let currentItem = num[i];
     // step2: 遍历已排序元素,找到插入位置
-    while (j > 0 && num[j - 1] > temp) {
+    while (j > 0 && num[j - 1] > currentItem) {
       // step3: 右移已排序元素
       num[j] = num[j - 1];
       j--;
@@ -671,7 +672,7 @@ function sortInsert(num) {
 
     // for循环写法替代while
     // for (; j > 0; j--) {
-    //   if (num[j - 1] > temp) {
+    //   if (num[j - 1] > currentItem) {
     //     num[j] = num[j - 1];
     //   } else {
     //     break;
@@ -679,7 +680,7 @@ function sortInsert(num) {
     // }
 
     // step4: 插入未排序元素到特定位置
-    num[j] = temp;
+    num[j] = currentItem;
   }
 
   return num;
