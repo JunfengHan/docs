@@ -65,6 +65,7 @@
 
 - [服务器与数据库](/server/ "服务器")
 
+  - [restful 对比 GraphQL](/server/restfulVsGraphql.md "restful 对比 GraphQL")
   - [MongoDB 入门](/server/mongo.md "MongoDB 入门")
   - [MongoDB Shell](/server/mongo_shell.md "MongoDB 入门")
   - [MongoDB User](/server/mongo_user.md "MongoDB 入门")
