@@ -81,11 +81,11 @@ _盒模型：_
 
 > BFC 是什么？
 
-**块格式化上下文（Block Formatting Context，BFC）** 是 CSS 可视化渲染的一部分，可以把它看作**一个相对独立的渲染区域**，有自己的**渲染规则**，块盒子模型可以在里面布局，浮动元素可以在里面浮动，不会影响到**BFC**之外的区域。
+**块格式化上下文（Block Formatting Context，BFC）** 是 **CSS 可视化渲染的一部分**，可以把它看作**一个相对独立的渲染区域**，有自己的**渲染规则**，块盒子模型可以在里面布局，浮动元素可以在里面浮动，不会影响到**BFC**之外的区域。
 
 **BFC 特性**：
 
-- 1. BFC 形成的区域内高度计算会把浮动元素计算在内。
+- 1. BFC 形成的区域会把浮动元素包含在内
 
 > 如何触发 BFC ？
 
@@ -150,7 +150,7 @@ _添加 overflow: auto 属性_:
 
 ![bfc2](../_media/interview_css_bfcOverflow2.png)
 
-**原理**：给父元素设置<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">overflow: auto;</code>或<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">display: flow-root;</code>使 **.container** 形成了一个 BFC，BFC 内的浮动元素会参与 BFC 的高度计算。
+**原理**：给父元素设置<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">overflow: auto;</code>或<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">display: flow-root;</code>使 **.container** 形成了一个 BFC，BFC 内的浮动元素会被包含在 BFC 内。
 
 **利用 BFC 解决外边距重叠问题：**
 
@@ -275,11 +275,9 @@ _z-index 分层：_
 
 ## 2. 布局实战
 
-### 2.1 如何实现 XXX 布局
+### 2.1 “左侧宽度固定，右侧宽度自适应”
 
-> “左侧宽度固定，右侧宽度自适应”？
-
-**1: float + margin**:
+_html_
 
 ```html
 <div class="container">
@@ -288,11 +286,14 @@ _z-index 分层：_
 </div>
 ```
 
+**1: float + margin**:
+
 ```css
 .left {
   float: left;
   /* 固定宽度 */
   width: 200px;
+  height: 200px;
   background: green;
 }
 .right {
@@ -314,29 +315,7 @@ _z-index 分层：_
 }
 ```
 
-**3: flex 布局**:
-
-```css
-.container {
-  display: flex;
-  height: 400px;
-  background: yellow;
-}
-.left {
-  width: 200px;
-  background: green;
-}
-.right {
-  /* 占据所有剩余空间 */
-  flex-grow: 1;
-  height: 300px;
-  background: red;
-}
-```
-
-![flex](../_media/interview_css_flex1.png)
-
-**4: float + calc 计算器**:
+**3: 左右 float + calc()函数**:
 
 ```css
 .container {
@@ -347,7 +326,7 @@ _z-index 分层：_
   /* 左浮动 */
   float: left;
   width: 200px;
-  height: 300px;
+  height: 200px;
   background: green;
 }
 .right {
@@ -360,30 +339,73 @@ _z-index 分层：_
 }
 ```
 
-![flex](../_media/interview_css_flex8.png)
+**4: flex 布局**:
 
-> 水平居中？
+```css
+.container {
+  display: flex;
+  height: 400px;
+  background: yellow;
+}
+.left {
+  /* width: 200px; */
+  flex-basis: 200px;
+  height: 200px;
+  background: green;
+}
+.right {
+  /* 占据所有剩余空间 */
+  flex-grow: 1;
+  height: 300px;
+  background: red;
+}
+```
 
-- 行内元素
+![flex](../_media/interview_css_flex1.png)
 
-  text-align:center;
+### 2.2 水平垂直居中
 
-- 块级元素
+- 1. 行内元素：在它的**包含块**中设置：{text-align:center;}，行内元素设置：{ line-height: 包含块高度; }
 
-  - 元素定宽时：
-    - {margin: 0 auto;}
-    - 父元素 { position: relative; } 子元素 { position: absolute; left: 50%; width: 100px; margin-left: -50px;}
-  - flex 布局：
-    - 父元素{ display: flex; justify-content: center; }
-    - 父元素 { display: flex;}，子元素 { margin: 0 auto;}(无需定宽)
-  - 绝对定位 + CSS3 新增的 transform 偏移子元素
-    - 父元素 { position: relative; } 子元素 { position: absolute; left: 50%; transform: translate(-50%, 0)}
+_示例：_
 
-> 垂直居中？
+```html
+<div class="container">
+  <span class="left">这里是span</span>
+  <p>这里是 p</p>
+</div>
+```
 
-- 单行文本垂直居中
+```css
+.container {
+  width: 400px;
+  height: 200px;
+  background: yellow;
+  /*  使 span 和 p 里的文字水平居中  */
+  text-align: center;
+}
 
-  - line-height 等于元素高度
-  - 块级元素，父元素设置 flex 布局，子元素 { margin: auto 0; }
-  - 元素定宽：绝对定位 + 使用 margin 负值或 transform 偏移
-  - flex 布局：容器元素 { display: flex; align-items: center; }
+span {
+  background: red;
+  /* 使 span 垂直居中 */
+  line-height: 200px;
+}
+
+p {
+  /*  可以单独控制 p 里的文字位置  */
+  text-align: start;
+  background: green;
+}
+```
+
+_布局结果_
+
+![布局结果](../_media/css_interview_textAlign.png)
+
+- 2. 块级元素
+
+  - 子元素**宽高已知**时
+
+  - 子元素**宽高未知**时
+
+  具体布局看[这里](http://localhost:3000/#/interview/ask1000?id=_11-%e6%b0%b4%e5%b9%b3%e5%9e%82%e7%9b%b4%e5%b1%85%e4%b8%ad)

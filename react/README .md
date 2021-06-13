@@ -25,3 +25,12 @@
 - [Build your own React --> 看不如写啊](https://pomb.us/build-your-own-react/)
 
 - [Redux 中文网 --> 翻译略有滞后，对英语不是很好的小伙伴友好啊](https://cn.redux.js.org/)
+
+待探索：
+
+Shadow DOM
+
+[使用 shadow DOM](https://developer.mozilla.org/zh-CN/docs/Web/Web_Components/Using_shadow_DOM)
+[在 React 中使用 Shadow DOM](https://zhuanlan.zhihu.com/p/81427755)
+[什么是 Shadow DOM？](https://segmentfault.com/a/1190000017970486)
+[深入理解 Shadow DOM](https://juejin.cn/post/6844903841033355271)

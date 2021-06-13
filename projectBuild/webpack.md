@@ -90,9 +90,9 @@ Gulp 优点是好用又不失灵活，既可以单独完成构建，也可以和
 
 > 构建工具是随着时代的发展而产生的，从侧面反映出 Web 开发的发展趋势.
 
-- 在 Npm Script 和 Grunt 时代，Web 开发要做的事情变多，流程复杂，自动化思想被引入，用于简化流程
-- 在 Gulp 时代，开始出现一些新语言用于提高开发效率，流式处理思想的出现是为了简化文件转换的流程，例如将 ES5 转换成 ES6
-- 在 Webpack 时代，由于单页应用的流行，网页的功能和实现代码变得复杂、庞大，Web 开发向模块化改进
+- 在 Npm Script 和 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Grunt</code> 时代，Web 开发要做的事情变多，流程复杂，**自动化思想被引入，用于简化流程**
+- 在 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Gulp</code> 时代，开始出现一些新语言用于提高开发效率，流式处理思想的出现是为了简化文件转换的流程，例如将 ES5 转换成 ES6
+- 在 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Webpack</code> 时代，由于单页应用的流行，网页的功能和实现代码变得复杂、庞大，Web 开发向模块化改进
 
 **webpack 成为首选的原因：**
 

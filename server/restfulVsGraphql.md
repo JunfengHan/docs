@@ -8,27 +8,95 @@
 
 上网，就是客户端获取服务器的资源的过程。
 
-todo: 获取资源的方式进化过程
-
 ## 2. RESTful 架构
 
 ### 2.1 什么是 RESTful
 
-### 2.2 使用 RESTful 架构
+### 2.2 RESTful 规则
+
+- 1. API 应该包含版本信息
+
+```js
+/api/v1/posts/
+/api/v1/drafts/
+
+/api/v2/posts/
+/api/v2/drafts/
+```
+
+另一种优雅的做法是，使用 HTTP header 中的 accept 来传递版本信息，这也是 GitHub API 采取的策略。
+
+- 2. 使用名词而不是动词
+
+使用名词而非动词来描述语义，请求方法 GET、POST、HEAD 已经表达了语义。
+
+```js
+// Bad APIs
+/api/getArticle/1/
+/api/updateArticle/1/
+/api/deleteArticle/1/
+```
+
+```js
+// Good APIs
+/api/Article/1/
+```
+
+- 3. GET 和 HEAD 请求应该是安全的
+
+有这样一个不规范的 API:
+
+```js
+// The following api is used to delete articles
+// [GET]
+/api/deleteArticle?id=1
+```
+
+- 4. 可以通过 url 参数对资源进行过滤，如：
+
+```js
+// List Gevin's articles
+/api/articles?author=gevin
+```
+
+- 5. 资源列表分页
+
+对于资源集合，分页获取是一种比较合理的方式。
+
+_常见分页数据_
+
+```js
+{
+  "page": 1,            // 当前是第几页
+  "pages": 3,           // 总共多少页
+  "per_page": 10,       // 每页多少数据
+  "has_next": true,     // 是否有下一页数据
+  "has_prev": false,    // 是否有前一页数据
+  "total": 27           // 总共多少数据
+}
+```
+
+分页就是一种最典型的资源过滤。
 
 ## 3. GraphQL 架构
 
+为什么需要 GraphQL?
+
+> GraphQL 的本质是程序员想对 JSON 使用 SQL，获取特定的某些字段，而不是获取整个 JSON 文件. 🌟🌟
+
 ### 3.1 什么是 GraphQL
+
+官方回答如下：
 
 <code style="color: #708090; background-color: #F5F5F5;">GraphQL</code> 是一个用于 API 的<code style="color: #708090; background-color: #F5F5F5;">查询语言</code>，是一个使用基于<code style="color: #708090; background-color: #F5F5F5;">类型系统</code>来执行查询的服务端运行时（类型系统由你的数据定义）。
 
-从官网的定义可以看出>
+_从官网的定义可以看出_
 
-- <code style="color: #708090; background-color: #F5F5F5;">GraphQL</code>的<span style="color: #ff0000; font-size: 16px;">类型</span>很重要
+- <code style="color: #708090; background-color: #F5F5F5;">GraphQL</code>的<span style="color: #ff0000; font-size: 16px;">类型（即：type）</span>很重要
 
 - <code style="color: #708090; background-color: #F5F5F5;">GraphQL</code>是一个来执行查询的服务端运行时
 
-一个 GraphQL 服务是通过定义类型和类型上的字段来创建的，然后给每个类型上的每个字段提供解析函数。
+一个 GraphQL 服务是通过**定义类型**和类型上的**字段**来创建的，然后给每个类型上的每个字段提供**解析函数**。🌟🌟
 
 例如，一个 GraphQL 服务告诉我们当前登录用户是 <code style="color: #708090; background-color: #F5F5F5;">me</code>，这个用户的名称可能像这样：
 _定义类型：_
@@ -90,7 +158,7 @@ _一个 GraphQL 查询：_
 ---
 
 - GraphQL 是查询语言
-- GraphQL 使用 SDL 语言来定义它的 schema, 像 REST API 可能会使用 JSON 模式一样
+- GraphQL 使用 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">SDL</code> 来定义它的 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">schema</code>, 像 REST API 可能会使用 JSON 模式一样
 - 接收到查询后会验证类型和字段，然后由指定的解析函数来生成结果
 - GraphQL 又是服务端查询的运行时，所以有[各种语言的实现](https://graphql.cn/code/)
 
@@ -112,7 +180,7 @@ _一个 GraphQL 查询：_
 
 > 因为 schema 直接位于你的应用客户端和你的底层数据服务之间，所以前端和后端团队应该就其结构进行协作。当你开发自己的数据图时，请实践 schema 优先的开发，并在你开始实现你的 API 之前，就 schema 达成一致。
 
-#### 对象类型 (Object types)
+#### 3.3.1 对象类型 (Object types)
 
 GraphQL schema 中大多数定义的都是对象类型。
 

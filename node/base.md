@@ -28,7 +28,7 @@ _Node 10 年大事件：_
 
 ## 2. Node 是什么
 
-Node.js 是一个基于 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">[Chrome V8 引擎](https://v8.dev/)</code>的<span style="color: #ff0000; font-size: 16px;">JavaScript 运行时</span>。
+Node.js 是一个基于 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">[Google V8 引擎](https://v8.dev/)</code>的<span style="color: #ff0000; font-size: 16px;">JavaScript 运行时</span>。
 
 简单点说就是：**Node.js 利用 V8 引擎提供了一个执行 JavaScript 的环境**。
 
@@ -53,7 +53,9 @@ _Node 的详细组成：_
 
 ## 3. Node 如何工作
 
-把 Node 比作一个餐厅，顾客（应用）向服务员点餐（发起请求任务），服务员把下单的菜给到厨房（处理请求），然后服务员就去服务下一桌顾客了，这种只处理了任务请求的过程是<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">异步</code>的，如果服务员把订单给到厨房，然后等厨房做完所有的菜（处理 query 等 IO 操作），这个就是<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">同步</code>的。
+把 Node 比作一个餐厅，顾客（JS 程序）向服务员点餐（发起任务），服务员（JS 引擎）把下单的菜给到后厨（Chrome API 或 libuv，用于处理异步任务），然后服务员就去服务下一桌顾客了，这种处理了任务请求的过程是<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">异步</code>的。因为服务员（JS 引擎）一直没闲着。
+
+如果服务员把订单给到厨房，然后等厨房做完所有的菜（如：处理数据请求等 IO 操作），在等待期间不去做任何其他事，最后等厨师把菜做出来后把菜端给客户，这个就是<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">同步</code>的。
 
 ![node](../_media/node_base_kitchen.png)
 
@@ -62,6 +64,24 @@ _Node 的详细组成：_
 ![node](../_media/node_base_howWork.png)
 
 <span style="color: #ff0000; font-size: 16px;">Node 默认就是这种<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">非阻塞（non-blocking）</code>的 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">异步架构（Asynchronous Architecture）</code></span>.
+
+### 3.1 Node 系统
+
+_Node 系统各主要模块及工作流程_
+
+![node](../_media/node_base_system.jpg)
+
+这张图解释了官网对 Node 的主要功能描述：
+
+- 1. Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行环境
+
+  这句话体现在左边那部分，即左侧两列东西。
+
+- 2. Node.js 使用了一个事件驱动、非阻塞式 I/O 的模型，使其轻量又高效
+
+  即右侧的 LIBUV 库。
+
+### 3.2 Node 适用场景
 
 **适用场景：**
 
@@ -199,7 +219,7 @@ Windows 系统同样也没有提供**异步非阻塞**的 I/O。
 
 <span style="color: #ff0000; font-size: 16px;">Node 使用的 I/O 模型就是 Reactor</span>。
 
-## 6. Node 的异步 I/O
+## 6. Node 的异步 I/O -- Event Loop🌟
 
 <span style="color: #ff0000; font-size: 16px;">Node 的异步 I/O 模型也叫做 -- 事件循环</span>。
 
@@ -239,7 +259,7 @@ Event Demultiplexer 有一个线程池来处理任务，线程池里有 K 个线
 
 Node 一共有**两种线程**：🌟🌟🌟
 
-- 一个事件循环线程（也叫主线程，主循环，事件线程等），启动 Node 就是启动了一个事件循环线程
+- 一个**Event Loop**（事件循环）线程（也叫主线程，主循环，事件线程等），启动 Node 就是启动了一个**Event Loop**（事件循环）线程
 - 另一种是工作线程，有 K 个（它们组成工作线程池）
 
 必须知道的是，<span style="color: #ff0000; font-size: 16px;">Node 是单线程是指主线程，但是 libuv 可是多线程的</span>。
@@ -248,45 +268,125 @@ Node 一共有**两种线程**：🌟🌟🌟
 
 Event Loop 是 Node 的关键组成部分。十分关键的那种！
 
-因为，<span style="color: #ff0000; font-size: 16px;">事件循环就是 Node 处理非阻塞 I/O 操作的机制</span>。
+因为，<span style="color: #ff0000; font-size: 16px;">**Event Loop**（事件循环）就是 Node 处理非阻塞 I/O 操作的机制</span>。
 
-事件循环也是在 Node 启动后初始化的。
+**Event Loop**（事件循环）也是在 Node 启动后初始化的。
 
-#### 6.2.1 事件循环简化概览
+#### 6.2.1 Event Loop（事件循环）简化概览
 
 _事件循环概览图：_
+
+![node](../_media/node_base_eventLoop2.png)
+
+_事件循环的七个阶段：_
 
 ![node](../_media/node_base_eventLoop.png)
 
 **说明：**
 
-- 一个事件循环被称为一个 Tick（记号）
-- 每个框是事件循环机制的一个阶段
+- 宏任务回调函数的同步调用被称为一个 Tick（记号），如：（setTimeout、I/O 的回调函数的同步执行）
+- 每个浅黄色框是**Event Loop**（事件循环）机制的一个阶段
 - 每个阶段都有一个 FIFO（先入先出）的队列来执行回调
-- 当事件循环进入给定的阶段时，它将执行特定于该阶段的任何操作，然后执行该阶段队列中的回调，直到队列用尽或最大回调数已执行
-- 当该队列已用尽或达到回调限制，事件循环将移动到下一阶段
+- 当**Event Loop**（事件循环）进入给定的阶段时，它将执行特定于该阶段的任何操作，然后执行该阶段队列中的回调，直到队列用尽或最大回调数已执行
+- 当该队列已用尽或达到回调限制，**Event Loop**（事件循环）将移动到下一阶段
 
 **阶段介绍：**
 
 - timers(定时器)：本阶段执行已经被 setTimeout() 和 setInterval() 的调度回调函数。
-- 待定回调：执行延迟到下一个循环迭代的 I/O 回调。
-- idle, prepare：仅系统内部使用。
+- 待定回调：执行一些系统操作的回调，比如 TCP 错误
+- idle, prepare：仅系统内部使用
 - poll(轮询)：
 
   <span style="color: #ff0000; font-size: 16px;">获取新的 I/O 事件</span>;
 
-  <span style="color: #ff0000; font-size: 16px;">执行与 I/O 相关的回调</span>（几乎所有情况下，除了关闭的回调函数，那些由计时器和 setImmediate() 调度的之外），Node 将在适当的时候在此阻塞。
+  <span style="color: #ff0000; font-size: 16px;">执行与 I/O 相关的回调</span>（几乎所有的 I/O 回调，如：操作读取文件等等。除了关闭的回调函数、计时器和 setImmediate() 回调），<span style="color: #ff0000; font-size: 16px;">Node 将在适当的时候在此阻塞</span>。
 
-- 检测：setImmediate() 回调函数在这里执行。
+- 检测：setImmediate() 回调函数在这里执行
 - 关闭的回调函数：一些关闭的回调函数，如：socket.on('close', ...)。
+
+#### 6.2.2 Event Loop 可视化执行过程
+
+_事件循环执行可视化：_
+
+![node](../_media/node_base_eventLoop.gif)
+
+#### 6.2.3 MacroTask(宏任务) 与 MicroTask（微任务）
+
+_Node 整体工作流程：_
+
+![node](../_media/node_base_microtasks.jpg)
+
+**说明：**
+
+- Stack 是主线程调用栈，函数同步执行
+- Node 遇到宏任务，会交给 Libuv 中的线程池（Background Threads）来执行它们，将执行完成后的回调放入 Task Queue
+- Node 遇到微任务，会直接放入 Microtask Queue
+- 当 Stack 中的函数执行完之后，开始运行**事件循环** 中的 MicroTask Queue，<span style="color: #ff0000; font-size: 16px;">一直执行到 MicroTask Queue 清空为止，如果在执行 MicroTask Queue 中有新的 微任务产生，直接插入到 MicroTask Queue 后面</span>
+- 清空 MicroTask Queue 后开始执行 Task Queue 中的回调
+
+_Event Loop 具体处理过程：_
+
+![node](../_media/node_base_micMac.png)
+
+_微任务与 Event Loop 的关系：_
+
+![node](../_media/node_base_eventLoopMic.png)
+
+**详细说明：**
+
+1. <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Node</code>中一共有两个微任务，<span style="color: #ff0000; font-size: 16px;">**微任务**不属于 Event Loop 任何阶段</span>：
+
+- process.nextTick()
+- Promises
+
+⚠️ 注意：process.nextTick() 的优先级比 Promises 高。
+
+_示例_
+
+```js
+setTimeout(() => {
+  console.log("timeout1");
+  Promise.resolve(1).then(() => {
+    console.log("Promise1");
+  });
+  process.nextTick(() => {
+    console.log("nextTick1");
+  });
+});
+
+setTimeout(() => {
+  console.log("timeout2");
+  Promise.resolve(1).then(() => {
+    console.log("Promise2");
+  });
+});
+// timeout1
+// nextTick1
+// Promise1
+// timeout2
+// Promise2
+
+// nextTick1 早于 Promise1 打印出来，说明 nextTick 优先级更高。
+```
+
+2. 我们可见的**宏任务**有 4 个：
+
+- setTimeout()、setInterval()
+- any I/O operation
+- setImmediate()
+- close Handlers
+
+3. 图中紫色的循环就是 **Event Loop**，任何阶段的宏任务执行完后都会先去执行**微任务队列**。
+
+#### 6.2.4 Event Loop 过程中的方法对比
 
 **setImmediate() VS setTimeout():**
 
 setImmediate() 是 Node 特有的方法，浏览器中没有。
 
-它是一个在事件循环的单独阶段运行的特殊计时器。
+它是一个在**Event Loop**（事件循环）的单独阶段运行的特殊计时器。
 
-它使用一个 libuv API 来安排回调**在 轮询 阶段完成后执行**。
+它使用一个 libuv API 来安排回调**在 Event Loop 的 轮询（poll） 阶段完成后执行**。
 
 如下：
 
@@ -306,7 +406,7 @@ fs.readFile(__filename, () => {
 // => immediate, timeout
 ```
 
-在一个事件循环中，setImmediate()永远比 setTimeout()先执行。
+在一个**Event Loop**（事件循环）中，setImmediate()永远比 setTimeout()先执行。
 
 需要注意 ⚠️ 的是，如果是在主函数中，二者的执行顺序是**不确定的**。
 
@@ -324,7 +424,7 @@ setImmediate(() => {
 
 **process.nextTick() VS setImmediate() :**
 
-process.nextTick() 从技术上讲不是事件循环的一部分。
+process.nextTick() 从技术上讲不是**Event Loop**（事件循环）的一部分。
 
 nextTick()会把回调放入队列中，再下一个 Tick 时取出执行，所以，nextTick()回调在一个 Tick 中早于其他任务执行。
 
@@ -365,32 +465,27 @@ console.log("同步执行");
 // setImmediate 回调2
 ```
 
-#### 6.2.2 MacroTask(宏任务) 与 MicroTask（微任务）
+#### 6.2.5 nextTick 的问题
 
-**微任务：**
+process.nextTick() 有一个很大的问题，它会发生“饿死” I/O 的潜在风险：
 
-- process.nextTick
-- Promises
-- Object.observe
+```js
+fs.readFile("file.path", (err, file) => {});
 
-**宏任务：**
+const loopTick = () => {
+  process.nextTick(loopTick);
+};
+```
 
-- setTimeout
-- setInterval
-- setImmediate
-- any I/O operation
+这段代码将会一直停留在 nextTick 阶段，无法进入到 fs.readFile 的回调中，这就是所谓的 I/O starving。
 
-_事件循环中的任务处理过程：_
+要解决这个问题，使用 setImmediate 替代，因为 setImmediate 属于事件循环，就算不停地循环，也不会阻塞整个事件循环机制。
 
-![node](../_media/node_base_microtasks.jpg)
+_Node 官网 Blog 中有这么一句话_
 
-**说明：**
+> 我们建议开发人员在所有情况下都使用 setImmediate()，因为它更容易理解。
 
-- Stack 是主线程调用栈，函数同步执行
-- Node 遇到宏任务，会交给 Libuv 中的线程池（Background Threads）来执行它们，将执行完成后的回调放入 Task Queue
-- Node 遇到微任务，会直接放入 Microtask Queue
-- 当 Stack 中的函数执行完之后，开始运行**事件循环** 中的 MicroTask Queue，<span style="color: #ff0000; font-size: 16px;">一直执行到 MicroTask Queue 清空为止，如果在执行 MicroTask Queue 中有新的 微任务产生，直接插入到 MicroTask Queue 后面</span>
-- 清空 MicroTask Queue 后开始执行 Task Queue 中的回调
+#### 6.2.6 经典案例分析
 
 _示例分析：_
 
@@ -510,7 +605,7 @@ _独角伶盗龙：_
 
 每个操作系统都有自己的**Event Demultiplexer**（事件多路分解器）接口，🌟🌟🌟
 
-- Limux -- epoll
+- Linux -- epoll
 - MacOS -- kqueue
 - Windows -- IOCP
 
@@ -669,7 +764,7 @@ _这样做的目的：_
 - 有助于提供一些看似全局的但实际上是**模块特定的变量**，如：
   module 、 exports 、 \_\_filename 、 \_\_dirname: 模块绝对文件名和目录路径
 
-经过原生方法处理后，<span style="color: #ff0000; font-size: 16px;">模块的 exports 属性被返回给了调用方</span>。
+经过原生方法处理后，<span style="color: #ff0000; font-size: 16px;">module.exports 属性被返回给了调用方</span>。
 
 这个过程就是 Node 对 CommonJS 模块规范的实现。
 
@@ -679,11 +774,11 @@ _这样做的目的：_
 
 - dlopen()方法在 Windows 和 \*nix 平台下分别有不同的实现，**通过 libuv 兼容层进行了封装**。
 
-- C/C++模块（.node 模块）其实不需要编译，只需要执行即可，执行过程中，模块的 exports 对象与 .node 模块产生联系，最后返回给调用者。
+- C/C++模块（.node 模块）其实不需要编译，只需要执行即可，执行过程中, module.exports 对象与 .node 模块产生联系，最后返回给调用者。
 
 **JSON 文件的编译过程：**
 
-- Node 利用 fs 模块同步读取 JSON 文件，调用 JSON.parse()解析文件，然后把它赋值给模块的 exports,供外部调用。
+- Node 利用 fs 模块同步读取 JSON 文件，调用 JSON.parse()解析文件，然后把它赋值, module.exports,供外部调用。
 
 ### 9.3 模块作用域
 
@@ -691,21 +786,21 @@ _这样做的目的：_
 
 **作用域中的变量：**
 
-- \_\_dirname : 当前模块目录名，相当于 \_\_filename 的 path.dirname()。
-
-```js
-console.log(__dirname);
-// 打印: /Users/mjr
-console.log(path.dirname(__filename));
-// 打印: /Users/mjr
-```
-
 - \_\_filename： 当前文件的文件名
 
 ```js
 console.log(__filename);
 // 打印: /Users/mjr/example.js
 console.log(__dirname);
+// 打印: /Users/mjr
+```
+
+- \_\_dirname : 当前模块目录名，相当于 \_\_filename 的 path.dirname()。
+
+```js
+console.log(__dirname);
+// 打印: /Users/mjr
+console.log(path.dirname(__filename));
 // 打印: /Users/mjr
 ```
 
@@ -826,8 +921,12 @@ C 大神可以仔细去研究 -- [libuv 官网](http://docs.libuv.org/en/v1.x/)
 
 官网文章，思路清晰，有必要读 -- [一次 HTTP 传输解析](https://nodejs.org/zh-cn/docs/guides/anatomy-of-an-http-transaction/#http-1)
 
-官方文章，事件循环的官方说明 -- [Node.js 事件循环，定时器和](https://nodejs.org/zh-cn/docs/guides/event-loop-timers-and-nexttick/)
+官方文章，事件循环 -- [Node.js 事件循环，定时器和 process.nextTick()](https://nodejs.org/zh-cn/docs/guides/event-loop-timers-and-nexttick/)
 
 醍醐灌顶的文章，讲 Event Loop -- [Node.js Under The Hood #3 - Deep Dive Into the Event Loop](https://dev.to/khaosdoctor/node-js-under-the-hood-3-deep-dive-into-the-event-loop-135d)
 
+Event Loop 可视化，一目了然执行过程，作者太有心了[JavaScript Visualized: Event Loop](https://dev.to/lydiahallie/javascript-visualized-event-loop-3dif)
+
 [高性能 IO 模型分析-Reactor 模式和 Proactor 模式](https://zhuanlan.zhihu.com/p/95662364)
+
+[Node 事件循环机制](https://juejin.cn/post/6844904137662922760)
