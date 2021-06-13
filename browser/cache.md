@@ -186,14 +186,14 @@ self.addEventListener("fetch", (event) => {
 
 ## 7. HTTP 实现缓存
 
-通常我们说的浏览器缓存都是**HTTP 缓存**。
+通常我们说的浏览器缓存一般是指**HTTP 缓存**。
 
 缓存的行为由 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">request headers(请求头) </code>和 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">response headers（响应头）</code>的组合控制。
 
 **HTTP 缓存可以分为两类：**
 
-- 强缓存：优先级较高，浏览器加载资源时**如果命中强缓存**，则**直接从缓存中读取**
-- 协商缓存：在命中强缓存失败的情况下，才会走协商缓存，请求头通过设置 **Last-Modified**和**ETag**验证资源是否命中协商缓存，服务器会返回 304
+- 强缓存：<span style="color: #ff0000; font-size: 16px;">优先级较高</span>，浏览器加载资源时**如果命中强缓存**，则**直接从缓存中读取**
+- 协商缓存：<span style="color: #ff0000; font-size: 16px;">在命中强缓存失败的情况下，才会走协商缓存</span>，通过设置请求头 **Last-Modified**和**ETag**发送给服务器，验证资源是否命中协商缓存，服务器一般会返回 200 或 304
 
 注意 ⚠️：🌟
 
@@ -382,6 +382,29 @@ http
 
 console.log("server is listening on port: 8080");
 ```
+
+**总结：**
+
+---
+
+1. **浏览器缓存**可以减少网络请求次数，提升性能
+
+2. 缓存可以存放在**内存**或**硬盘**中，这是由浏览器控制的
+
+3. **ServiceWorker**可以开启**离线缓存**，但是，它独立于“浏览器窗口“之外，不能操作 DOM
+
+4. **HTTP 缓存**是最常用的缓存方式，分为**强缓存**和**协商缓存**
+
+- 强缓存：由 _Cache-Control_ 和 _Expires_ 两个字段控制；
+- 协商缓存：由 _Etag_ / _If-None-Match_ 和 _Last-Modified_ / *If-Modified-Since*两组 HTTP 请求头字段控制
+
+5. 强缓存与协商缓存区别
+
+- **强缓存**优先级高，*没有命中*强缓存或强缓存*过期*才走**协商缓存**
+
+- **强缓存**不发起 HTTP 请求，**协商缓存**才会发起 HTTP 请求
+
+---
 
 ## 参考
 
