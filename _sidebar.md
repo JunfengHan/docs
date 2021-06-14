@@ -1,6 +1,7 @@
 - [CSS](/css/ "CSS 布局 伪元素")
 
-  - [CSS 易混淆概念与常见布局](/css/interview.md "CSS 常见布局")
+  <!-- - [CSS 易混淆概念与常见布局](/css/interview.md "CSS 常见布局") -->
+
   - [CSS 布局--响应式布局](/css/response_style.md "css 响应式布局 Flex")
   <!-- - [CSS 布局--网格布局](/css/grid.md "css 网格布局 Grid") -->
   - [伪类与伪元素](/css/pseudo.md "CSS 伪类 伪元素")
@@ -108,7 +109,13 @@
 
   - [url 处理](/synthesize/url.md "url")
 
-<!-- - [1000 问](/interview/ "快问")
+<!-- - [1000 问](/ask1000/ "前端1000问")
 
-  - [前端 1000 问，快问快答](/interview/ask1000.md "前端常见面试题")
-  - [01 腾讯-智慧零售](/interview/01-腾讯-智慧零售.md "前端常见面试题") -->
+  - [CSS](/ask1000/1css.md "CSS 面试题")
+  - [JS](/ask1000/2js.md "js 面试题")
+  - [React](/ask1000/3react.md "react 面试题")
+  - [Node.js](/ask1000/4node.md "node 面试题")
+  - [浏览器](/ask1000/5browser.md "browser 面试题")
+  - [HTTP](/ask1000/6http.md "http 面试题")
+  - [前端工程化](/ask1000/7project.md "project 面试题")
+  - [算法](/ask1000/8algorithm.md "algorithm 面试题") -->
