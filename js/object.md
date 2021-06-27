@@ -6,7 +6,7 @@
 
 ### 1.1 现实中的对象
 
-![搞对象](../_media/object_img.png)
+![搞对象](../img/object_img.png)
 
 你想要这样一个对象搞事情：
 
@@ -28,7 +28,7 @@
 
 这是你网站的注册页面：
 
-![搞对象](../_media/object_register.png)
+![搞对象](../img/object_register.png)
 
 这就是你的对象。
 
@@ -38,7 +38,7 @@
 
 醒醒吧少年，该学习了
 
-![搞对象](../_media/object_study.jpeg)
+![搞对象](../img/object_study.jpeg)
 
 JS 中，你的对象长成这样。
 
@@ -57,7 +57,7 @@ JS 中，你的对象长成这样。
 }
 ```
 
-![eg](../_media/object_eg.png)
+![eg](../img/object_eg.png)
 
 ### 1.3 JS 中的对象是什么
 
@@ -254,7 +254,7 @@ console.log(person1);
 
 _打印结果：_
 
-![搞对象](../_media/object_factory.png)
+![搞对象](../img/object_factory.png)
 
 **优点：**
 
@@ -289,7 +289,7 @@ console.log(person1.sayName === person2.sayName); // false
 
 _person1:_
 
-![构造函数模式](../_media/object_constructor.png)
+![构造函数模式](../img/object_constructor.png)
 
 **优点：**
 

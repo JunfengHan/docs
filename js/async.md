@@ -215,7 +215,7 @@ JS 虽然是单线程，但是**浏览器是多线程啊**。
 
 _浏览器工作原理：_
 
-![浏览器工作原理](../_media/js_runtime_environment.png)
+![浏览器工作原理](./img/js_runtime_environment.png)
 
 ### 3.1 JS 中常见的异步
 

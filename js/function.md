@@ -102,7 +102,7 @@ console.log(car1);
 
 _打印结果：_
 
-![function_new](../_media/function_new.png)
+![function_new](../img/function_new.png)
 
 **new 关键字做了如下操作：**🌟🌟🌟
 
@@ -271,7 +271,7 @@ console.dir(Fn);
 
 _控制台输出结果:_
 
-![function](../_media/function.png)
+![function](../img/function.png)
 
 **可以看到函数 sum 有 6 个属性：**
 
@@ -345,7 +345,7 @@ _关系图 👇：_
 
 蓝色箭头代表 -- 构造函数
 
-![function_extend](../_media/function_extend.png)
+![function_extend](../img/function_extend.png)
 
 **结论:**
 
@@ -464,7 +464,7 @@ test();
 
 _浏览器运行结果：_
 
-![this4111](../_media/function_this_4111.png)
+![this4111](../img/function_this_4111.png)
 
 **结论**：
 
@@ -485,7 +485,7 @@ test();
 
 _浏览器运行结果：_
 
-![this4111](../_media/function_this_4112.png)
+![this4111](../img/function_this_4112.png)
 
 **结论**：
 
@@ -698,7 +698,7 @@ Function.prototype._apply = function (context, args) {
 
 _bind 对比 call 和 apply_:
 
-![bind 对比 call 和 apply](../_media/js_function_bindCompare.png)
+![bind 对比 call 和 apply](./img/js_function_bindCompare.png)
 
 ### 4.7 箭头函数中的 this
 
@@ -883,11 +883,11 @@ let result = compare(5, 10);
 **这里调用 compare()函数是在全局作用域下的，第一次调用 compare 时，会为它创建一个包含 arguments、val1、val2 的活动对象，这个对象其实是作用域链上的第一个对象，而全局上下文的变量对象则是 compare()作用域链上的第二个对象，其中包含 result 和 compare**。
 
 标准函数作用域链示意图 👇：
-![标准函数作用域链](../_media/function_scope.png)
+![标准函数作用域链](../img/function_scope.png)
 
 闭包中的作用域链示意图 👇：
 
-![闭包函数作用域链](../_media/function_scope_package.png)
+![闭包函数作用域链](../img/function_scope_package.png)
 
 ### 5.2 闭包的作用
 
@@ -1119,9 +1119,9 @@ Promise 作为 ES6 新增的引用类型，可以通过 new 操作符来实例�
 
 假设我们要做月饼 🥮，流程是这样的：
 
-![月饼制作流程1](../_media/cookie_flow.png)
+![月饼制作流程1](../img/cookie_flow.png)
 
-![月饼制作流程](../_media/callback_flow.gif)
+![月饼制作流程](../img/callback_flow.gif)
 
 _图片来自@东予薏米，侵删_
 
@@ -1650,7 +1650,7 @@ asyncThing1()
 
 _流程图：_
 
-![promise捕获错误](../_media/promise_catch_err.png)
+![promise捕获错误](../img/promise_catch_err.png)
 
 实践中的错误处理：
 

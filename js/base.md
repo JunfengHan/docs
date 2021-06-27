@@ -6,7 +6,7 @@
 
 ### 1.1 数据类型分类
 
-![JS数据类型](../_media/js_data_type.png)
+![JS数据类型](./img/js_data_type.png)
 
 _JS 数据分为两类：_
 
@@ -280,8 +280,8 @@ Symbol() == "";
 
 **JSON.stringify 转化规则**：
 
-![stringify1](../_media/js_base_stringify1.png)
-![stringify2](../_media/js_base_stringify2.png)
+![stringify1](./img/js_base_stringify1.png)
+![stringify2](./img/js_base_stringify2.png)
 
 ```js
 function jsonStringify(data) {
@@ -390,11 +390,11 @@ Array 应该是 JS 中第二常用的数据类型吧，第一是 Object。
 
 _数组方法分类：_
 
-![Array method](../_media/js_base_arrayMethods.png)
+![Array method](./img/js_base_arrayMethods.png)
 
 _数组方法汇总：_
 
-![Array method](../_media/array_method.png)
+![Array method](../img/array_method.png)
 
 [脑图地址，拿走不谢](https://www.processon.com/view/link/60453082e401fd4f9cbc6f5d)
 
@@ -562,7 +562,7 @@ console.dir(obj);
 
 _打印结果：_
 
-![对象是什么](../_media/what_is_object.png)
+![对象是什么](./img/what_is_object.png)
 
 我们可以看到，对象 obj 上有这些属性：
 
