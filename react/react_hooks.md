@@ -1,144 +1,16 @@
-# 一文读懂 React Hook
+# 一文读懂 React Hooks
 
 > Hook 为已知的 React 概念提供了更直接的 API：props， state，context，refs 以及生命周期。
 
-**Hook 使你在非 class 的情况下可以使用更多的 React 特性**。
+_React Hooks 学习图谱_
 
-## 1. React 组件之间如何进行状态复用?
+![React Hooks 学习图谱](../_media/react_hooks_learnPath.png)
 
-<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">React</code> 的 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Function Component</code> 是没有状态的，因此也叫做**无状态组件**。
+## 1. 为什么需要 Hooks
 
-<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">React</code> 的 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Class Component</code> 是有状态的。
+### 1.1 React 组件之间状态复用很难
 
-_创建一个有状态的 Class Component:_
-
-```js
-import { Component } from "react";
-
-class ComponentA extends Component {
-  // 定义状态
-  state = {
-    num: 1,
-  };
-
-  render() {
-    // 使用状态
-    return <div>Num{this.state.num}</div>;
-  }
-}
-
-export default ComponentA;
-```
-
-假如现在有一个需求，要在组件 ComponentB 中使用 ComponentA 的状态“num”，怎么办 ❓
-
-此时你可能会想到两个常见方法：
-
-- [render prop](https://zh-hans.reactjs.org/docs/render-props.html)
-- [高阶组件(HOC)](https://zh-hans.reactjs.org/docs/higher-order-components.html)
-
-### 1.1 使用 render props 传递 state
-
-**React Router**、**Downshift** 以及 **Formik** 等都使用了 render prop。
-
-_创建组件 B_
-
-```js
-class ComponentB extends Component {
-  render() {
-    // 接收 props 传递的 num
-    const num = this.props.num;
-    return <div>My Num is {num}.</div>;
-  }
-}
-```
-
-_修改组件 A,动态渲染内容_
-
-```js
-class ComponentA extends Component {
-  // 定义状态
-  state = {
-    num: 1,
-  };
-
-  render() {
-    // 使用状态
-    return (
-      <div>
-        {/*
-          使用 `render`prop 动态决定要渲染的内容，
-          而不是给出一个 <ComponentA> 渲染结果的静态表示
-        */}
-        {this.props.renderProp(this.state)}
-      </div>
-    );
-  }
-}
-```
-
-_把组件 B 通过 render 传递给组件 A：_
-
-```js
-class Container extends Component {
-  render() {
-    return (
-      <div>
-        <p>test</p>
-        <ComponentA renderProp={(num) => <ComponentB num={num} />}></ComponentA>
-      <div/>
-    );
-  }
-}
-```
-
-**render prop 方法的原理**：
-
-**提供状态的组件**（ComponentA）<span style="color: #ff0000; font-size: 16px;">动态渲染</span>**使用状态的组件**(ComponentB)。
-
-### 1.2 使用 高阶组件（HOC）传递 state
-
-```js
-function ppHOC(WrappedComponent) {
-  return class PP extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        name: "",
-      };
-
-      this.onNameChange = this.onNameChange.bind(this);
-    }
-    onNameChange(event) {
-      this.setState({
-        name: event.target.value,
-      });
-    }
-    render() {
-      const newProps = {
-        name: {
-          value: this.state.name,
-          onChange: this.onNameChange,
-        },
-      };
-      return <WrappedComponent {...this.props} {...newProps} />;
-    }
-  };
-}
-```
-
-_使用 ppHOC:_
-
-```js
-@ppHOC
-class Example extends React.Component {
-  render() {
-    return <input name="name" {...this.props.name} />;
-  }
-}
-```
-
-## 2. Class Component 复杂组件变得难以理解
+### 1.2 Class Component 复杂组件变得难以理解
 
 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Class Component</code>是有**状态**和**生命周期**的，所以，复杂一些的组件往往用 Class Component 来实现。
 
@@ -198,8 +70,9 @@ Hook 拥抱了函数，是我们在<code style="color: #708090; background-color
 
 那么 **React 的特性**就很好理解了：
 
-- 只能写在函数组件中
-- 可以用它来“钩入”React state 及生命周期等特性
+> 1. 只能写在函数组件中
+>
+> 2. 可以用它来“钩入”React state 及*生命周期*等特性
 
 ## 5. React Hook 分类和使用
 
@@ -243,6 +116,10 @@ function Example() {
 
 ### 5.2 Effect Hook
 
+**useEffect 作用？**
+
+React 会<span style="color: #ff0000; font-size: 16px;">保存你传递的函数（我们将它称之为 “effect”），并且在执行 DOM 更新之后调用它</span>。
+
 > 在 React 组件中执行过数据获取、订阅或者手动修改过 DOM。我们统一把这些操作称为<code style="color: #708090; background-color: #F5F5F5;">“副作用</code>”，或者简称为<code style="color: #708090; background-color: #F5F5F5;">“作用(Effect)”</code>。
 
 #### 5.2.1 什么是副作用
@@ -267,7 +144,7 @@ import React, { useState, useEffect } from "react";
 function Example() {
   const [count, setCount] = useState(0);
 
-  // 相当于 componentDidMount 和 componentDidUpdate
+  // 相当于 componentDidMount 、 componentDidUpdate 和 componentWillUnMount 的组合
   // 挂载和更新都会执行这个副作用
   useEffect(() => {
     // 使用浏览器的 API 更新页面标题
@@ -376,19 +253,7 @@ useEffect(() => {
 
 #### 5.2.6 useEffect 是如何实现的
 
-React 的 Mount 和 Update 是分为三个阶段的：
-
-- 1. Scheduler: 调度阶段，主要是调度组件更新优先级
-- 2. Render： 获取更新的 Fiber 信息等
-
-  这个阶段会对组件进行深度优先遍历，然后对比 Fiber 获取需要更新的内容，这个过程就是大名鼎鼎的 **diff 算法**执行阶段。
-
-  处理函数组件时，遇到 useEffect 时会对其做处理。
-
-- 3. Commit： 更新视图，可以细分为三个小阶段
-  - 1. before mutation
-  - 2. mutation: 改变视图，DOM 在这个阶段生成
-  - 3. layout: 执行 useEffect 等，这时执行 Effect 时 DOM 已经在上一个阶段生成
+**useEffect(effect, deps)**函数里的<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Effect</code>在 React 内部是一个*链表*结构，React 会在每次 DOM 更新后调用需要执行的<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Effect</code>。
 
 ### 5.3 useContext
 

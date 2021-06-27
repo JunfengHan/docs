@@ -106,7 +106,7 @@ function getParams(url) {
   // 生成 URL实例
   url = new URL(url);
   // 获取 url 的 search(包含？)
-  let urlSearch = url.search;
+  let urlSearch = url.search.split("?")[1];
   // 分割 urlSearch
   var vars = urlSearch.split("&");
   for (var i = 0; i < vars.length; i++) {

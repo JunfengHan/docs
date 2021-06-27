@@ -73,7 +73,7 @@ _盒模型：_
 - 正常文档流定位：position: static（默认）
 - 相对定位: relative -> 相对于**元素默认位置**偏移，不脱离文档流（偏移之前的位置仍然被占据）
 - 绝对定位:
-  - absolute -> 相对于**最近的非 static 定位祖先元素**偏移，元素会被移出正常文档流
+  - absolute -> 相对于**最近的非 static 定位祖先元素**的<span style="color: #ff0000; font-size: 16px;">Border 内边缘</span>偏移，元素会被移出正常文档流
   - fixed(也叫固定定位) -> 相对于**屏幕视口（viewport）的位置**来偏移（当元素祖先的 transform, perspective 或 filter 属性非 none 时，容器由视口改为该祖先）；元素会被移出正常文档流
 - sticky: 粘性定位，根据正常文档流定位
 

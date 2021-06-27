@@ -366,25 +366,30 @@ _查找变量 a 的过程：_
 
 ```js
 function bar() {
+  console.log(this.b);
   console.log(myName);
 }
 function foo() {
+  this.b = "b";
   var myName = "极客邦";
   bar();
 }
+var b = "B";
 var myName = "极客时间";
 foo();
 ```
 
 打印结果是什么？
 
-为什么？是不是以为会打印“极客邦”？
+为什么？是不是以为会打印"b"、“极客邦”？
 
 ![作用域](../_media/js_deep_scope1.png)
 
-> 答案是： "极客时间"
+> 答案是： “b”、"极客时间"。
 
-> 为什么？因为**作用域链**。
+> 为什么？打印出“b”比价好理解，因为*bar*在**foo**中执行，所以**bar**里的<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">this</code>指向
+>
+> 但是为什么没有打印出“极客邦”，而是打印出“极客时间”呢？因为**作用域链**。
 
 **JavaScript 引擎查找变量的流程**：🌟🌟🌟
 
@@ -541,9 +546,9 @@ var name = "test";
 var myObj = {
   name: "极客时间",
   showThis: function () {
-    console.log(this);
+    console.log(this.name);
     function bar() {
-      console.log(this);
+      console.log(this.name);
     }
     bar();
   },
@@ -564,5 +569,7 @@ myObj.showThis();
 维基百科：[编译语言](https://zh.wikipedia.org/wiki/%E7%B7%A8%E8%AD%AF%E8%AA%9E%E8%A8%80)
 
 极客时间 - 李兵[浏览器工作原理与实践](https://time.geekbang.org/column/intro/216)
+
+非常详细 [说说执行上下文](https://juejin.cn/post/6844904158957404167#heading-16)
 
 《JavaScript 高级程序设计》第 4 版

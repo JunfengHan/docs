@@ -1,6 +1,6 @@
 # React
 
-**官网**
+**官网**：
 
 - [React](https://zh-hans.reactjs.org/docs/getting-started.html)
 
@@ -8,7 +8,7 @@
 
 - [Redux](https://redux.js.org/)
 
-**推荐 👍**
+**推荐 👍**：
 
 - [React 全部 api 汇总](https://juejin.cn/post/6950063294270930980#heading-2)
 

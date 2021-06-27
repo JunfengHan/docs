@@ -8,7 +8,7 @@
 
 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">WWW</code>(World Wide Web，万维网)这一名称，是 Web 浏览器当年**用来浏览超文本的客户端应用程序时的名称**。现在我们用它表示这一系列的集合，简称 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Web</code>.
 
-![web分层](../_media/http_base_layers.png)
+![web分层](./img/http_base_layers.png)
 
 ### 1.2 网络基础 -- TCP/IP 协议族
 
@@ -20,7 +20,7 @@
 
 _网络分层协议：_
 
-![网络分层协议](../_media/net_layer.png)
+![网络分层协议](../media/net_layer.png)
 
 **各层级的作用：**
 
@@ -44,7 +44,7 @@ _网络分层协议：_
 
 _TCP/IP 数据流：_
 
-![tcp_ip数据流](../_media/tcp_ip_layer.png)
+![tcp_ip数据流](../media/tcp_ip_layer.png)
 
 本文不讨论网络传输，只是讨论如何使用 HTTP。
 
@@ -86,7 +86,7 @@ _TCP/IP 数据流：_
 
 DNS 协议提供通过**域名**查找**IP 地址**或逆向从**IP 地址**反查**域名**的服务。
 
-![DNS](../_media/http_http_dns.png)
+![DNS](../media/http_http_dns.png)
 
 #### 1.3.2 TCP 协议 -- 确保传输的可靠性
 
@@ -114,11 +114,11 @@ DNS 协议提供通过**域名**查找**IP 地址**或逆向从**IP 地址**反�
 
 _三次握手示意图：_
 
-![三次握手](../_media/http_http_handshaking.png)
+![三次握手](../media/http_http_handshaking.png)
 
 _三次握手详情图：_
 
-![三次握手](../_media/http_http_handshakingDetail.jpg)
+![三次握手](../media/http_http_handshakingDetail.jpg)
 
 ---
 
@@ -136,16 +136,14 @@ _三次握手详情图：_
 
 **3. 四次挥手策略：** 🙋‍♂️🙋‍♂️🙋‍♂️
 
-**三次握手过程：**
+**四次挥手过程：**
 
 1. 发送端 -> 标有 FIN 数据包 -> 接收端：意思是，我的需求发送完了(其他层级关了 发送端 socket 等）
 2. 发送端 <- 标有 ACK 数据包 <- 接收端：意思是，行，我知道了，等我把数据都发给你了也关了 socket
 3. 发送端 <- 标有 FIN 数据包 <- 接收端：意思是，我也发完了(其他层级关了 发送端 socket 等），可以结束了
 4. 发送端 -> 标有 ACK 数据包 -> 接收端：意思是，行，结束吧
 
-![四次挥手](../_media/http_http_bye.jpg)
-
----
+![四次挥手](../media/http_http_bye.jpg)
 
 #### 1.3.3 IP 协议 -- 负责传输
 
@@ -168,17 +166,17 @@ IP（Internet Protocol）协议**把各种数据包传递给对方**。
 
 不同局域网（例如我们访问一般的网站）中，使用**ARP 协议**，它可以**根据通信双方的 IP 地址查找出对应的 MAC 地址**。
 
-![arp](../_media/http_http_arp.png)
+![arp](../media/http_http_arp.png)
 
 ### 1.4 浏览页面网络过程
 
-![从url到页面](../_media/http_http_url.png)
+![从url到页面](../media/http_http_url.png)
 
 ## 2. HTTP 协议
 
 _HTTP 简易工作流：_
 
-![http flow](../_media/http_req_res.png)
+![http flow](../media/http_req_res.png)
 
 ### 2.1 HTTP 用于客户端和服务器之间的通信
 
@@ -196,7 +194,7 @@ _HTTP 简易工作流：_
 
 _HTTP 请求示意图：_
 
-![http 报文](../_media/http_http_get.png)
+![http 报文](../media/http_http_get.png)
 
 像上面的图示一样，**HTTP 报文**分为**请求报文**和**响应报文**。
 
@@ -216,19 +214,19 @@ _HTTP 请求示意图：_
 
 _HTTP 报文组成：_
 
-![http 报文](../_media/http_http_text.png)
+![http 报文](../media/http_http_text.png)
 
 _HTTP 请求报文首部：_
 
-![http request](../_media/http_http_request.png)
+![http request](../media/http_http_request.png)
 
 _HTTP 响应报文首部：_
 
-![http request](../_media/http_http_response.png)
+![http request](../media/http_http_response.png)
 
 _HTTP 报文详情：_
 
-![http 报文详情](../_media/http_http_textDetail.png)
+![http 报文详情](../media/http_http_textDetail.png)
 
 ### 2.3 HTTP 报文首部 Headers
 
@@ -293,6 +291,7 @@ _HTTP 报文详情：_
 - 1XX：<span style="color: #ff0000; font-size: 16px;">信息</span>状态码 -- 请求正在处理
 - 2XX：<span style="color: #ff0000; font-size: 16px;">成功</span>状态码 -- 请求正常处理完毕
   - 200 OK：正常处理成功
+  - 201 Created 成功创建了新的资源
   - 204 No Content：处理成功,但没有资源
   - 206 Partial Content：对资源的某一部分处理成功
 - 3XX：<span style="color: #ff0000; font-size: 16px;">重定向</span>状态码 -- 需要进行附加操作以完成请求
@@ -395,7 +394,7 @@ Proxy-Authenticate: Basic
   - 压缩：压缩和优化内容以加快传输的速度
   - 隐藏服务器真实 IP
 
-**HTTP 隧道(tunneling)**：
+**HTTP 隧道(tunneling)：**
 
 **隧道**可以建立起一条和其他服务器通信的线路，可以帮助我们使用 SSL 等加密手段进行通信。
 
@@ -417,11 +416,11 @@ HTTP 协议是无状态的，也就是说，每次请求都是独立的，请求
 
 _无 Cookie 时的请求：_
 
-![no cookie](../_media/http_http_noCookie.png)
+![no cookie](../media/http_http_noCookie.png)
 
 _有 Cookie 时的请求：_
 
-![have cookie](../_media/http_http_hasCookie.png)
+![have cookie](../media/http_http_hasCookie.png)
 
 保存的 Cookie 内容是什么呢？一般是 **SessionID**.
 
@@ -467,7 +466,7 @@ SSL 或 TLS 可以<span style="color: #ff0000; font-size: 16px;">加密 HTTP 的
 
 _SSL/TLS 通用模型：_
 
-![SSL/TLS 通用模型](../_media/http_http_https.png)
+![SSL/TLS 通用模型](../media/http_http_https.png)
 
 ### 4.3 HTTPS 如何工作
 
@@ -479,17 +478,17 @@ _SSL/TLS 通用模型：_
 
 - 3. 客户端请求数据时，服务端把自己的**公钥**和**数字认证机构**返回
 
-- 4. 客户端使用**公钥**和**数字认证机构**对报文加密
+- 4. 客户端使用**公钥**和**数字认证机构公钥**对报文加密
 
-- 5. 服务端使用**私钥**和**数字认证机构**对报文解密
+- 5. 服务端使用**私钥**和**数字认证机构公钥**对报文解密
 
 _图示：_
 
-![HTTPS工作流程](../_media/http_http_httpsFlow.png)
+![HTTPS工作流程](../media/http_http_httpsFlow.png)
 
-**HTTPS 通信机制：**
+**HTTPS 通信机制**
 
-![HTTPS通信机制](../_media/http_http_httpsMessage.png)
+![HTTPS通信机制](../media/http_http_httpsMessage.png)
 
 **通信大致过程：**
 
@@ -497,6 +496,18 @@ _图示：_
 - 校验阶段： 5 - 9 步（校验成功后 SSL 建立完成）
 - 传输 HTTP 信息： 10 - 11 步
 - 关闭 SSL 连接等：12 步
+
+**HTTPS 请求过程**
+
+![HTTPS 请求过程](../media/http_http_httpsFlow2.png)
+
+- 1.客户端发起 HTTPS 请求
+- 2.服务端根据**数字认证机构**颁发的**数字证书**生成<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">公钥</code>、<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">私钥</code>
+- 3.服务端把生成的<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">公钥</code>返回给客户端
+- 4.客户端根据本地的**数字机构公开密钥**来验证<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">公钥</code>是否合法
+- 5.客户端会使用<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">公钥</code>生成**随机 key**，对传输内容加密后发给服务端
+- 6.服务器用<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">私钥</code>揭秘，获取**随机 key**，然后也使用**随机 key**对返回信息加密
+- 7.客户端使用**随机 key**解密，获取内容
 
 ## 5. Web 安全
 
@@ -593,10 +604,36 @@ http://xxx/search?keyword="><script>alert('XSS');</script>
 
 **HTTP2 相对于 HTTP1.1 的优势：**
 
-- HTTP2 采用二进制传递数据（HTTP1.X 是字符串传递）
-- HTTP2 支持多路复用（允许同时通过单一的 HTTP/2 连接发起多重的请求-响应消息）
-- HTTP2 头部压缩，传输效率更高
-- HTTP2 可以服务端推送
+- 1. **健壮性更强**: HTTP2 采用二进制传递数据（HTTP1.X 是字符串传递），
+- 2. **解析速度更快**: HTTP2 基于帧的协议，每个帧都有表示帧长度的字段；解析 HTTP1.1 的请求时，必须不断地读入字节，直到遇到分隔符 CRLF 为止。
+- 3. **多路复用**: HTTP2 支持多路复用（允许同时通过单一的 HTTP/2 连接发起多重的请求-响应消息）
+- 4. **首部压缩**: HTTP2 头部压缩，传输效率更高。
+
+  客户端发起第一次 HTTP 请求时会根据首部创建一个**表**，服务端收到请求也会创建一个**表**。
+
+  如果第二次请求时首部相同，就直接发送*索引*，而不是发送*首部字段*，以达到压缩效果。
+
+  如：发送如下 Header
+
+  ```text
+  Header1: foo
+  Header2: bar
+  Header3: bat
+  ```
+
+  ![Header 表](../media/synthesize_performance_http2.png)
+
+  第二次不会直接发送*Header1: foo*，而是直接发送它的索引*62*。
+
+- 5. **HTTP2 可以服务端推送**
+
+  如：当浏览器请求一个网站时，除了返回 HTML 页面外，服务器还可以根据 HTML 页面中的资源的 URL，来提前推送资源。
+
+  ![HTTP请求各阶段耗时](../media/synthesize_performance_http3.png)
+
+- 6. \*\*
+
+## 8. HTTP 与 WebSocket
 
 ## 参考
 

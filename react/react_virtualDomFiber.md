@@ -1,4 +1,4 @@
-# React Fiber
+# Virtual DOM 与 Fiber
 
 Fiber 是践行代数效应的产物。
 
@@ -14,7 +14,11 @@ _一个 fiber node:_
 }
 ```
 
-## 1. 为何需要 Fiber
+## 1. Virtual DOM（虚拟 DOM）
+
+### 1.1 什么是 Virtual DOM
+
+## 2. 为何需要 Fiber
 
 React 的使命是"快速构建用户界面"。
 
@@ -25,11 +29,15 @@ React 15 之前，组件的更新是同步的，这样可能会阻塞浏览器�
 - <span style="color: #ff0000; font-size: 16px;">1. 更新可以暂停和继续</span>
 - <span style="color: #ff0000; font-size: 16px;">2. 更新要有优先级，高优先级可以打断低优先级</span>。
 
+<span style="color: #ff0000; font-size: 16px;">用户操作</span>一般具有更高优先级。
+
 JS 中实现代码暂停的是 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">generator</code>.
 
 generator 可以完成第一条，但是无法实现第二条。
 
 而且，generator 有传染性，想使用 generator 的话别的函数必须使用它的语法。
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">浏览器</code>有个获取浏览器渲染间歇的 [幕后任务协作调度 API](https://developer.mozilla.org/zh-CN/docs/Web/API/Background_Tasks_API)，它就是 [requestIdleCallback](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/requestIdleCallback)，可惜的是它的兼容性是个问题？
 
 基于以上两点，React 团队开发出了一个新的架构 Fiber。
 
@@ -164,3 +172,7 @@ react 核心团队成员文章：[React Fiber Architecture](https://github.com/a
 [Fiber 架构心智模型](https://react.iamkasong.com/process/fiber-mental.html#%E4%BB%80%E4%B9%88%E6%98%AF%E4%BB%A3%E6%95%B0%E6%95%88%E5%BA%94)
 
 [这可能是最通俗的 React Fiber(时间分片) 打开方式](https://juejin.cn/post/6844903975112671239#heading-12)
+
+详细论述了基于 JSON 的 VirtualDOM:[Your benefits of working with JSON based virtual DOM](https://medium.com/dataseries/your-benefits-of-working-with-json-based-virtual-dom-7318a983da9e)
+
+解释了 Virtual DOM 真正的优点是让开发者更方便运用 DOM，而不是速度[The Real Benefits of the Virtual DOM in React.js](https://www.accelebrate.com/blog/the-real-benefits-of-the-virtual-dom-in-react-js/)

@@ -4,21 +4,106 @@
 
 ## 1.模块化历程
 
-- Step1: 没有模块化的年代
+### 1.1 没有模块化的年代
+
+**Step1:按文件划分**
 
 那是个古老的年代，前端在整个应用中的作用远不如现在，代码相对较少，比较容易管理。
 
 不同的文件使用 \<script\> 标签来区分。
 
-- Step2: CommonJS
+_缺点_
 
-随着 JS 程序越来越复杂，有必要考虑提供一种<span style="color: #ff0000; font-size: 16px;">将 JavaScript 程序拆分为**可按需导入**的**单独模块**的机制</span>。
+- 全局变量污染
+- 没有私有空间，所有模块内的成员都能被外部访问
+- 极其容易出现*命名冲突*
+- 无法管理模块间的依赖
+- 很难维护，难以分辨成员所属的模块
 
-<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">CommonJS</code> 是伴随着 Node.js 出现的，是 Node.js 的模块化方案。
+**Step2:命名空间的方式**
 
-- Step3: AMD 与 CMD
+_例如_
 
-然后出现了基于 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">AMD</code>(Asynchronous Module Definition) 规范的模块系统，如：**RequireJS**.
+```js
+// module-1.js
+window.moduleA = {
+  method1: function () {},
+};
+```
+
+```js
+// module-2.js
+window.moduleB = {
+  method2: function () {},
+};
+```
+
+把*模块*挂载到全局对象，可以*解决命名冲突*的问题；
+
+**Step3:IIFE**
+
+[IIFE](https://developer.mozilla.org/zh-CN/docs/Glossary/IIFE)指的是**立即调用函数表达式**。
+
+```js
+(function () {
+  var name = "module-a";
+
+  function module1() {}
+
+  window.moduleA = {
+    method1: method1,
+  };
+})();
+```
+
+**优点**：
+
+- 带来了私有成员的概念
+- 解决了前面所提到的*全局作用域污染*和*命名冲突*的问题
+
+---
+
+_此时模块的引用是这样的_:
+
+```html
+<!DOCTYPE html>
+<html>
+  <head></head>
+  <body>
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="module-a.js"></script>
+    <script src="module-b.js"></script>
+    <script>
+      moduleA.method1();
+      moduleB.method1();
+    </script>
+  </body>
+</html>
+```
+
+_仍存在缺陷_:
+
+- 并没解决模块**加载**与**模块依赖**的问题，我们<span style="color: #ff0000; font-size: 16px;">必须手动引入或去除模块</span>
+
+此时，我们对**模块化方案**的需求比较明确了：❓❓
+
+> 1.模块要具有独立性
+>
+> 2.可以自动加载模块的依赖
+
+### 1.2 CommonJS
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">CommonJS</code> 规范是 Node.js 中所遵循的模块规范.
+
+_特点_:
+
+- 1.一个文件就是一个模块
+- 2.module.exports 导出成员，再通过 require 函数载入模块
+- 3.同步加载（即：代码执行时就加载导入的模块并执行）
+
+### 1.3 AMD 与 CMD
+
+然后出现了基于 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">AMD</code>(Asynchronous Module Definition) 即**异步模块定义规范**，如：**RequireJS**.
 
 **缺陷：**
 
@@ -34,7 +119,7 @@
 
 经过不断的迭代与发展，AMD 和 CMD 如今的功能基本相同。
 
-- Step4: ES6 Module
+### 1.4 ES6 Module
 
 **CommonJS**主要基于后端，**AMD**、**CMD**主要基于前端。
 
@@ -285,7 +370,7 @@ CommonJS 的一个模块，一般就是一个文件，使用 require() 第一次
 
 它会被**放进缓存中**，后面都会从缓存中读取。
 
-CommonJS 模块的特性就是加载时执行，当脚本被 require 的时候，就会全部执行。
+CommonJS 模块的特性就是<span style="color: #ff0000; font-size: 16px;">加载时执行，当脚本被 require 的时候，就会全部执行</span>。
 
 **循环加载**会得到已经执行的那部分的值。
 
@@ -332,7 +417,7 @@ ES6 Module 遇到模块加载命令 <code style="color: #708090; background-colo
 
 等到真的需要用到时，再到模块里面去取值。
 
-ES6 根本**不会关心是否发生了"循环加载"**，只是生成一个指向被加载模块的引用，需要开发者自己保证，真正取值的时候能够取到值。
+ES6 根本**不会关心是否发生了*循环加载***，只是生成一个指向被加载模块的引用，需要开发者自己保证，真正取值的时候能够取到值。
 
 ## 参考
 

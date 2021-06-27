@@ -18,7 +18,7 @@
 
 ### 5.1 处理 req、res 的理念不同
 
-从设计理念上讲，Koa 的目标是 "修复和替换 node"，而 Express 则是 "增强节点"。它公开了自己的 ctx.request 和 ctx.response 对象，而不是 node 的 req 和 res 对象。
+从设计理念上讲，Koa 的目标是 "修复和替换 node"，而 Express 则是 "增强 node"。它公开了自己的 ctx.request 和 ctx.response 对象，而不是 node 的 req 和 res 对象。
 
 Koa 可以看作是 <span style="color: #ff0000; font-size: 16px;">node.js 的 http 模块的抽象</span>；
 
@@ -51,7 +51,11 @@ _理由如下:_
 - 能做 Express 可以做的一切
 - 设计理念更简洁（只有 Middleware Kernel）
 - 更轻量，灵活性更好（总有些 Express 的功能你是用不到的）
-- 支持下一代 ES（async）
+- 支持下一代 ES（async/await）
+
+## 不错的 Blog 推荐
+
+[koa 实践总结，总有你用的到抄的走的](https://juejin.cn/post/6952665400890884127#heading-6)
 
 ## 参考
 

@@ -245,7 +245,7 @@ Content-Type: text/plain
 
 #### 4.2.3 CORS 实战实现跨域案例
 
-TODO
+// TODO
 
 ### 4.3 nginx 代理跨域
 
@@ -264,7 +264,7 @@ TODO
 
 [跨源资源共享（CORS）| MDN](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS)
 
-[跨域资源共享 CORS 详解](https://www.ruanyifeng.com/blog/2016/04/cors.html)
+阮老师写了确实通俗易懂 👍 [跨域资源共享 CORS 详解](https://www.ruanyifeng.com/blog/2016/04/cors.html)
 
 [不要再问我跨域的问题了](https://segmentfault.com/a/1190000015597029)
 

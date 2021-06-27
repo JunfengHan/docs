@@ -10,5 +10,3 @@
   前端有没看过这本书的吗？有吗？
 
 文档：
-
-[jQuery 基本原理](https://docs.huihoo.com/jquery/jquery-fundamentals/zh-cn/index.html)

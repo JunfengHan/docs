@@ -1,5 +1,76 @@
 # React 常见面试题
 
+## 0.理论篇
+
+### 0.1 为什么选择 React？
+
+- 1. 数据驱动 UI，摆脱直接操作 DOM
+- 2. JSX 灵活易用，实现组件化很简单
+- 3. 生态强大且不断进步
+
+### 1. React 基本工作原理
+
+<span style="color: #ff0000; font-size: 16px;">React 的基本思维模式是每次有变动就重新渲染整个应用</span>。
+
+对，你没看错。
+
+变动 React 应用的方式有 3 种：
+
+- New Props
+- setState()
+- forceUpdate()
+
+**他们都会导致整个应用重新渲染**。
+
+### 2. 每次有变动就重新渲染整个应用，效率岂不是很低？
+
+一般不会。
+
+要知道 React 是用来构建<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">前端应用</code>的，尤其是 SPA，如果你的需求就是只有三个页面的静态页面，那请直接原生 JS 写吧（JQuery 效率更高）。
+
+不会感觉很慢的原因之一是有 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Virtual DOM</code> 和 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Diff 算法</code>。
+
+React 16 之后引进的 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Fiber Reconciler</code> 架构，和未来的 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">concurrent 模式</code>会大大优化“快”的体验。
+
+React 想要做的是让用户感觉到“更快”。
+
+需要明确的是，代码运行的快是相对。
+
+任何框架都没有原生 JS 运行效率高，“可维护性”和“性能”是要做取舍的。
+
+但目前 React 是世界上做的做的最好的 JS 库之一。
+
+![react介绍](../_media/react_compare_other.png)
+
+### 3. Virtual DOM 是什么，让 React 更快吗
+
+> 我觉得不应该这样问，应该问 Virtual DOM 是如何工作的。
+
+<span style="color: #ff0000; font-size: 16px;">Virtual DOM 是个对象</span>。
+
+看来 Virtual DOM 好像也就那样，并没有多么高大上。
+
+Virtual DOM 的新架构 Fiber Reconciler（包含了 Diff 算法）才是 React 的精华。
+
+这么说是显然对 Virtual DOM 有误解，因为设计 Virtual DOM 的目的从来都不是为了速度。
+
+相关原因可以看这个知乎问答[网上都说操作真实 DOM 慢，但测试结果却比 React 更快，为什么？](https://www.zhihu.com/question/31809713)，尤雨溪 和 司徒正美 都做了相关回答，值得多读几遍。
+
+**摘选几个经典回答：**
+
+- 尤雨溪：
+
+  > 在我看来 Virtual DOM 真正的价值从来都不是性能，而是它:
+  >
+  > 1. 为函数式的 UI 编程方式打开了大门；
+  > 2. 可以渲染到 DOM 以外的 backend，比如 ReactNative
+
+- 司徒正美：
+
+  > 有了虚拟 DOM，我们是使用够轻量的对象代替超重对象作为直接操作主体，减少对超重对象的操作.
+  >
+  > 虚拟 DOM 不只是一个缓冲层，里面涉及大量算法，你可以使用 hash 或 KMP (Knuth-Morris-Pratt 算法），确保更新最少。
+
 ## 1. API 篇
 
 ### 1.1 说一下 React.PureComponent？
@@ -97,7 +168,7 @@ _生命周期函数：_
 
 - 跨平台
 
-> 2.虚拟 DOM 不直接操作 DOM 更快？
+> 2.虚拟 DOM 比直接操作 DOM 更快？
 
 不是。
 
@@ -148,10 +219,13 @@ React 16 中使用了 Fiber 架构，<code style="color: #708090; background-col
 
 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">函数组件</code>引入<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Hook</code>后功能大大增强，优点得到充分展现，将是主流方案。
 
-_类组件的主要缺点_：
+_总结对比_：
 
-- 类组件的业务逻辑被分散到生命周期中，有时难以理解
-- 类组件 this 的模块性
+- 作为组件而言：类组件与函数组件在使用与呈现上没有任何不同，性能上在现代浏览器中也不会有明显差异；
+- 理解难易程度：类组件的业务逻辑被分散到生命周期中，有时难以理解；
+- 上手难度：类组件的规范性更强，上手简单，函数组件相对比较松散；
+- 未来趋势：React Hooks 的推出，生命周期概念的淡出，函数组件可以完全取代类组件；
+- 性能优化：类组件主要依靠 shouldComponentUpdate  阻断渲染来提升性能；而函数组件依靠 React.memo 缓存渲染结果来提升性能；
 
 ### 2.8 React Hooks
 
