@@ -631,8 +631,6 @@ http://xxx/search?keyword="><script>alert('XSS');</script>
 
   ![HTTP请求各阶段耗时](./img/synthesize_performance_http3.png)
 
-- 6. \*\*
-
 ## 8. HTTP 与 WebSocket
 
 ## 参考
