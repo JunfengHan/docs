@@ -197,7 +197,7 @@ _🌰 1: flexbox 默认布局_
 
 结果 ⬇️：
 
-![flex](../_media/layout_flex.png)
+![flex](./img/layout_flex.png)
 
 <code style="color: #708090; background-color: #F5F5F5;">.container</code> 就是一个 <code style="color: #708090; background-color: #F5F5F5;">Flex 容器</code>，它的子元素 .item 就是 <code style="color: #708090; background-color: #F5F5F5;">Flex 元素</code>。
 
@@ -233,15 +233,15 @@ flex-direction 属性定义了 Flex 元素 沿着 <code style="color: #708090; b
 
 _flex-direction: row-reverse ⬇️_
 
-![flex](../_media/flex_row_reverse.png)
+![flex](./img/flex_row_reverse.png)
 
 _flex-direction: column ⬇️_
 
-![flex](../_media/flex_column.png)
+![flex](./img/flex_column.png)
 
 _flex-direction: column-reverse ⬇️_
 
-![flex](../_media/flex_column_reverse.png)
+![flex](./img/flex_column_reverse.png)
 
 **和主轴垂直的轴是 <code style="color: #708090; background-color: #F5F5F5;"> 交叉轴</code>。**
 
@@ -256,7 +256,7 @@ _flex-direction: column-reverse ⬇️_
 
 _效果如下：_
 
-![flex](../_media/flex_width_height.png)
+![flex](./img/flex_width_height.png)
 
 准确描述一下<code style="color: #708090; background-color: #F5F5F5;"> display: flex</code>时 Flex 元素 排列方式：
 
@@ -304,7 +304,7 @@ _效果如下：_
 
 _效果 ⬇️：_
 
-![flex](../_media/flex_justify_center.png)
+![flex](./img/flex_justify_center.png)
 
 ```css
 .container {
@@ -316,7 +316,7 @@ _效果 ⬇️：_
 
 _效果 ⬇️：_
 
-![flex](../_media/flex_justify_between.png)
+![flex](./img/flex_justify_between.png)
 
 ```css
 .container {
@@ -328,7 +328,7 @@ _效果 ⬇️：_
 
 _效果 ⬇️：_
 
-![flex](../_media/flex_justify_around.png)
+![flex](./img/flex_justify_around.png)
 
 ```css
 .container {
@@ -341,7 +341,7 @@ _效果 ⬇️：_
 
 _效果 ⬇️：_
 
-![flex](../_media/flex_aline_items_center.png)
+![flex](./img/flex_aline_items_center.png)
 
 align-items: center 在这里实现了 Flex 元素的 垂直居中。
 
@@ -416,7 +416,7 @@ _效果 ⬇️：_
 
 此时，Flex 元素 的总宽度达到了 1000px,而 Flex 容器的宽度只有 700px。会溢出到下一行吗？
 
-![flex](../_media/flex_overflow.png)
+![flex](./img/flex_overflow.png)
 
 可以看到，Flex 元素 的总宽度超过了 Flex 容器宽度，默认情况下，Flex 元素 会伸缩，填满整个 Flex 容器。
 
@@ -442,7 +442,7 @@ flex-wrap 的值：
 
 _效果 ⬇️：_
 
-![flex](../_media/flex_wrap.png)
+![flex](./img/flex_wrap.png)
 
 #### 3.6.5 align-content
 
@@ -475,7 +475,7 @@ align-content 属性的值：
 
 _效果 ⬇️：_
 
-![flex](../_media/flex_align_content.png)
+![flex](./img/flex_align_content.png)
 
 #### 3.6.6 flex-flow
 
@@ -511,7 +511,7 @@ _效果 ⬇️：_
 
   _flex-grow: 1 效果 ⬇️_
 
-  ![flex](../_media/flex_grow.png)
+  ![flex](./img/flex_grow.png)
 
   ```css
   .container {
@@ -529,7 +529,7 @@ _效果 ⬇️：_
 
   _flex-grow: 0.5 效果 ⬇️_
 
-  ![flex](../_media/flex_grow_half.png)
+  ![flex](./img/flex_grow_half.png)
 
 #### 3.7.2 flex-shrink: 空间不足时压缩 Flex 元素(默认 1，所有 Flex 元素收缩相同)
 
@@ -575,7 +575,7 @@ _效果 ⬇️：_
 
   _flex-shrink: 2 效果 ⬇️_
 
-  ![flex](../_media/flex_shrink_2.png)
+  ![flex](./img/flex_shrink_2.png)
 
   ```css
   .item3 {
@@ -586,7 +586,7 @@ _效果 ⬇️：_
 
   _flex-shrink: 0 效果 ⬇️_
 
-  ![flex](../_media/flex_shrink_0.png)
+  ![flex](./img/flex_shrink_0.png)
 
 #### 3.7.3 flex-basis: 定义 Flex 元素宽度
 
@@ -633,7 +633,7 @@ _效果 ⬇️：_
 
   _剩余空间不足时，flex_basis 属性 效果 ⬇️_
 
-  ![flex](../_media/flex_basis_500.png)
+  ![flex](./img/flex_basis_500.png)
 
   _剩余空间足够时，flex_basis 属性示例_
 
@@ -669,7 +669,7 @@ _效果 ⬇️：_
 
   _flex-basis: 300px 效果 ⬇️_
 
-  ![flex](../_media/flex_basis.png)
+  ![flex](./img/flex_basis.png)
 
 #### 3.7.4 flex: <flex-grow | flex-shrink | flex-basis> 的缩写
 
@@ -728,7 +728,7 @@ _示例：_
 </style>
 ```
 
-![flex](../_media/css_response_flex.png)
+![flex](./img/css_response_flex.png)
 
 #### 3.7.5 align-self
 
@@ -757,7 +757,7 @@ _示例：_
 
   _order: -1 效果 ⬇️_
 
-  ![flex](../_media/flex_order.png)
+  ![flex](./img/flex_order.png)
 
 ### 3.8 Flex 布局案例
 
@@ -773,7 +773,7 @@ _示例：_
 
 **思维导图，拿走不谢 😄：**
 
-![flex](../_media/flex_map.png)
+![flex](./img/flex_map.png)
 
 ## 参考
 

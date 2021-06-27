@@ -38,7 +38,7 @@ _优先级从高到低排序：_
 
 _盒模型：_
 
-![box](../_media/interview_css_box.png)
+![box](./img/interview_css_box.png)
 
 **控制盒模型的属性**：
 
@@ -135,7 +135,7 @@ _盒模型：_
 
 _布局样式：_
 
-![bfc1](../_media/interview_css_bfcOverflow1.png)
+![bfc1](./img/interview_css_bfcOverflow1.png)
 
 _添加 overflow: auto 属性_:
 
@@ -148,7 +148,7 @@ _添加 overflow: auto 属性_:
 }
 ```
 
-![bfc2](../_media/interview_css_bfcOverflow2.png)
+![bfc2](./img/interview_css_bfcOverflow2.png)
 
 **原理**：给父元素设置<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">overflow: auto;</code>或<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">display: flow-root;</code>使 **.container** 形成了一个 BFC，BFC 内的浮动元素会被包含在 BFC 内。
 
@@ -184,7 +184,7 @@ _添加 overflow: auto 属性_:
 }
 ```
 
-![bfc3](../_media/interview_css_bfc3.png)
+![bfc3](./img/interview_css_bfc3.png)
 
 ```css
 .rightContainer {
@@ -194,7 +194,7 @@ _添加 overflow: auto 属性_:
 }
 ```
 
-![bfc4](../_media/interview_css_bfc4.png)
+![bfc4](./img/interview_css_bfc4.png)
 
 **利用 BFC 解决元素被浮动元素覆盖：**
 
@@ -221,7 +221,7 @@ _添加 overflow: auto 属性_:
 
 _浮动元素 left 会脱离文档流，覆盖正常布局的元素 right_
 
-![bfc5](../_media/interview_css_bfc5.png)
+![bfc5](./img/interview_css_bfc5.png)
 
 _触发元素 right 的 BFC_
 
@@ -234,7 +234,7 @@ _触发元素 right 的 BFC_
 }
 ```
 
-![bfc6](../_media/interview_css_bfc6.png)
+![bfc6](./img/interview_css_bfc6.png)
 
 **IE 盒模型**：
 
@@ -247,7 +247,7 @@ box-sizing: content-box;
 box-sizing: border-box;
 ```
 
-![bfc7](../_media/interview_css_bfc7.png)
+![bfc7](./img/interview_css_bfc7.png)
 
 ### 1.5 z-index
 
@@ -261,7 +261,7 @@ HTML 元素被认为是**二维的**，元素被排列在页面上而不重叠�
 
 _z-index 分层：_
 
-![z-index](../_media/css_interview_index.png)
+![z-index](./img/css_interview_index.png)
 
 ### 1.6 伪类与伪元素
 
@@ -361,7 +361,7 @@ _html_
 }
 ```
 
-![flex](../_media/interview_css_flex1.png)
+![flex](./img/interview_css_flex1.png)
 
 ### 2.2 水平垂直居中
 
@@ -400,7 +400,7 @@ p {
 
 _布局结果_
 
-![布局结果](../_media/css_interview_textAlign.png)
+![布局结果](./img/css_interview_textAlign.png)
 
 - 2. 块级元素
 

@@ -6,7 +6,7 @@
 
 ### 1.1 JavaScript 实现
 
-![JS组成](../_media/js_compose.png)
+![JS组成](./img/js_compose.png)
 
 JavaScript 包括:
 
@@ -100,7 +100,7 @@ console.log(document.__proto__.__proto__.constructor)
 
 继承关系：
 
-![document继承关系图](../_media/doucment_extend.png)
+![document继承关系图](./img/document_extend.png)
 
 #### Document 的属性和方法
 
@@ -164,7 +164,7 @@ console.log(document.__proto__.__proto__.constructor)
 **元素继承于节点，节点是 DOM 概念，元素是 HTML 概念。**
 
 先来看一下不完全的接口继承图：
-![浏览器文档和元素部分继承关系](../_media/node_element_interface.png)
+![浏览器文档和元素部分继承关系](./img/node_element_interface.png)
 
 可以看出：
 
