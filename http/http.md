@@ -20,7 +20,7 @@
 
 _网络分层协议：_
 
-![网络分层协议](../media/net_layer.png)
+![网络分层协议](./img/net_layer.png)
 
 **各层级的作用：**
 
@@ -44,7 +44,7 @@ _网络分层协议：_
 
 _TCP/IP 数据流：_
 
-![tcp_ip数据流](../media/tcp_ip_layer.png)
+![tcp_ip数据流](./img/tcp_ip_layer.png)
 
 本文不讨论网络传输，只是讨论如何使用 HTTP。
 
@@ -86,7 +86,7 @@ _TCP/IP 数据流：_
 
 DNS 协议提供通过**域名**查找**IP 地址**或逆向从**IP 地址**反查**域名**的服务。
 
-![DNS](../media/http_http_dns.png)
+![DNS](./img/http_http_dns.png)
 
 #### 1.3.2 TCP 协议 -- 确保传输的可靠性
 
@@ -114,11 +114,11 @@ DNS 协议提供通过**域名**查找**IP 地址**或逆向从**IP 地址**反�
 
 _三次握手示意图：_
 
-![三次握手](../media/http_http_handshaking.png)
+![三次握手](./img/http_http_handshaking.png)
 
 _三次握手详情图：_
 
-![三次握手](../media/http_http_handshakingDetail.jpg)
+![三次握手](./img/http_http_handshakingDetail.jpg)
 
 ---
 
@@ -143,7 +143,7 @@ _三次握手详情图：_
 3. 发送端 <- 标有 FIN 数据包 <- 接收端：意思是，我也发完了(其他层级关了 发送端 socket 等），可以结束了
 4. 发送端 -> 标有 ACK 数据包 -> 接收端：意思是，行，结束吧
 
-![四次挥手](../media/http_http_bye.jpg)
+![四次挥手](./img/http_http_bye.jpg)
 
 #### 1.3.3 IP 协议 -- 负责传输
 
@@ -166,17 +166,17 @@ IP（Internet Protocol）协议**把各种数据包传递给对方**。
 
 不同局域网（例如我们访问一般的网站）中，使用**ARP 协议**，它可以**根据通信双方的 IP 地址查找出对应的 MAC 地址**。
 
-![arp](../media/http_http_arp.png)
+![arp](./img/http_http_arp.png)
 
 ### 1.4 浏览页面网络过程
 
-![从url到页面](../media/http_http_url.png)
+![从url到页面](./img/http_http_url.png)
 
 ## 2. HTTP 协议
 
 _HTTP 简易工作流：_
 
-![http flow](../media/http_req_res.png)
+![http flow](./img/http_req_res.png)
 
 ### 2.1 HTTP 用于客户端和服务器之间的通信
 
@@ -194,7 +194,7 @@ _HTTP 简易工作流：_
 
 _HTTP 请求示意图：_
 
-![http 报文](../media/http_http_get.png)
+![http 报文](./img/http_http_get.png)
 
 像上面的图示一样，**HTTP 报文**分为**请求报文**和**响应报文**。
 
@@ -214,19 +214,19 @@ _HTTP 请求示意图：_
 
 _HTTP 报文组成：_
 
-![http 报文](../media/http_http_text.png)
+![http 报文](./img/http_http_text.png)
 
 _HTTP 请求报文首部：_
 
-![http request](../media/http_http_request.png)
+![http request](./img/http_http_request.png)
 
 _HTTP 响应报文首部：_
 
-![http request](../media/http_http_response.png)
+![http request](./img/http_http_response.png)
 
 _HTTP 报文详情：_
 
-![http 报文详情](../media/http_http_textDetail.png)
+![http 报文详情](./img/http_http_textDetail.png)
 
 ### 2.3 HTTP 报文首部 Headers
 
@@ -416,11 +416,11 @@ HTTP 协议是无状态的，也就是说，每次请求都是独立的，请求
 
 _无 Cookie 时的请求：_
 
-![no cookie](../media/http_http_noCookie.png)
+![no cookie](./img/http_http_noCookie.png)
 
 _有 Cookie 时的请求：_
 
-![have cookie](../media/http_http_hasCookie.png)
+![have cookie](./img/http_http_hasCookie.png)
 
 保存的 Cookie 内容是什么呢？一般是 **SessionID**.
 
@@ -466,7 +466,7 @@ SSL 或 TLS 可以<span style="color: #ff0000; font-size: 16px;">加密 HTTP 的
 
 _SSL/TLS 通用模型：_
 
-![SSL/TLS 通用模型](../media/http_http_https.png)
+![SSL/TLS 通用模型](./img/http_http_https.png)
 
 ### 4.3 HTTPS 如何工作
 
@@ -484,11 +484,11 @@ _SSL/TLS 通用模型：_
 
 _图示：_
 
-![HTTPS工作流程](../media/http_http_httpsFlow.png)
+![HTTPS工作流程](./img/http_http_httpsFlow.png)
 
 **HTTPS 通信机制**
 
-![HTTPS通信机制](../media/http_http_httpsMessage.png)
+![HTTPS通信机制](./img/http_http_httpsMessage.png)
 
 **通信大致过程：**
 
@@ -499,7 +499,7 @@ _图示：_
 
 **HTTPS 请求过程**
 
-![HTTPS 请求过程](../media/http_http_httpsFlow2.png)
+![HTTPS 请求过程](./img/http_http_httpsFlow2.png)
 
 - 1.客户端发起 HTTPS 请求
 - 2.服务端根据**数字认证机构**颁发的**数字证书**生成<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">公钥</code>、<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">私钥</code>
@@ -621,7 +621,7 @@ http://xxx/search?keyword="><script>alert('XSS');</script>
   Header3: bat
   ```
 
-  ![Header 表](../media/synthesize_performance_http2.png)
+  ![Header 表](./img/synthesize_performance_http2.png)
 
   第二次不会直接发送*Header1: foo*，而是直接发送它的索引*62*。
 
@@ -629,7 +629,7 @@ http://xxx/search?keyword="><script>alert('XSS');</script>
 
   如：当浏览器请求一个网站时，除了返回 HTML 页面外，服务器还可以根据 HTML 页面中的资源的 URL，来提前推送资源。
 
-  ![HTTP请求各阶段耗时](../media/synthesize_performance_http3.png)
+  ![HTTP请求各阶段耗时](./img/synthesize_performance_http3.png)
 
 - 6. \*\*
 

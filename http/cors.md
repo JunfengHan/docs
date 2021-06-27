@@ -4,7 +4,7 @@
 
 你的前端项目运行在“localhost:8081”，你项目的本地服务跑在 “localhost:3999"。前端项目向服务发起了一个 HTTP 请求,于是你快乐地喝着快乐水等着服务器返回结果。可是，居然报错了。💔
 
-![跨域报错](../_media/cross_domain.png)
+![跨域报错](./img/cross_domain.png)
 
 对于快乐搬砖的你我来说，调用一个 API 居然告说我报错了，于是，你放下手里的快乐水，开始了自己的探索之旅途。
 
@@ -35,7 +35,7 @@ URL 中以上 3 个内容必须全部相同，否则就是不同源。
 
 浏览器中的[可能嵌入跨源资源的示例](https://developer.mozilla.org/zh-CN/docs/Web/Security/Same-origin_policy#%E8%B7%A8%E6%BA%90%E7%BD%91%E7%BB%9C%E8%AE%BF%E9%97%AE)：
 
-![可以跨域的请求](../_media/cross_domain_types.png)
+![可以跨域的请求](./img/cross_domain_types.png)
 
 ## 4. 如何跨域
 
@@ -146,7 +146,7 @@ CORS 是一个 W3C 标准，全称是"跨域资源共享"（Cross-origin resourc
 
 _cors 示意图_
 
-![cors](../_media/http_cors_principle.png)
+![cors](./img/http_cors_principle.png)
 
 #### 4.2.1 CORS 的功能概述
 
@@ -170,7 +170,7 @@ _cors 示意图_
 
 _预检请求示例：_
 
-![HTTP Options方法发起预检请求](../_media/http_cors_options.png)
+![HTTP Options方法发起预检请求](./img/http_cors_options.png)
 
 #### 4.2.2 CORS 头
 

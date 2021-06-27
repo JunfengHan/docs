@@ -22,7 +22,7 @@
 
 _打印看看 XMLHttpRequest 是什么：_
 
-![xmlHttpRequest](../_media/xmlHttpRequest.png)
+![xmlHttpRequest](./img/xmlHttpRequest.png)
 
 是不是看到了几个非常熟悉的方法：<code style="color: #708090; background-color: #F5F5F5;">open</code>、<code style="color: #708090; background-color: #F5F5F5;">send</code>、<code style="color: #708090; background-color: #F5F5F5;">onreadystatechange</code>、<code style="color: #708090; background-color: #F5F5F5;">ontimeout</code> ...
 

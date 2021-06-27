@@ -1,6 +1,6 @@
 # axios 深度分析（含源码）
 
-![axios](../_media/http_http_axios.png)
+![axios](./img/http_http_axios.png)
 
 ## 1. axios 是什么
 
@@ -442,7 +442,7 @@ axios.post("/foo", qs.stringify({ bar: 123 }));
 
 **node_modules 中 axios 目录结构**：
 
-![axios](../_media/http_axios_directory.png)
+![axios](./img/http_axios_directory.png)
 
 - dist: 源码生成的打包文件
 - lib: 源码主要在这里
