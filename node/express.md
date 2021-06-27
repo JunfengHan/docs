@@ -2,7 +2,7 @@
 
 > Express 是使用量最大的 NodeJs 框架，也是最早的 NodeJs 框架之一。
 
-![node_plateform](../_media/node_plateform.png)
+![node_plateform](../img/node_plateform.png)
 
 与其说 Express 是框架，不如说他是个库。
 
@@ -35,15 +35,15 @@ node server.js
 ```
 
 _node 服务已经启动：_
-![start_node_server](../_media/start_node_server.png)
+![start_node_server](../img/start_node_server.png)
 
 浏览器向这个服务器发起一个请求：
 
-![request_node_server](../_media/request_node_server.png)
+![request_node_server](../img/request_node_server.png)
 
 发送 2 次请求后，看到打印结果：
 
-![requst_node_server2](../_media/requst_node_server2.png)
+![requst_node_server2](../img/requst_node_server2.png)
 
 然而，这个服务是很弱的，除了返回一个“Hello World!”,什么都做不了。
 
@@ -113,10 +113,10 @@ http
 代码虽很臃肿，但是成功匹配到了我们的请求：
 
 _发送一个 user 路径的 Get 请求：_
-![postman_getUser](../_media/postman_getUser.png)
+![postman_getUser](../img/postman_getUser.png)
 
 _发送一个 user 路径的 Post 请求：_
-![postman_postUser](../_media/postman_postUser.png)
+![postman_postUser](../img/postman_postUser.png)
 
 ### 1.3 静态文件处理
 
@@ -228,7 +228,7 @@ http
 
 ### 2.1 Express 是什么
 
-![what is Express](../_media/node_express_what.png)
+![what is Express](../img/node_express_what.png)
 
 上图是，官方文档的介绍，它告诉我们：
 
@@ -238,7 +238,7 @@ http
 
 _官方 API 参考目录：_
 
-![node_express_api](../_media/node_express_api.png)
+![node_express_api](../img/node_express_api.png)
 
 - express()方法：它会创建一个 Application 实例
 - Application 应用实例: 它上面挂载有各种处理方法

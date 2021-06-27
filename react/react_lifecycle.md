@@ -7,7 +7,7 @@
 
 **React version >= 16.4 生命周期图**
 
-![react_lifecycle](../_media/react_lifecycle.png)
+![react_lifecycle](../img/react_lifecycle.png)
 
 ## 1. 什么是 React 生命周期方法
 
@@ -159,7 +159,7 @@ commit 阶段的详细情况可以看我的另一篇文章[React 源码(一) 整
 
 **经过分析，我们给上面的图加一些注释**
 
-![react_lifecycle](../_media/react_lifecycle_change.png)
+![react_lifecycle](../img/react_lifecycle_change.png)
 
 ## 3. 生命周期方法如何使用
 

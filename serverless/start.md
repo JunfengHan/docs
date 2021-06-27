@@ -8,7 +8,7 @@
 
 > 开发人员为了保证开发环境的正确（即，这个 Bug 不是环境因素造成的），想出了一系列的隔离方式：虚拟机、容器虚拟化、语言虚拟机、应用容器（如 Java 的 Tomcat）、虚拟环境（如 Python 中的 virtualenv），甚至是独立于语言的 DSL。
 
-![server growth](../_media/server_growth.jpg)
+![server growth](../img/server_growth.jpg)
 
 - 我们使用 XEN、KVM 等虚拟化技术，隔离了硬件以及运行在这之上的操作系统
 - 我们使用云计算进一步地自动管理这些虚拟化的资源
@@ -39,7 +39,7 @@
 
 - FaaS(Function as a Service, 函数即服务)。提供函数平台来处理服务。如：Amazon Lambda、阿里云 FC(函数计算)
 
-![云计算分类](../_media/serverless_start_cloud.jpg)
+![云计算分类](../img/serverless_start_cloud.jpg)
 
 ## 3. Serverless 是什么
 
@@ -59,7 +59,7 @@
 
 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">BaaS</code>(Backend as a Service)即“后端即服务”，常见的有 github pages，我们只需简单的配置就能生成一个静态网站。常见的 BaaS 有，阿里云 OSS 等。
 
-![server framework](../_media/serverless_start_constitute.png)
+![server framework](../img/serverless_start_constitute.png)
 
 ### 3.1 FaaS 与 BaaS
 
@@ -71,11 +71,11 @@
 
 _使用 serverless 的应用架构工作流程示意图:_
 
-![server framework](../_media/serverless_start_framework.png)
+![server framework](../img/serverless_start_framework.png)
 
 _FaaS 产品对比:_
 
-![server faas](../_media/serverless_start_faas.png)
+![server faas](../img/serverless_start_faas.png)
 
 ### 3.2 Serverless 优缺点
 
@@ -122,7 +122,7 @@ _FaaS 产品对比:_
 
 _传统 Web 服务 Serverless 化流程:_
 
-![serverless move](../_media/serverless_start_move1.png)
+![serverless move](../img/serverless_start_move1.png)
 
 解决办法通常有如下几种方案：
 
@@ -132,7 +132,7 @@ _传统 Web 服务 Serverless 化流程:_
 
   _serverless 适配原理：_
 
-  ![serverless forward](../_media/serverless_start_move2.png)
+  ![serverless forward](../img/serverless_start_move2.png)
 
   _适配层_：
 
@@ -209,12 +209,10 @@ exports.handler = async (event, callback) => {
     database: "test",
   });
   // 查询用户信息
-  const [
-    rows,
-    fields,
-  ] = await connection.execute("SELECT * FROM `table` WHERE `name` = ?", [
-    name,
-  ]);
+  const [rows, fields] = await connection.execute(
+    "SELECT * FROM `table` WHERE `name` = ?",
+    [name]
+  );
   return rows;
 };
 ```
@@ -223,17 +221,24 @@ _好的示例：_
 
 ```js
 // 初始化数据库连接
-const connection = await mysql.createConnection({host:'localhost', user: 'root', database: 'test'});
+const connection = await mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  database: "test",
+});
 // 查询用户信息
 function getUser(name) {
-  const [rows, fields] = await connection.execute('SELECT * FROM `table` WHERE `name` = ?', [name]);
+  const [rows, fields] = await connection.execute(
+    "SELECT * FROM `table` WHERE `name` = ?",
+    [name]
+  );
   return rows;
 }
 exports.handler = async (event, callback) => {
   const name = event.user.name;
   const res = await getUser(name);
   return res;
-}
+};
 ```
 
 > 3.函数单一职责
@@ -264,7 +269,7 @@ exports.handler = async (event, callback) => {
 
 _serverless 开发经验：_
 
-![serverless experience](../_media/serverless_start_experience.png)
+![serverless experience](../img/serverless_start_experience.png)
 
 --- 未完待续... ---
 

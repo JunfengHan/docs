@@ -8,7 +8,7 @@
 - DOM：是 HTML 和 XML 文档的编程接口，它会将 web 页面和脚本或程序语言连接起来。
 - BOM：
 
-![JS组成](../_media/js_compose.png)
+![JS组成](../img/js_compose.png)
 
 **EcmaScript 和 DOM 有什么关系 ❓**
 
@@ -57,11 +57,11 @@ DOM 操作分为两步：
 
 浏览器下载完页面中的所有资源（比如 HTML、JavaScript、CSS、图片等）后，会发生如下的 6 步过程：
 
-![JS组成](../_media/browser_render_flow2.png)
+![JS组成](../img/browser_render_flow2.png)
 
 _渲染流程图示：_
 
-![JS组成](../_media/browser_render_flow.png)
+![JS组成](../img/browser_render_flow.png)
 
 ### 3.1 reflow（重排/回流）
 

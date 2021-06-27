@@ -4,7 +4,7 @@
 
 _React Hooks 学习图谱_
 
-![React Hooks 学习图谱](../_media/react_hooks_learnPath.png)
+![React Hooks 学习图谱](../img/react_hooks_learnPath.png)
 
 ## 1. 为什么需要 Hooks
 

@@ -1,6 +1,6 @@
 # webpack 基础
 
-![webpack](../_media/webpack1.png)
+![webpack](../img/webpack1.png)
 
 ## 1. 前端模块化
 
@@ -95,7 +95,7 @@ Gulp 优点是好用又不失灵活，既可以单独完成构建，也可以和
 
 _Grunt & Gulp 工作流_
 
-![webpack](../_media/projectBuild_webpack_gruntGulp.png)
+![webpack](../img/projectBuild_webpack_gruntGulp.png)
 
 Grunt 和 Gulp 是基于 **任务**的，会自动执行指定的任务.projectBuild_webpack_gruntGulp
 
@@ -117,7 +117,7 @@ _Gulp 处理 less 文件并压缩_
 
 _Webpack 工作流_
 
-![webpack](../_media/projectBuild_webpack_webpack.png)
+![webpack](../img/projectBuild_webpack_webpack.png)
 
 **特点**：
 
@@ -340,7 +340,7 @@ webpack 开箱即用，但是会假定项目的入口起点为 src/index，然�
 
 ## 10. webpack 的工作流程
 
-![image](../_media/webpack2.png)
+![image](../img/webpack2.png)
 
 ## 参考
 

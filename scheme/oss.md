@@ -12,7 +12,7 @@
 
 _上传流程：_
 
-![oss flow](../_media/schema_oss_flow.png)
+![oss flow](../img/schema_oss_flow.png)
 
 因为需要先上传到**应用服务器**，所以这种方案有明显缺点：
 
@@ -45,7 +45,7 @@ PostObject 直传有 3 中方式：
 
 <span style="color: #ff0000; font-size: 16px;">服务端签名直传可以解决暴露 AccessKey ID 和 AcessKey Secret 的问题，是比较成熟的方案</span>。
 
-![oss flow](../_media/schema_oss_flowServer.png)
+![oss flow](../img/schema_oss_flowServer.png)
 
 上面最重要的应该是第 2 步，正是这里避免了暴露我们的账号和密码。
 
@@ -55,7 +55,7 @@ PostObject 直传有 3 中方式：
 
 _阿里云服务端签名示例语言列表：_
 
-![oss flow](../_media/schema_oss_serverUpload.png)
+![oss flow](../img/schema_oss_serverUpload.png)
 
 感觉像在开玩笑呢，别的服务几乎都是支持的（如：视频点播），这里居然不支持，难道让应用服务端换个语言？？
 

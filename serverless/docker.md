@@ -65,7 +65,7 @@ Docker 引擎主要构成：
 - **REST API**: 指定了程序可以用来与守护进程对话并指示它做什么的接口
 - **CLI**: 客户端命令行工具（执行 docker 操作命令）
 
-![docker engine](../_media/engine_components_flow.png)
+![docker engine](../img/engine_components_flow.png)
 
 ### 4.2 Docker 用途
 
@@ -85,7 +85,7 @@ Docker 引擎主要构成：
 
 - **Docker Client 使用 REST API, 或通过 UNIX sockets 或 网络接口 来通信.**
 
-![docker architecture](../_media/docker_architecture.svg)
+![docker architecture](../img/docker_architecture.svg)
 
 _查看本地 docker 版本可以看到 Docker Client 和 Docker Server_:
 
@@ -177,11 +177,11 @@ image(镜像)是一个只读的模板，包含创建 Docker 容器的说明。
 
 _Mac 启动 Docker 后的图标：_
 
-![docker_desktop](../_media/docker_desktop.png)
+![docker_desktop](../img/docker_desktop.png)
 
 _Docker 仪表盘：_
 
-![docker_dashboard](../_media/docker_dashboard.png)
+![docker_dashboard](../img/docker_dashboard.png)
 
 ### 6.1 创建 container
 
@@ -211,7 +211,7 @@ Status: Downloaded newer image for docker/getting-started:latest
 
 _Docker Dashboard 已经成功创建并启动了'docker/getting-started':_
 
-![docker getStart](../_media/docker_getstart.png)
+![docker getStart](../img/docker_getstart.png)
 
 ## 7. 构建一个 node 应用
 

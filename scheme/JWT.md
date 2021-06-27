@@ -16,11 +16,11 @@ JWT（JSON Web Token）的作用是 <code style="color: #708090; background-colo
 
 ## 2. 传统的有状态登录（session）
 
-![session](../_media/session.png)
+![session](../img/session.png)
 
 ## 3. 无状态登录（JWT）
 
-![jwt](../_media/jwt.png)
+![jwt](../img/jwt.png)
 
 ## 4. session 和 JWT 区别
 
@@ -30,7 +30,7 @@ JWT 优势：**适合分布式，同一个 JWT 可以发给不同的服务器，
 
 ## 5. 一个 JWT 是怎样的
 
-![session](../_media/jwt_eg.png)
+![session](../img/jwt_eg.png)
 
 左边是一个 JWT，是一个字符串，分为 3 部分：红色、紫色、蓝色。
 

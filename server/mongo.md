@@ -174,7 +174,7 @@ db.myCollection.insertOne 会往集合中插入数据，同时会新建集合“
 
 _insertOne：_
 
-![mongo crud](../_media/crud_mongodb.svg)
+![mongo crud](../img/crud_mongodb.svg)
 
 **查(R)：**
 

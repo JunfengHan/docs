@@ -240,7 +240,7 @@ npm run dev
 
 npm run dev 会执行 package.json 中的 “dev” 配置的 命令。
 
-![npm run dev](../_media/npm_run_dev.png)
+![npm run dev](../img/npm_run_dev.png)
 
 webpack-dev-server 运行输出一系列提示，主要告诉我们：
 
@@ -251,11 +251,11 @@ webpack-dev-server 运行输出一系列提示，主要告诉我们：
 
 浏览器看看效果：
 
-![npm run dev](../_media/webpack_localhost.png)
+![npm run dev](../img/webpack_localhost.png)
 
 浏览器 Source 面板 有哪些资源：
 
-![npm run dev](../_media/webpack_source.png)
+![npm run dev](../img/webpack_source.png)
 
 不错，是我们想要的效果，index.html 文件里加载到了 bundle.js;
 
@@ -301,7 +301,7 @@ require("./css/style.css");
 
 一切就绪，然后看看结果如何。
 
-![npm run dev](../_media/webpack_noloader.png)
+![npm run dev](../img/webpack_noloader.png)
 
 你没看错，报错了。
 
@@ -376,7 +376,7 @@ module.exports = {
 
 _这里的为了方便对 bundle.js 做了展开处理：_
 
-![npm run dev](../_media/webpack_bundle.png)
+![npm run dev](../img/webpack_bundle.png)
 
 我们写的 CSS 文件被打包到 bundle.js 里了。
 
@@ -405,13 +405,13 @@ rules: [
 
 重新打包 📦 下文件，npm run build , 更新后的 bundle.js,如下 ⬇️
 
-![npm run dev](../_media/webpack_bundle_styleLoader.png)
+![npm run dev](../img/webpack_bundle_styleLoader.png)
 
 隐隐约约的是不是看到 👀 了点什么？
 
 对，你看的没错，style-loader 在页面了插入了一个 style 元素。如下 ⬇️
 
-![npm run dev](../_media/webpack_styleLoader_page.png)
+![npm run dev](../img/webpack_styleLoader_page.png)
 
 ## 4. 引入 图片
 
@@ -472,11 +472,11 @@ rules: [
 ];
 ```
 
-![webpack_url_loader](../_media/webpack_url_loader.png)
+![webpack_url_loader](../img/webpack_url_loader.png)
 
 重新打包 📦 下文件，npm run build , dist 目录如下 ⬇️
 
-![webpack_url_loader](../_media/webpack_url_loader_dist.png)
+![webpack_url_loader](../img/webpack_url_loader_dist.png)
 
 ## 5. 打包生成 HTML 文件
 
@@ -705,7 +705,7 @@ ReactDom.render(element, document.getElementById("root"));
 
 然后就报错了！
 
-![npm run dev](../_media/webpack_react_err.png)
+![npm run dev](../img/webpack_react_err.png)
 
 报错提示我们说不支持 jsx 语法，这里不说 jsx 语法，需要连接详情点[这里-JSX 简介](https://zh-hans.reactjs.org/docs/introducing-jsx.html)；
 
@@ -739,7 +739,7 @@ _webpack.config.js 中添加配置：_
 
 重新启动下看到了我们想要的结果，如下 ⬇️ 。
 
-![npm run dev](../_media/webpack_react_success.png)
+![npm run dev](../img/webpack_react_success.png)
 
 ## 7. 完善 Webpack 配置和基础优化
 
@@ -1202,11 +1202,11 @@ export default App;
 
 _开启 CSS Modules 之前：_
 
-![npm run dev](../_media/webpack_css_modules_before.png)
+![npm run dev](../img/webpack_css_modules_before.png)
 
 _开启 CSS Modules 之后：_
 
-![npm run dev](../_media/webpack_css_modules_after.png)
+![npm run dev](../img/webpack_css_modules_after.png)
 
 > 有了 CSS Modules 之后，我们就形成了一个局部样式文件，不用担心样式污染，样式文件和我们的组件可以绑定，更利于我们组件的模块化。
 
@@ -1259,7 +1259,7 @@ export default App;
 
 _组件正常加载，但是引入了 Antd 所有样式：_
 
-![npm run dev](../_media/webpack_antd_allcss.png)
+![npm run dev](../img/webpack_antd_allcss.png)
 
 **Antd 按需加载[官方介绍](https://3x.ant.design/docs/react/getting-started-cn#%E6%8C%89%E9%9C%80%E5%8A%A0%E8%BD%BD)：**
 
@@ -1286,7 +1286,7 @@ npm install babel-plugin-import --save-dev
 
 _Antd 按需加载 :_
 
-![npm run dev](../_media/webpack_antd_inneed.png)
+![npm run dev](../img/webpack_antd_inneed.png)
 
 ### 10.3 React Router 路由代码分割
 
@@ -1296,11 +1296,11 @@ _Antd 按需加载 :_
 
 _一个未做代码分割的 React 应用：_
 
-![npm run dev](../_media/webpack_splitting_no.png)
+![npm run dev](../img/webpack_splitting_no.png)
 
 _React Router 分割的 React 应用：_
 
-![npm run dev](../_media/webpack_splitting_router.png)
+![npm run dev](../img/webpack_splitting_router.png)
 
 ### 10.4 React Loadable 组件代码分割
 
@@ -1321,7 +1321,7 @@ React Router 显然是没有做到上面这几点的，React Router 只是按照
 
 _理想的分割 React 应用：_
 
-![npm run dev](../_media/webpack_splitting_loadable.png)
+![npm run dev](../img/webpack_splitting_loadable.png)
 
 <code style="color: #708090; background-color: #F5F5F5;">React Loadable</code> 就能按上图 👆 所示的拆分方案完成 React 应用的分割工作。
 

@@ -24,7 +24,7 @@ Ryan Dahl 是一位 C/C++ 程序员，创造 Node 之前他的主要工作是围
 
 _Node 10 年大事件：_
 
-![node](../_media/node_base_history.png)
+![node](../img/node_base_history.png)
 
 ## 2. Node 是什么
 
@@ -36,11 +36,11 @@ Node.js 是一个基于 <code style="color: #708090; background-color: #F5F5F5; 
 
 _Chrome 与 Node 的区别：_
 
-![node](../_media/node_base_different.png)
+![node](../img/node_base_different.png)
 
 _Node 的详细组成：_
 
-![node](../_media/node_base_components.png)
+![node](../img/node_base_components.png)
 
 **Node 的组成依赖：**
 
@@ -57,11 +57,11 @@ _Node 的详细组成：_
 
 如果服务员把订单给到厨房，然后等厨房做完所有的菜（如：处理数据请求等 IO 操作），在等待期间不去做任何其他事，最后等厨师把菜做出来后把菜端给客户，这个就是<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">同步</code>的。
 
-![node](../_media/node_base_kitchen.png)
+![node](../img/node_base_kitchen.png)
 
 服务员一直在干活，所以服务员是同步（Node 主线程是单任务且同步）的，有顾客到了就处理他们的点餐，这个过程是很快的（V8 很快），而且要必须很快。如果哪一桌顾客点餐花了一个小时（耗时较多的任务，如：CPU 密集型任务视频解码），服务员一直在处理这一桌顾客，这样会影响整个餐厅的运作（程序运行）。
 
-![node](../_media/node_base_howWork.png)
+![node](../img/node_base_howWork.png)
 
 <span style="color: #ff0000; font-size: 16px;">Node 默认就是这种<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">非阻塞（non-blocking）</code>的 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">异步架构（Asynchronous Architecture）</code></span>.
 
@@ -69,7 +69,7 @@ _Node 的详细组成：_
 
 _Node 系统各主要模块及工作流程_
 
-![node](../_media/node_base_system.jpg)
+![node](../img/node_base_system.jpg)
 
 这张图解释了官网对 Node 的主要功能描述：
 
@@ -117,7 +117,7 @@ I/O 是计算机的基础。
 
 _系统的各种延时：_
 
-![node](../_media/node_base_io.png)
+![node](../img/node_base_io.png)
 
 上图是系统的各种**延时**，不包含脚本执行时间。
 
@@ -181,7 +181,7 @@ I/O 工作模式有两种：
 
 [类 Unix 操作系统与 POSIX：](https://zh.wikipedia.org/wiki/%E7%95%B0%E6%AD%A5I/O#%E7%B1%BBUnix%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%8EPOSIX)
 
-![node](../_media/node_base_ioUnix.png)
+![node](../img/node_base_ioUnix.png)
 
 **aio** 是什么？它不就实现了**异步非阻塞**吗？
 
@@ -225,7 +225,7 @@ Windows 系统同样也没有提供**异步非阻塞**的 I/O。
 
 _Node 的 Reactor pattern(模型)：_
 
-![node](../_media/node_base_reactor.jpg)
+![node](../img/node_base_reactor.jpg)
 
 **过程分析：**
 
@@ -276,11 +276,11 @@ Event Loop 是 Node 的关键组成部分。十分关键的那种！
 
 _事件循环概览图：_
 
-![node](../_media/node_base_eventLoop2.png)
+![node](../img/node_base_eventLoop2.png)
 
 _事件循环的七个阶段：_
 
-![node](../_media/node_base_eventLoop.png)
+![node](../img/node_base_eventLoop.png)
 
 **说明：**
 
@@ -308,13 +308,13 @@ _事件循环的七个阶段：_
 
 _事件循环执行可视化：_
 
-![node](../_media/node_base_eventLoop.gif)
+![node](../img/node_base_eventLoop.gif)
 
 #### 6.2.3 MacroTask(宏任务) 与 MicroTask（微任务）
 
 _Node 整体工作流程：_
 
-![node](../_media/node_base_microtasks.jpg)
+![node](../img/node_base_microtasks.jpg)
 
 **说明：**
 
@@ -326,11 +326,11 @@ _Node 整体工作流程：_
 
 _Event Loop 具体处理过程：_
 
-![node](../_media/node_base_micMac.png)
+![node](../img/node_base_micMac.png)
 
 _微任务与 Event Loop 的关系：_
 
-![node](../_media/node_base_eventLoopMic.png)
+![node](../img/node_base_eventLoopMic.png)
 
 **详细说明：**
 
@@ -599,7 +599,7 @@ uv 是什么意思？uv 是 Unicorn Velociraptor 的缩写，意思是“独角�
 
 _独角伶盗龙：_
 
-![node](../_media/node_base_libuv.png)
+![node](../img/node_base_libuv.png)
 
 如果熟悉 C 语言的化可以看看[libuv 源码](https://github.com/libuv/libuv)。
 
@@ -617,7 +617,7 @@ _独角伶盗龙：_
 
 _libuv 组成：_
 
-![node](../_media/node_base_libuvArchitecture.png)
+![node](../img/node_base_libuvArchitecture.png)
 
 **组成说明：**
 
@@ -852,7 +852,7 @@ C/C++ 编写的的部分统一称为 <span style="color: #ff0000; font-size: 16p
 
 _Node 模块的依赖关系：_
 
-![node](../_media/node_base_depend.png)
+![node](../img/node_base_depend.png)
 
 一般情况下，**文件模块**可能依赖**核心模块**，**核心模块**会依赖**内建模块**。
 
@@ -870,7 +870,7 @@ _Node 模块的依赖关系：_
 
 _os 模块从 C/C++ 到 JavaScript 过程：_
 
-![node](../_media/node_base_osFlow.png)
+![node](../img/node_base_osFlow.png)
 
 ### 9.5 C/C++扩展模块
 
@@ -884,7 +884,7 @@ C/C++ 扩展模块会在**出现性能瓶颈时对我们有很大帮助**。
 
 _模块间的调用关系图：_
 
-![node](../_media/node_base_relation.png)
+![node](../img/node_base_relation.png)
 
 说明：
 

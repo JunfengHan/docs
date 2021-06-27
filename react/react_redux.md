@@ -75,7 +75,7 @@ Dan Abramov，这家伙厉害了，Redux 作者之一，React 团队核心成员
 
 _官网截图：_
 
-![redux介绍](../_media/react_redux_info.png)
+![redux介绍](../img/react_redux_info.png)
 
 Redux 要做的只有一件事，<span style="color: #ff0000; font-size: 16px;">管理可预见的 State</span>.
 
@@ -91,7 +91,7 @@ Redux 要做的只有一件事，<span style="color: #ff0000; font-size: 16px;">
 
 _Redux 三个核心概念工作流程：_
 
-![react组件间通信](../_media/react_redux_flow.png)
+![react组件间通信](../img/react_redux_flow.png)
 
 _工作流程描述：_
 
@@ -121,7 +121,7 @@ _工作流程描述：_
 
 <span style="color: #ff0000; font-size: 16px;">Redux 统一保存状态数据，在隔离了数据与 UI 的同时，负责处理数据的绑定</span>。
 
-![redux 工作模型](../_media/react_redux_work.png)
+![redux 工作模型](../img/react_redux_work.png)
 
 **作用**：
 
@@ -210,7 +210,7 @@ function reducer(state = state, action) {
 
 _项目中的 Redux 架构：_
 
-![redux 工作模型](../_media/react_redux_flow_project.png)
+![redux 工作模型](../img/react_redux_flow_project.png)
 
 显然，项目中使用 Redux 比 Demo 中会复杂的多。
 
@@ -230,7 +230,7 @@ _项目中的 Redux 架构：_
 
 **项目目录：**
 
-![redux 入口文件](../_media/react_redux_input.png)
+![redux 入口文件](../img/react_redux_input.png)
 
 _1. 定义 reducer:_
 
@@ -328,7 +328,7 @@ export default App;
 
 **我们可以得到如下示意图：**
 
-![redux props 传递 store](../_media/react_redux_props.png)
+![redux props 传递 store](../img/react_redux_props.png)
 
 **说明：**
 
@@ -444,7 +444,7 @@ Redux 官网里写的很清楚了，看这里或许能解决你很多疑惑 👉
 
 _思维导图：_
 
-![redux 思维导图](../_media/react_redux_map.png)
+![redux 思维导图](../img/react_redux_map.png)
 
 ## 教程推荐
 

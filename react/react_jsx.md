@@ -2,7 +2,7 @@
 
 > react 官网说 react 的特性之一就是“声明式”，react 正是使用 JSX 来声明的，JSX 是一个 JavaScript 的语法扩展。
 
-![react声明式](../_media/react-declarative.png)
+![react声明式](../img/react-declarative.png)
 
 **JSX**是一个 JavaScript 的语法扩展。
 
@@ -259,7 +259,7 @@ React.createElement 实际最终返回的是一个“React Element”,它们描�
 
 _最终返回的 React Element_
 
-![react element](../_media/react_jsx_reactElement.png)
+![react element](../img/react_jsx_reactElement.png)
 
 可以看到，**最终得到的 React Element 是一个对象，通过 pros 属性的 children 构建出了一个模拟的 DOM 树**。
 

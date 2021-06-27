@@ -12,7 +12,7 @@
 
 这里说的 Router(路由器)就是你家用的路由器，设置 wifi 的那个设备。
 
-![路由器](../_media/react_router_net.png)
+![路由器](../img/react_router_net.png)
 
 假如你家里有 2 台电脑和 2 部手机，都要通过路由器来分发数据包到设备。
 
@@ -84,7 +84,7 @@ src
 
 [详情](https://www.jianshu.com/p/a02eb15d2d70)
 
-![SPA 和 MPA 对比](../_media/react_router_spa.png)
+![SPA 和 MPA 对比](../img/react_router_spa.png)
 
 ## 3. React 应用中如何设置路由？
 
@@ -112,7 +112,7 @@ window.location.hash = "XXX";
 
 如下图：直接修改 window.location.hash 属性为 “XXX”，页面的 URL 地址也发生了变化。
 
-![hash](../_media/react_router_hash.png)
+![hash](../img/react_router_hash.png)
 
 #### 3.1.2 通过 history 改变路由
 
@@ -171,13 +171,13 @@ window.addEventListener("pushState", funcRef);
 
 _URL 切换流程图：_
 
-![changeUrl](../_media/react_router_changeUrl.png)
+![changeUrl](../img/react_router_changeUrl.png)
 
 ## 4. React Router 是什么
 
 前面说了那么多，你应该猜到 React Router 想要干什么了。
 
-![react-router info](../_media/react_router_info.png)
+![react-router info](../img/react_router_info.png)
 
 从官网首页的介绍我们可以看到两点主要信息：
 
@@ -328,11 +328,11 @@ exports.NavLink = NavLink;
 
 _[React Router](https://github.com/ReactTraining/react-router) 源码目录:_
 
-![React Router Origin  Directory](../_media/react_router_origin.png)
+![React Router Origin  Directory](../img/react_router_origin.png)
 
 _项目中[node\_modules] 中的 react-router 安装包目录:_
 
-![React Router Directory](../_media/react_router_directory.png)
+![React Router Directory](../img/react_router_directory.png)
 
 对比两个文件目录我们发现，[node\_modules]中的 react-router 多了两个文件夹：
 

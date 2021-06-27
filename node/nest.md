@@ -29,7 +29,7 @@ NodeJs 框架可谓是百花齐放，目前主流的有：
 
 _npm 包的下载量对比：_
 
-![node框架对比](../_media/node_plateform.png)
+![node框架对比](../img/node_plateform.png)
 
 ## 3. 为什么选择 Nest
 
@@ -66,7 +66,7 @@ npm i --save @nestjs/core @nestjs/common rxjs reflect-metadata
 
 _安装成功后的目录：_
 
-![nest初始化目录结构](../_media/nest_start_files.png)
+![nest初始化目录结构](../img/nest_start_files.png)
 
 ### 4.2 启动
 
@@ -79,11 +79,11 @@ npm run start
 
 _nest 启动成功：_
 
-![nest启动成功](../_media/nest_start.png)
+![nest启动成功](../img/nest_start.png)
 
 在浏览器输入 http://localhost:3999，可以看到输出：
 
-![nest前端请求](../_media/nest_start_hello.png)
+![nest前端请求](../img/nest_start_hello.png)
 
 ## 5. 深入了解 NestJs
 
@@ -269,7 +269,7 @@ export class AppModule {}
 
 控制器负责处理传入的 <code style="color: #708090; background-color: #F5F5F5;">请求</code> 和向客户端返回 <code style="color: #708090; background-color: #F5F5F5;">响应</code> 。
 
-![nest控制器](../_media/nest_controllers.png)
+![nest控制器](../img/nest_controllers.png)
 
 使用 nest CLI 命令，创建控制器：
 
@@ -279,7 +279,7 @@ nest g controller user
 
 执行结果如下图 ⬇️：
 
-![nest控制器](../_media/nest_cli_controller.png)
+![nest控制器](../img/nest_cli_controller.png)
 
 可以看到，nest CLI 帮我们创建了一个文件夹 user，
 
@@ -390,7 +390,7 @@ export class CatsController {
 
 _Provider 组成的 Components 提供给 Controller:_
 
-![provider 提供给 controller](../_media/nest_components_providers.png)
+![provider 提供给 controller](../img/nest_components_providers.png)
 
 #### service(服务)
 
@@ -401,7 +401,7 @@ nest g service user
 ```
 
 _执行结果 ⬇️：_
-![nest控制器](../_media/nest_cli_service.png)
+![nest控制器](../img/nest_cli_service.png)
 
 和上面 👆 Controllers 章节中创建 controller 一样，nest CLI 帮我们创建了服务，然后在 app.module.ts 中注册服务。这里就不再赘述。
 
@@ -415,7 +415,7 @@ _执行结果 ⬇️：_
 
 当提供者需要在模块外部可见时，它首先从其主机模块导出，然后导入到其消费模块。
 
-![Modules组成](../_media/nest_modules_app.png)
+![Modules组成](../img/nest_modules_app.png)
 
 @module() 装饰器接受一个描述模块属性的对象：
 
@@ -431,7 +431,7 @@ nest g module user
 ```
 
 _执行结果 ⬇️：_
-![nest控制器](../_media/nest_cli_module.png)
+![nest控制器](../img/nest_cli_module.png)
 
 _模块分类：_
 
@@ -480,7 +480,7 @@ export class AppModule {}
 
 在 Nest 中，默认情况下，模块是<code style="color: #708090; background-color: #F5F5F5;">单例</code>，因此您可以轻松地在多个模块之间共享<code style="color: #708090; background-color: #F5F5F5;">同一个</code>提供者实例。
 
-![Nest_Shared_Module](../_media/Nest_Shared_Module.png)
+![Nest_Shared_Module](../img/Nest_Shared_Module.png)
 
 实际上，每个模块都是一个共享模块。
 

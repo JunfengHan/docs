@@ -13,7 +13,7 @@
 
 _视频点播实现音视频上传、存储、处理和播放的整体流程:_
 
-![视频点播流程](../_media/schema_vod_flow.png)
+![视频点播流程](../img/schema_vod_flow.png)
 
 **流程解析：**
 
@@ -33,7 +33,7 @@ _视频点播实现音视频上传、存储、处理和播放的整体流程:_
 
 根据我们选择的技术栈，可以得到整体的开发流程：
 
-![视频点播开发流程](../_media/schema_vod_workflow.png)
+![视频点播开发流程](../img/schema_vod_workflow.png)
 
 整理了开发流程后，我们将按照开发流程一步步完成整个需求。
 
@@ -45,7 +45,7 @@ _视频点播实现音视频上传、存储、处理和播放的整体流程:_
 
 _阿里云 VoD 上传方式：_
 
-![视频点播开发流程](../_media/schema_vod_uploadType.png)
+![视频点播开发流程](../img/schema_vod_uploadType.png)
 
 **我们的需求是 PGC 场景**。
 
@@ -147,7 +147,7 @@ client
 
 _客户端上传流程：_
 
-![视频点播开发流程](../_media/schema_vod_clientUploadFlow.png)
+![视频点播开发流程](../img/schema_vod_clientUploadFlow.png)
 
 1-4 步的工作我们在上面已经完成了，现在要做的是 5-6 步，即 **上传**和**获取上传结果**。
 

@@ -8,7 +8,7 @@
 
 _算法与数据结构分类：_
 
-![算法与数据结构汇总](../_media/algorithmStructure_category.jpg)
+![算法与数据结构汇总](../img/algorithmStructure_category.jpg)
 
 ## 1. 算法复杂度
 
@@ -131,7 +131,7 @@ T(n) = O(f(n));
 
 > 随着问题规模 n 的不断增大，上述时**间复杂度不断增大，算法的执行效率越低**。
 
-![时间复杂度](../_media/algorithmStructure_graph.jpg)
+![时间复杂度](../img/algorithmStructure_graph.jpg)
 
 #### 1.1.2 时间复杂度分析
 
@@ -313,7 +313,7 @@ foo(3);
 
 _执行动画演示：_
 
-![递归过程](../_media/algorithm_recursion.gif)
+![递归过程](../img/algorithm_recursion.gif)
 
 执行过程：
 
@@ -345,28 +345,28 @@ greet("MAGGIE");
 
 - 1. 调用 greet("han")，计算机首先**为该函数调用分配一块内存**，计算机使用一个<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">栈</code>来表示内存块
 
-![ram](../_media/algorithm_stack_ram.jpg)
+![ram](../img/algorithm_stack_ram.jpg)
 
 - 2. 使用分配的内存，变量 name 被设置为“han"
 
-![callback](../_media/algorithm_stack_callback.jpg)
+![callback](../img/algorithm_stack_callback.jpg)
 
 - 3. 接着执行函数内的代码，打印出“hello, han !”
 - 4. 然后调用 greet2(name)，greet2 被**压入栈顶**。（因为这里的调用是同步执行的，所以函数 greet 现在发生了**暂停**）
 
 _此时的调用栈：_
 
-![callback2](../_media/algorithm_stack_callback2.jpg)
+![callback2](../img/algorithm_stack_callback2.jpg)
 
 - 5. greet2 执行后会**从栈顶弹出**，函数 greet **继续执行**
 
-![callback3](../_media/algorithm_stack_callback3.jpg)
+![callback3](../img/algorithm_stack_callback3.jpg)
 
 - 6. 接着是函数 bye 的压入、执行和弹出
 
-![bye](../_media/algorithm_stack_bye.jpg)
+![bye](../img/algorithm_stack_bye.jpg)
 
-![bye2](../_media/algorithm_stack_bye2.jpg)
+![bye2](../img/algorithm_stack_bye2.jpg)
 
 - 7. 最后执行 greet 中的 console.log()，函数 greet 退出，调用栈清空
 
@@ -464,7 +464,7 @@ function flatArr(arr) {
 
 _执行过程演示：_
 
-![展平数组递归过程](../_media/algorithm_flatArr.gif)
+![展平数组递归过程](../img/algorithm_flatArr.gif)
 
 **流程分析：**
 
@@ -513,7 +513,7 @@ _执行过程演示：_
 
 ## 5. 排序算法
 
-![sort](../_media/algorithm_sort.jpg)
+![sort](../img/algorithm_sort.jpg)
 
 **概述：**：🌟🌟🌟
 
@@ -529,7 +529,7 @@ _执行过程演示：_
 
 > 如：将 4,5,6,3,2,1 从小到大，冒泡排序。
 
-![sort](../_media/algorithm_sort_bubble.jpg)
+![sort](../img/algorithm_sort_bubble.jpg)
 
 **冒泡过程：**
 
@@ -586,7 +586,7 @@ sortBubble([45, 111, 48, 77, 11, 666]);
 
 _选择排序：_
 
-![sort](../_media/algorithm_sort_select.jpg)
+![sort](../img/algorithm_sort_select.jpg)
 
 _示例：_
 
@@ -638,7 +638,7 @@ sortSelect([45654, 45, 788, 455, 0, -454]);
 
 插入排序也包含两种操作，一种是**元素的比较**，一种是**元素的移动**。
 
-![sort](../_media/algorithm_sort_insert.jpg)
+![sort](../img/algorithm_sort_insert.jpg)
 
 红色为已经排序，黄色为未排序。
 
@@ -716,7 +716,7 @@ sortInsert([456, 455, 7894, 78, 556, 0]);
 
 _归并排序：_
 
-![sort](../_media/algorithm_sort_merge.jpg)
+![sort](../img/algorithm_sort_merge.jpg)
 
 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">归并排序</code>的关键是<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">分解</code>与<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">合并</code>。
 
@@ -831,7 +831,7 @@ a.mergeSort();
 
 _快速排序：_
 
-![sort](../_media/algorithm_sort_quick.jpg)
+![sort](../img/algorithm_sort_quick.jpg)
 
 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">快速排序</code>的关键是利用**不同的**<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">支点</code>把数据<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">分区</code>后进行排序。
 

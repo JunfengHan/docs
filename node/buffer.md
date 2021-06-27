@@ -10,13 +10,13 @@
 
 虽然聪明的人类能看懂 0 和 1，却看不懂 0 和 1 背后的真正意义。
 
-![buffer](../_media/node_buffer_01.png)
+![buffer](../img/node_buffer_01.png)
 
 除非你是《黑客帝国》里的主角 -- Neo.
 
 那么你眼里的世界是这样的 👇：
 
-![buffer](../_media/node_buffer_human.jpg)
+![buffer](../img/node_buffer_human.jpg)
 
 回到正常世界吧，人类看不懂二进制数据的，所以需要<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">编码</code>。
 
@@ -43,12 +43,12 @@
 
 _ASCII 和 UTF-8 编码下的字母“A”_
 
-![buffer](../_media/node_buffer_ascii.jpg)
-![buffer](../_media/node_buffer_utf.png)
+![buffer](../img/node_buffer_ascii.jpg)
+![buffer](../img/node_buffer_utf.png)
 
 _google 统计的编码使用情况：_
 
-![buffer](../_media/node_buffer_statistics.png)
+![buffer](../img/node_buffer_statistics.png)
 
 <span style="color: #ff0000; font-size: 16px;">Node 想要处理文件就必然需要处理二进制，所以就有了 Buffer</span>，而且把它作为常量，可见其重要性。
 
@@ -86,7 +86,7 @@ Buffer.from("我")
 
 _Buffer 示例：_
 
-![buffer](../_media/node_buffer_graphical.png)
+![buffer](../img/node_buffer_graphical.png)
 
 ## 3. Buffer 是什么
 
@@ -94,7 +94,7 @@ _Buffer 示例：_
 
 _Node 中直接打印 Buffer:_
 
-![buffer](../_media/node_buffer_class.png)
+![buffer](../img/node_buffer_class.png)
 
 ```js
 { [Function: Buffer]

@@ -16,7 +16,7 @@
 
 _内存 IC 引脚：_
 
-![IC电路](../_media/structure_ic.png)
+![IC电路](../img/structure_ic.png)
 
 - 1. 内存的内部是由各种**IC 电路**组成的
 - 2. **内存 IC** 是一个完整的结构，它内部也有**电源**、**地址信号**、**数据信号**、**控制信号**和用于寻址的 **IC 引脚**来进行数据的读写
@@ -26,7 +26,7 @@ _内存 IC 引脚：_
 
 可以做一个类比，把数据存储到内存，相当于我们去超市时的物品寄存。
 
-![IC电路](../_media/structure_box.jpg)
+![IC电路](../img/structure_box.jpg)
 
 ## 2. 数据结构分类
 
@@ -52,11 +52,11 @@ _数据结构分类：_
 
 _线性表数据结构图示：_
 
-![线性表数据结构](../_media/structure_line.jpg)
+![线性表数据结构](../img/structure_line.jpg)
 
 _非线性表数据结构图示：_
 
-![非线性表数据结构](../_media/structure_notLine.jpg)
+![非线性表数据结构](../img/structure_notLine.jpg)
 
 ## 3. 线性表
 
@@ -173,7 +173,7 @@ while (p3) {
 
   多指针解决链表反转；
 
-![链表多指针](../_media/structure_link_answer.png)
+![链表多指针](../img/structure_link_answer.png)
 
 - 2. 构建一个虚假链表头
 
@@ -189,7 +189,7 @@ while (p3) {
 
 - 2. <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">链表</code>的**插入**、**删除**只是修改其指针指向，时间复杂度为 O(1)
 
-![非线性表数据结构](../_media/structure_arrayVsLink.jpg)
+![非线性表数据结构](../img/structure_arrayVsLink.jpg)
 
 **结论**：<span style="color: #ff0000; font-size: 16px;">数组**更擅长**查询**操作，**链表**更擅长**插入**、**删除**操作**</span>
 
@@ -278,7 +278,7 @@ console.log(a); // []
 
 优先队列的本质是**二叉堆**结构，利用一个数组结构来实现<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">完全二叉树</code>。
 
-![优先队列](../_media/structure_priority_queue.png)
+![优先队列](../img/structure_priority_queue.png)
 
 **最常用场景：**
 
@@ -294,7 +294,7 @@ _例题：_
 
 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">树</code>是一种非顺序<span style="color: #ff0000; font-size: 16px;">分层</span>数据结构，<span style="color: #ff0000; font-size: 16px;">适用于存储需要快速查找的数据</span>。
 
-![树](../_media/structure_tree1.png)
+![树](../img/structure_tree1.png)
 
 **前端工作中常见的树**：
 
@@ -361,13 +361,13 @@ _模拟二叉树：_
 
 _模拟二叉树示例：_
 
-![模拟二叉树](../_media/structure_tree_eg.png)
+![模拟二叉树](../img/structure_tree_eg.png)
 
 #### 4.1.1 二叉树
 
 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">二叉树</code>是最多有两个“叉”的树，即：最多两个子节点。
 
-![二叉搜索树分类](../_media/structure_tree_binaryTreeType.jpg)
+![二叉搜索树分类](../img/structure_tree_binaryTreeType.jpg)
 
 - 图示 1 为一般二叉树
 - 图示 2 为<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">满二叉树</code>
@@ -377,11 +377,11 @@ _模拟二叉树示例：_
 
 - 链式存储（左右指针来实现）
 
-  ![链式存储树](../_media/structure_tree_typeLinked.jpg)
+  ![链式存储树](../img/structure_tree_typeLinked.jpg)
 
 - 顺序存储（数组来实现）
 
-  ![数组存储树](../_media/structure_tree_typeArray.jpg)
+  ![数组存储树](../img/structure_tree_typeArray.jpg)
 
 #### 4.1.2 二叉搜索树
 
@@ -395,11 +395,11 @@ _模拟二叉树示例：_
 
 _二叉搜索树：_
 
-![二叉搜索树示例](../_media/structure_tree_binarySearchTree1.png)
+![二叉搜索树示例](../img/structure_tree_binarySearchTree1.png)
 
 _不是二叉搜索树：_
 
-![不是二叉搜索树](../_media/structure_tree_notBinarySearch.svg)
+![不是二叉搜索树](../img/structure_tree_notBinarySearch.svg)
 
 **二叉搜索树特点**：
 
@@ -416,7 +416,7 @@ _不是二叉搜索树：_
 
 - 先序遍历：从根节点开始，先左子节点，后右子节点（递归）
 
-  ![先序遍历](../_media/structure_tree_traverseFront.gif)
+  ![先序遍历](../img/structure_tree_traverseFront.gif)
 
   ```js
   const preOrder = (root) => {
@@ -435,7 +435,7 @@ _不是二叉搜索树：_
 
 - 中序遍历：从最左侧子节点开始，左 -> 中 -> 右
 
-  ![中序遍历](../_media/structure_tree_traverseMiddle.gif)
+  ![中序遍历](../img/structure_tree_traverseMiddle.gif)
 
   ```js
   const inOrder = (root) => {
@@ -454,7 +454,7 @@ _不是二叉搜索树：_
 
 - 后续遍历：从最左侧子节点开始，先左，后右，最后中
 
-  ![后序遍历](../_media/structure_tree_traverseEnd.gif)
+  ![后序遍历](../img/structure_tree_traverseEnd.gif)
 
   ```js
   const postOrder = (root) => {
@@ -475,7 +475,7 @@ _不是二叉搜索树：_
 
 _树的节点示意图_:
 
-![树的节点示意图](../_media/structure_tree_traverse.png)
+![树的节点示意图](../img/structure_tree_traverse.png)
 
 除了**根结点**和**叶子结点**，其他所有结点都有三个箭头指向它。
 
@@ -531,7 +531,7 @@ _二叉堆特性_：
 
 _二叉堆合法示例：_
 
-![二叉堆](../_media/structure_tree2_heap.jpg)
+![二叉堆](../img/structure_tree2_heap.jpg)
 
 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">JavaScript</code> 中通常用**数组**表示<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">堆</code>。
 
@@ -539,7 +539,7 @@ _二叉堆合法示例：_
 
 _用数组表示最小堆：_
 
-![数组表示堆](../_media/structure_heap_arr.png)
+![数组表示堆](../img/structure_heap_arr.png)
 
 #### 4.2.1 创建一个最小堆的 Class
 
@@ -594,7 +594,7 @@ class MinHeap {
 
 _最大堆的堆节点上移：_
 
-![堆节点上移](../_media/structure_heap_swap.jpg)
+![堆节点上移](../img/structure_heap_swap.jpg)
 
 #### 4.2.2 堆的应用--找第 K 大/小的值
 
@@ -661,7 +661,7 @@ JavaScript 中没有图，可以用 Object 和 Array 构建图。
 
 _JS 中使用二维数组表示邻接矩阵_：
 
-![邻接矩阵](../_media/structure_graph_arr2.png)
+![邻接矩阵](../img/structure_graph_arr2.png)
 
 图中共 5 个节点，6 个边，二维数组中，**交集为 1 代表两个节点的连接**。
 
@@ -700,7 +700,7 @@ let graph = {
 
 _一个“图“实例：_
 
-![邻接矩阵](../_media/structure_graph_search.png)
+![邻接矩阵](../img/structure_graph_search.png)
 
 左侧为一个“图”，右侧为遍历步骤。
 
@@ -813,7 +813,7 @@ ES6 中新增的<code style="color: #708090; background-color: #F5F5F5; font-siz
 
 _数据结构操作的复杂度：_
 
-![后序遍历](../_media/structure_operation_bigO.png)
+![后序遍历](../img/structure_operation_bigO.png)
 
 ## 参考
 

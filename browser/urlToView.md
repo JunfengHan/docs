@@ -12,13 +12,13 @@
 
 _启动一个 chrome 之后开启多个进程_
 
-![chrome进程](../_media/browser_chrome.png)
+![chrome进程](../img/browser_chrome.png)
 
 启动**Chrome**一共启动了 4 个进程，可以看到，**Chrome 是一个多进程架构的浏览器**。
 
 _多进程浏览器架构_
 
-![多进程浏览器架构](../_media/browser_chrome_component.png)
+![多进程浏览器架构](../img/browser_chrome_component.png)
 
 **各进程的作用**：
 
@@ -54,11 +54,11 @@ _多进程浏览器架构_
 
 _整体流程_
 
-![整体流程](../_media/browser_urlToView1.png)
+![整体流程](../img/browser_urlToView1.png)
 
 _从 url 到页面_
 
-![从url到页面](../_media/http_http_url.png)
+![从url到页面](../img/http_http_url.png)
 
 _流程如下_
 
@@ -85,7 +85,7 @@ _网络请求流程_
 
 **HTTP 请求流程**：
 
-![请求流程](../_media/browser_httpRequest.png)
+![请求流程](../img/browser_httpRequest.png)
 
 ### 2.3 浏览器处理响应信息
 
@@ -95,7 +95,7 @@ _网络请求流程_
 
   <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">网络进程</code>会从响应头的 Location 字段里面读取重定向的地址，然后再发起新的 HTTP 或者 HTTPS 请求，一切又重头开始了.
 
-  ![重定向](../_media/browser_urlToView_301.png)
+  ![重定向](../img/browser_urlToView_301.png)
 
 - 2> 响应数据类型处理
 
@@ -129,7 +129,7 @@ _网络请求流程_
 
 _浏览器进程更新页面_：
 
-![浏览器进程更新页面](../_media/browser_update.png)
+![浏览器进程更新页面](../img/browser_update.png)
 
 ### 2.6 渲染阶段
 
@@ -137,7 +137,7 @@ _浏览器进程更新页面_：
 
 渲染的流程很复杂，被分为多个子阶段。
 
-![渲染阶段](../_media/browser_render.png)
+![渲染阶段](../img/browser_render.png)
 
 _整体流程：_
 
@@ -145,7 +145,7 @@ _整体流程：_
 
   即：将 HTML 转换为**DOM 树**，正式 DOM 树的存在，我们**才能使用 JS 通过来控制页面**。
 
-  ![生成DOM树](../_media/browser_dom.png)
+  ![生成DOM树](../img/browser_dom.png)
 
 - 样式计算
 
@@ -153,13 +153,13 @@ _整体流程：_
   2. 转换样式表中的属性值，使其标准化；
   3. 计算出 DOM 树中每个节点的具体样式
 
-  ![DOM树+CSS](../_media/browser_domCss.png)
+  ![DOM树+CSS](../img/browser_domCss.png)
 
 - 布局
 
   1. 创建布局树
 
-  ![布局树](../_media/browser_layoutTree.png)
+  ![布局树](../img/browser_layoutTree.png)
 
   可以简单理解为老版浏览器的**渲染树**。
 
@@ -169,13 +169,13 @@ _整体流程：_
 
   像 PhotoShop 里的图层。
 
-  ![图层树](../_media/browser_layerTree.png)
+  ![图层树](../img/browser_layerTree.png)
 
 - 图层绘制
 
 **渲染引擎**实现图层的绘制，会把一个图层的绘制拆分成很多小的<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">绘制指令</code>，<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">绘制指令</code>会形成一个**绘制表**，绘制表里的指令会一步步执行，完成绘制工作。
 
-![绘制表](../_media/browser_renderSheel.png)
+![绘制表](../img/browser_renderSheel.png)
 
 - 栅格化（raster）
 
@@ -191,7 +191,7 @@ _整体流程：_
 
 _绘制整体流程_：
 
-![绘制整体流程](../_media/browser_renderFlow.png)
+![绘制整体流程](../img/browser_renderFlow.png)
 
 ## 3. 重排与重绘
 
@@ -199,7 +199,7 @@ _绘制整体流程_：
 
 更新元素的几何属性（位置、大小）会引起重排。
 
-![重排](../_media/browser_reflow.png)
+![重排](../img/browser_reflow.png)
 
 **重排**需要更新完整的渲染流水线，所以**开销最大**。
 
@@ -207,7 +207,7 @@ _绘制整体流程_：
 
 改变元素的颜色等，会引起重绘。
 
-![重绘](../_media/browser_repaint.png)
+![重绘](../img/browser_repaint.png)
 
 **重绘**省去了布局和分层阶段，所以执行效率会比重排操作要高一些。
 

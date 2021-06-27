@@ -12,6 +12,13 @@
 
 ### 2.1 什么是 RESTful
 
+数据的 CRUD 接口使用 HTTP 方法来统一规范：
+
+- 增：POST
+- 删：DELETE
+- 查：GET
+- 改：PUT
+
 ### 2.2 RESTful 规则
 
 - 1. API 应该包含版本信息

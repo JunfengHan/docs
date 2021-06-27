@@ -4,7 +4,7 @@
 
 **缓存分类：**
 
-![缓存分类](../_media/browser_cache_category.png)
+![缓存分类](../img/browser_cache_category.png)
 
 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">缓存</code>可以**减少网络 IO 消耗**，提高访问速度。
 
@@ -20,7 +20,7 @@
 
 _浏览器/缓存/服务器工作关系图：_
 
-![浏览器缓存服务器工作关系](../_media/browser_cache.png)
+![浏览器缓存服务器工作关系](../img/browser_cache.png)
 
 ## 2. 浏览器缓存
 
@@ -35,11 +35,11 @@ _浏览器/缓存/服务器工作关系图：_
 
 _淘宝网使用 Memory Cache 缓存示例：_
 
-![淘宝缓存示例](../_media/browser_cache_taobao.png)
+![淘宝缓存示例](../img/browser_cache_taobao.png)
 
 _YouTube 使用 ServiceWorker 缓存示例：_
 
-![youtube缓存示例](../_media/browser_cache_youtube.png)
+![youtube缓存示例](../img/browser_cache_youtube.png)
 
 ## 3. Memory 缓存
 
@@ -92,7 +92,7 @@ Disk Cache 不会随着浏览器 Tab 页关闭而释放。
 
 _ServiceWorker 兼容性不是很好：_
 
-![youtube缓存示例](../_media/browser_cache_compatibility.png)
+![youtube缓存示例](../img/browser_cache_compatibility.png)
 
 ### 5.1 ServiceWork 实现离线缓存
 
@@ -208,7 +208,7 @@ self.addEventListener("fetch", (event) => {
 
 _淘宝缓存 Base64 二维码图片返回 HTTP 信息：_
 
-![淘宝缓存示例](../_media/browser_cache_taobaoBase64.png)
+![淘宝缓存示例](../img/browser_cache_taobaoBase64.png)
 
 ### 7.2 HTTP 强缓存实现
 
@@ -220,7 +220,7 @@ _淘宝缓存 Base64 二维码图片返回 HTTP 信息：_
 
 *www.baidu.com 的 HTTP headers:*
 
-![百度缓存示例](../_media/browser_cache_baidu.png)
+![百度缓存示例](../img/browser_cache_baidu.png)
 
 ```js
 // Response Headers
@@ -314,7 +314,7 @@ Expires: Wed, 21 Oct 2015 07:28:00 GMT
 
 _服务器检查资源未发生变化时返回 304:_
 
-![304](../_media/browser_cache_304.png)
+![304](../img/browser_cache_304.png)
 
 **注意**⚠️：
 
@@ -322,7 +322,7 @@ _服务器检查资源未发生变化时返回 304:_
 
 _协商缓存整体流程：_
 
-![协商缓存](../_media/browser_cache_flow.png)
+![协商缓存](../img/browser_cache_flow.png)
 
 ## 8. 手动实现一个 Node.js 协商缓存
 

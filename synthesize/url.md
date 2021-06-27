@@ -6,7 +6,7 @@
 
 _url 组成：_
 
-![url组成](../_media/synthesize_url.png)
+![url组成](../img/synthesize_url.png)
 
 ## 2. 如何获取 URL
 

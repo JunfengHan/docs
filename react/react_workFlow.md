@@ -94,12 +94,12 @@ F2 打开浏览器的开发者工具（DevTools）;
 
 找到 Performance 面板，点击刷新。
 
-![performance](../_media/react_code_performance.png)
+![performance](../img/react_code_performance.png)
 
 你会看到一张页面渲染的火焰图，找到有用的部分，"./src/index.js"所在的部分，其他的先不管。
 
 图 2: 初次渲染，React 执行过程火焰图 🔥
-![hello function flow](../_media/react_render_fire.png)
+![hello function flow](../img/react_render_fire.png)
 
 对，这里的 render 就是我们代码里的 ReactDOM.render() 方法。
 
@@ -123,7 +123,7 @@ ReactDOM.render(<App />, document.getElementById("root"));
 
 _在 render 函数处打断点：_
 
-![render gif](../_media/react_code1_render.gif)
+![render gif](../img/react_code1_render.gif)
 
 可以看到，render 的参数:
 
@@ -187,7 +187,7 @@ function legacyRenderSubtreeIntoContainer(
 
 _在 legacyRenderSubtreeIntoContainer 函数处打断点：_
 
-![render legacyRenderSubtreeIntoContainer](../_media/react_code1_legacy.gif)
+![render legacyRenderSubtreeIntoContainer](../img/react_code1_legacy.gif)
 
 #### 4.1.3 执行 updateContainer 函数
 
@@ -736,7 +736,7 @@ _beginWork 流程图：_
 
 > （来自-卡颂) 这张图画的挺好，红色为我的标注，后面有时间自己画一个更详细点的
 
-![beginWork 流程图](../_media/react_beginWork.png)
+![beginWork 流程图](../img/react_beginWork.png)
 
 #### 4.2.6 执行 completeWork 函数
 
@@ -862,7 +862,7 @@ _completeWork 流程图：_
 
 > （来自-卡颂) 这张图画的挺好，红色为我的标注，后面有时间自己画一个更详细点的
 
-![completeWork 流程图](../_media/react_completeWork.png)
+![completeWork 流程图](../img/react_completeWork.png)
 
 ### 4.3 渲染器（commit 阶段）
 

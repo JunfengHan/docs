@@ -8,7 +8,7 @@ React17 架构可以分为三层：
 - Reconciler（协调器）—— 负责找出变化的组件
 - Renderer（渲染器）—— 负责将变化的组件渲染到页面上
 
-![react架构工作流](../_media/react_architecture.png)
+![react架构工作流](../img/react_architecture.png)
 
 ## 2. Scheduler（调度器）-- 调度更新
 
@@ -59,7 +59,7 @@ Renderer 根据 Reconciler 为虚拟 DOM 打的标记，同步执行对应的 DO
 
 假如点击按钮，state 会改变：
 
-![react架构工作流](../_media/react_flow.png)
+![react架构工作流](../img/react_flow.png)
 
 - 点击按钮，setState() 导致 state 变化
 - 调度器接收到更新，调度更细优先级，将新的 state 给 Reconciler

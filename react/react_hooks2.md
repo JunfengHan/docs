@@ -4,7 +4,7 @@
 
 React 的哲学之一是**数据驱动**。
 
-![React 数据驱动](../_media/react_hooks2_start.png)
+![React 数据驱动](../img/react_hooks2_start.png)
 
 在 Hooks 诞生之前，React 使用面向对象的 Class 组件来处理**state**。
 
@@ -34,7 +34,7 @@ React 出现前，调用组件的方式往往是：dialog.show(), dialog.hide() 
 
 _Hooks 工作原理_
 
-![React 数据驱动](../_media/react_hooks2_hooksFlow.png)
+![React 数据驱动](../img/react_hooks2_hooksFlow.png)
 
 ## 3. Hooks 优势
 
