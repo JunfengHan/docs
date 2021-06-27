@@ -1,4 +1,4 @@
-![logo](/_media/logo_kobe.png)
+![logo](/img/logo_kobe.png)
 
 # 分享 交流 热爱
 
