@@ -8,6 +8,16 @@
 >
 > 可以解决**让浮动元素高度塌陷**、**上下 margin 折叠**等问题；
 
+问 ❓：link 与 @import 的区别？
+
+> 答：<1> 类别不同：link 是 HTML 标签，@import 是 css 语法
+>
+> <2>加载顺序：页面加载时 link 会和 html 同时被加载；@import 引入的 CSS 将在页面加载完毕后被加载；
+>
+> <3>优先级：link 引入的优先级高于@import；因为 @import 引入的内容会被放在 css 文件的顶部
+>
+> <4>DOM 操作权: JS 可以通过 DOM 操作新建 link 标签的方式引入样式；@import 不行
+
 问 ❓：rem、em 与 vh 的区别？
 
 > 答：
@@ -36,7 +46,11 @@
 >
 > **matrix(矩阵)**方法可以实现任何上面的组合效果；
 >
-> 注意 ⚠️：只能转化 {display: block;} 的元素。
+> 注意 ⚠️：
+>
+> 1.transform 只能转化 {display: block;} 的元素。
+>
+> 2.transform 并不是都会启动 GPU 加速，3D transforms (transform: translateZ(), rotate3d())才会启动加速
 
 问 ❓：了解什么是<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">包含块</code>吗？
 

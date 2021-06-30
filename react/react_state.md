@@ -1,0 +1,137 @@
+# React 状态复用
+
+## 1. React 组件之间如何进行状态复用?
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">React</code> 的 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Function Component</code> 是没有状态的，因此也叫做**无状态组件**。
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">React</code> 的 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Class Component</code> 是有状态的。
+
+_创建一个有状态的 Class Component:_
+
+```js
+import { Component } from "react";
+
+class ComponentA extends Component {
+  // 定义状态
+  state = {
+    num: 1,
+  };
+
+  render() {
+    // 使用状态
+    return <div>Num{this.state.num}</div>;
+  }
+}
+
+export default ComponentA;
+```
+
+假如现在有一个需求，要在组件 ComponentB 中使用 ComponentA 的状态“num”，怎么办 ❓
+
+此时你可能会想到两个常见方法：
+
+- [render prop](https://zh-hans.reactjs.org/docs/render-props.html)
+- [高阶组件(HOC)](https://zh-hans.reactjs.org/docs/higher-order-components.html)
+
+### 1.1 使用 render props 传递 state
+
+**React Router**、**Downshift** 以及 **Formik** 等都使用了 render prop。
+
+_创建组件 B_
+
+```js
+class ComponentB extends Component {
+  render() {
+    // 接收 props 传递的 num
+    const num = this.props.num;
+    return <div>My Num is {num}.</div>;
+  }
+}
+```
+
+_修改组件 A,动态渲染内容_
+
+```js
+class ComponentA extends Component {
+  // 定义状态
+  state = {
+    num: 1,
+  };
+
+  render() {
+    // 使用状态
+    return (
+      <div>
+        {/*
+          使用 `render`prop 动态决定要渲染的内容，
+          而不是给出一个 <ComponentA> 渲染结果的静态表示
+        */}
+        {this.props.renderProp(this.state)}
+      </div>
+    );
+  }
+}
+```
+
+_把组件 B 通过 render 传递给组件 A：_
+
+```js
+class Container extends Component {
+  render() {
+    return (
+      <div>
+        <p>test</p>
+        <ComponentA renderProp={(num) => <ComponentB num={num} />}></ComponentA>
+      <div/>
+    );
+  }
+}
+```
+
+**render prop 方法的原理**：
+
+**提供状态的组件**（ComponentA）<span style="color: #ff0000; font-size: 16px;">动态渲染</span>**使用状态的组件**(ComponentB)。
+
+### 1.2 使用 高阶组件（HOC）传递 state
+
+```js
+function ppHOC(WrappedComponent) {
+  return class PP extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        name: "",
+      };
+
+      this.onNameChange = this.onNameChange.bind(this);
+    }
+    onNameChange(event) {
+      this.setState({
+        name: event.target.value,
+      });
+    }
+    render() {
+      const newProps = {
+        name: {
+          value: this.state.name,
+          onChange: this.onNameChange,
+        },
+      };
+      return <WrappedComponent {...this.props} {...newProps} />;
+    }
+  };
+}
+```
+
+_使用 ppHOC:_
+
+```js
+@ppHOC
+class Example extends React.Component {
+  render() {
+    return <input name="name" {...this.props.name} />;
+  }
+}
+```
+
+### 1.3 使用自定义 Hook

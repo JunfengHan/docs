@@ -29,17 +29,17 @@
   - [深入理解 JSX](/react/react_jsx.md "react JSX")
   <!-- - [Virtual DOM 与 Fiber](/react/react_virtualDomFiber.md "react fiber 架构 虚拟DOM virtual DOM") -->
   - [深入理解 React 高阶组件](/react/react_hoc.md "react 高阶组件 HOC")
+  - [React 中的 state 复用](/react/react_jsx.md "react JSX")
   - [React 生命周期（含源码分析）](/react/react_lifecycle.md "react 生命周期")
   - [认识 Hooks](/react/react_hooks.md "react Hooks")
   - [深入理解 Hooks](/react/react_hooks2.md "react Hooks")
   - [React 工作流程（含源码分析）](/react/react_workFlow.md "react 源码 初始化 渲染流程")
   - [一次搞懂 React Router（含源码分析）](/react/react_router.md "react router 路由 源码")
   - [一次搞懂 Redux（含源码分析）](/react/react_redux.md "react redux 状态管理")
-  <!-- - [React 项目中的组件规划](/react/react_component.md "react component") -->
   - [React 项目中的样式处理](/react/react_style.md "react CSS Modules 样式 模块化")
-  <!-- - [Antd 分析](/react/react_antd.md "react antd")
-  - [React 开源组件库 -- BlockUi](/react/react_blockUi.md "react 组件库 blockUi") -->
-  <!-- - [React 常见面试题](/react/react_interview.md "react 面试题") -->
+  - [Antd 分析](/react/react_antd.md "react antd")
+  - [React 开源组件库 -- BlockUi](/react/react_blockUi.md "react 组件库 blockUi")
+  - [React 常见问题](/react/react_interview.md "react 面试题")
 
 - [NodeJS](/node/ "nodeJs")
 
@@ -81,11 +81,12 @@
   - [阿里云 Serverless](/serverless/aliServerless.md "aliyun 阿里云 serverless 使用")
   - [Docker](/serverless/docker.md "docker 简介 容器 镜像")
 
-- [工程化](/projectBuild/ "前端工程化 webpack")
+- [工程化与模块化](/projectBuild/ "前端工程化 webpack")
 
+  - [前端工程化](/projectBuild/build.md "webpack")
+  - [模块化](/projectBuild/modules.md "JS module")
   - [webpack 概念与原理](/projectBuild/webpack.md "webpack")
   - [Webpack 实战与配置详解](/projectBuild/webpack_case.md "webpack")
-  - [模块化](/projectBuild/modules.md "JS module")
 
 - [技术方案](/scheme/ "技术方案")
 
@@ -108,8 +109,9 @@
 - [综合](/synthesize/ "综合")
 
   - [url 处理](/synthesize/url.md "url")
+  - [安全](/synthesize/security.md "前端安全")
 
-- [前端 1000 问](/ask1000/ "前端1000问")
+- [1000 问](/ask1000/ "前端1000问")
 
   - [CSS](/ask1000/1css.md "CSS 面试题")
   - [JS](/ask1000/2js.md "js 面试题")

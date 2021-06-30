@@ -1,16 +1,20 @@
 # React 篇
 
-### 3.1 Hook
+> React 问题快问快答。
+
+## 1. Hook 相关
 
 问 ❓：为什么需要 Hooks?或者说 Hooks 解决了什么问题？
 
-> 答：Hooks 的设计初衷是**改进 React 组件开发模式**；因为：
+> 答：Hooks 的设计初衷是**改进 React 组件开发模式**，使**函数组件**也具备操作*state*等特性的权利；
 >
-> <1> 组件之间难以复用状态逻辑(例如只能使用高阶组件做登陆状态判断)
+> Hook 的动机：
 >
-> <2> 复杂的组件变得难以理解(如：componentDidMount 集成了很多互不相关的副作用)
+> <1> **组件之间难以复用状态逻辑**：(例如只能使用高阶组件做登陆状态判断)，Hook 使用**自定义 Hook**可以解决*状态复用*。
 >
-> <3> JS 的 Class 和 this 不好理解，特别是对于非前端开发者
+> <2> **复杂的组件变得难以理解**：(如：componentDidMount 集成了很多互不相关的副作用)，**useState**可以解决。
+>
+> <3> JS 的 Class 和 this 不好理解，特别是对于非前端开发者；Hook 更符合**函数式编程**。
 
 问 ❓：[React Hooks 是什么](https://zh-hans.reactjs.org/docs/hooks-overview.html#but-what-is-a-hook)？
 
@@ -18,19 +22,19 @@
 >
 > 我们不需要特殊的 API 来读取 Hook —— 它已经保存在函数作用域中。
 >
-> Hook 使用了 JavaScript 的闭包机制。
+> Hook 使用了 JavaScript 的**闭包机制**。
+
+问 ❓：Hook 的工作机制是怎样的？何时执行？
+
+>
 
 问 ❓：使用 Hook 有哪些限制？如何避免？
 
 > 答：只能在**函数组件最外层**调用 Hook。不要在循环、条件判断或者子函数中调用。
 >
-> why：Hooks 的设计是基于链表实现。在调用时按顺序加入链表中，使用循环、条件或嵌套函数很有可能导致链表取值错位，执行错误的 Hook。
+> why：Hooks 的设计是基于*链表*实现。在调用时按顺序加入链表中，使用循环、条件或嵌套函数很有可能导致链表取值错位，执行错误的 Hook。
 >
 > 使用 Lint 工具库， “eslint-plugin-react-hooks” 完成自动检查。
-
-问 ❓：什么是副作用？有哪些常见的副作用？
-
-> 答：**副作用**指和渲染无关的任何操作。如：数据请求、手动修改 DOM。
 
 问 ❓：生命周期方法要如何对应到 Hook？(ps:这个 react 官方文档的问题)（腾讯一面原题）
 
@@ -45,8 +49,6 @@ const Button = React.memo((props) => {
   // 你的组件
 });
 ```
-
----
 
 问 ❓：setState 是同步还是异步？
 
@@ -98,20 +100,12 @@ function Fn(props) {
 
 > 答：
 
-问 ❓：react 如何使组件的状态复用？
-
-> 1. [render props 传递 state](https://shushuo.me/#/react/react_hooks?id=_11-%e4%bd%bf%e7%94%a8-render-props-%e4%bc%a0%e9%80%92-state)
->
-> 2. [高阶函数](https://shushuo.me/#/react/react_hooks?id=_12-%e4%bd%bf%e7%94%a8-%e9%ab%98%e9%98%b6%e7%bb%84%e4%bb%b6%ef%bc%88hoc%ef%bc%89%e4%bc%a0%e9%80%92-state)
->
-> 3. 状态管理库，redux 等
-
-### 3.1 React Router
+## 2. React Router
 
 问 ❓：React Router 原理是什么？
 
-> Route 内的组件当作自己的子组件进行管理，通过监听 hashChange 和 popstate 事件来改变组件的显示隐藏。
+> 把 Route 内的组件当作自己的子组件进行管理，通过监听 hashChange 和 popstate 事件来改变组件的显示隐藏。
 
-### 3.2 Redux
+## 3. Redux
 
 问 ❓：Redux 的原理是什么？
