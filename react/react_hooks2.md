@@ -318,3 +318,7 @@ Context 是这样一个机制：
 
 1. 在某个组件父组件树上创建一个 Context
 2. 所有子组件，就都能*访问*和*修改*这个 Context 了
+
+## 参考
+
+useEffect 关于对象/数组的依赖，写的很透彻 [Object & array dependencies in the React useEffect Hook](https://www.benmvp.com/blog/object-array-dependencies-react-useEffect-hook/)

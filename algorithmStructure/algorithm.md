@@ -263,11 +263,11 @@ while (x < 10) {
 
 ```js
 function loop(x) {
-  if (x > 10) {
+  if (x >= 10) {
     // 退出条件
-    return;
+    return x;
   } else {
-    loop(x + 1); // 递归调用
+    return loop(x + 1); // 递归调用
   }
 }
 loop(0);

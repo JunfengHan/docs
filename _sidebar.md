@@ -109,7 +109,7 @@
 
   - [url 处理](/synthesize/url.md "url")
 
-<!-- - [1000 问](/ask1000/ "前端1000问")
+- [前端 1000 问](/ask1000/ "前端1000问")
 
   - [CSS](/ask1000/1css.md "CSS 面试题")
   - [JS](/ask1000/2js.md "js 面试题")
@@ -118,4 +118,4 @@
   - [浏览器](/ask1000/5browser.md "browser 面试题")
   - [HTTP](/ask1000/6http.md "http 面试题")
   - [前端工程化](/ask1000/7project.md "project 面试题")
-  - [算法](/ask1000/8algorithm.md "algorithm 面试题") -->
+  - [算法](/ask1000/8algorithm.md "algorithm 面试题")
