@@ -1,10 +1,10 @@
-# 一文读懂 Hookss
+# 深入理解 Hooks
 
 > Hook 为已知的 React 概念提供了更直接的 API：props， state，context，refs 以及生命周期。
 
-_Hookss 学习图谱_
+_Hooks 学习图谱_
 
-![Hookss 学习图谱](../img/react_hooks_learnPath.png)
+![Hooks 学习图谱](../img/react_hooks_learnPath.png)
 
 ## 1. 为什么需要 Hooks
 
@@ -725,6 +725,8 @@ todo...
 ## 8. 手动实现一个 useState 方法
 
 todo...
+
+分享一下不可错过的 [Hooks 总结](https://www.processon.com/view/link/60e334525653bb1b5f7f5ba7)。
 
 ## 参考
 
