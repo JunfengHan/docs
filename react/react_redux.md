@@ -51,11 +51,11 @@ export default ComponentA;
 
 一个应用中有多种设计模式，如：组件间的通信可以有不同的设计模式，可以看[这里]()。
 
-![react组件间通信](../_media/react_message.png)
+![react组件间通信](../img/react_message.png)
 
 Redux 用自己的方式实现了应用的全局状态管理，进而**实现组件间的通信问题**。
 
-![react组件间通信](../_media/react_redux_message.png)
+![react组件间通信](../img/react_redux_message.png)
 
 **遇到如下问题后我们可能需要考虑引入 Redux:**
 
@@ -89,7 +89,7 @@ Redux 用自己的方式实现了应用的全局状态管理，进而**实现组
 
 **Redux 工作流程：**
 
-![react组件间通信](../_media/react_redux_flow.png)
+![react组件间通信](../img/react_redux_flow.png)
 
 _工作流程：_
 
@@ -103,7 +103,7 @@ _工作流程：_
 
 **项目中的 Redux 架构：**
 
-![react组件间通信](../_media/react_redux_flow_project.png)
+![react组件间通信](../img/react_redux_flow_project.png)
 
 ## 3. 何时需要 Redux？
 

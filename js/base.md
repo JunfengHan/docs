@@ -544,6 +544,229 @@ let c = a.sort((a, b) => (a <= b ? -1 : 1));
 
 #### 3.1.6 数组遍历
 
+- for 循环
+- forEach
+
+#### 3.1.7 map() 和 reduce()
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">map()</code>、<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">reduce()</code>
+
+- **map()**: **创建一个新数组**，其结果是该数组中的每个元素是调用一次**提供的函数**后的<span style="color: #ff0000; font-size: 16px;">返回值</span>
+
+```js
+var new_array = arr.map(function callback(currentValue[, index[, array]]) {
+ // Return element for new_array
+}[, thisArg])
+```
+
+- **reduce()**: 对数组中的**每个元素**执行一个由您提供的 **reducer 函数**
+
+```js
+arr.reduce(callback(accumulator, currentValue[, index[, array]])[, initialValue]);
+```
+
+看了上面的介绍我们可以知道，_二者的作用与区别_：
+
+- **map**主要作用: 遍历原始数组，创建出一个新数组
+
+```js
+const array1 = [1, 4, 9, 16];
+
+const mapFn = (x) => x * 2;
+
+// map1 就是 array1 所有元素执行 mapFn 后的返回值组成的新数组
+const map1 = array1.map(mapFn);
+
+console.log(map1);
+// [2, 8, 18, 32]
+```
+
+- **reduce**主要作用: 遍历原始数组，对数组的每个元素，做你想做的任何事
+
+> 简单说就是，reduce 可以做很多。
+
+1. reduce -> map
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">map</code> 方法接收一个回调函数，函数内接收三个参数，当前项、索引、原数组，返回一个新的数组。
+
+```js
+const testArr = [1, 2, 3, 4];
+Array.prototype.reduceMap = function (callback) {
+  return this.reduce((acc, cur, index, array) => {
+    const item = callback(cur, index, array);
+    acc.push(item);
+    return acc;
+  }, []);
+};
+testArr.reduceMap((item, index) => {
+  return item + index;
+});
+// [1, 3, 5, 7]
+```
+
+2. reduce -> forEach
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">forEach</code> 接收一个回调函数作为参数，然后执行函数，没有返回值。
+
+```js
+const testArr = [1, 2, 3, 4];
+Array.prototype.reduceForEach = function (callback) {
+  this.reduce((acc, cur, index, array) => {
+    callback(cur, index, array);
+  }, []);
+};
+
+testArr.reduceForEach((item, index, array) => {
+  console.log(item, index);
+});
+// 1 0
+// 2 1
+// 3 2
+// 4 3
+```
+
+3. reduce -> filter
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">filter</code> 同样接收一个回调函数，回调函数返回 true 则返回当前项，反之则不返回。
+
+```js
+const testArr = [1, 2, 3, 4];
+Array.prototype.reduceFilter = function (callback) {
+  return this.reduce((acc, cur, index, array) => {
+    if (callback(cur, index, array)) {
+      acc.push(cur);
+    }
+    return acc;
+  }, []);
+};
+testArr.reduceFilter((item) => item % 2 == 0); // 过滤出偶数项。
+// [2, 4]
+```
+
+4. reduce -> find
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">find</code>方法中 callback 同样也是返回 Boolean 类型，返回你要找的第一个符合要求的项。
+
+```js
+const testArr = [1, 2, 3, 4];
+const testObj = [{ a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }];
+Array.prototype.reduceFind = function (callback) {
+  return this.reduce((acc, cur, index, array) => {
+    if (callback(cur, index, array)) {
+      if (acc instanceof Array && acc.length == 0) {
+        acc = cur;
+      }
+    }
+    // 循环到最后若 acc 还是数组，且长度为 0，代表没有找到想要的项，则 acc = undefined
+    if (index == array.length - 1 && acc instanceof Array && acc.length == 0) {
+      acc = undefined;
+    }
+    return acc;
+  }, []);
+};
+testArr.reduceFind((item) => item % 2 == 0); // 2
+testObj.reduceFind((item) => item.a % 2 == 0); // {a: 2}
+testObj.reduceFind((item) => item.a % 9 == 0); // undefined
+```
+
+5. 二维数组展平为一维数组
+
+```js
+const testArr = [
+  [1, 2],
+  [3, 4],
+  [5, 6],
+];
+testArr.reduce((acc, cur) => {
+  return acc.concat(cur);
+}, []);
+// [1,2,3,4,5,6]
+```
+
+6. 计算数组中每个元素出现的个数
+
+初始化的值变成了 {},这个方法*非常常用*，变种也很多。
+
+比如给你一个账单列表（项与项之间的消费类型有相同情况），让你统计账单列表中各个消费类型的支出情况，如 购物 、 学习 、 转账 等消费类型的支出情况。
+
+这就用到了上述方法，去进行**归类**。
+
+```js
+const testArr = [1, 3, 4, 1, 3, 2, 9, 8, 5, 3, 2, 0, 12, 10];
+testArr.reduce((acc, cur) => {
+  if (!(cur in acc)) {
+    acc[cur] = 1;
+  } else {
+    acc[cur] += 1;
+  }
+  return acc;
+}, {});
+
+// {0: 1, 1: 2, 2: 2, 3: 3, 4: 1, 5: 1, 8: 1, 9: 1, 10: 1, 12: 1}
+```
+
+```js
+const bills = [
+  { type: "shop", money: 223 },
+  { type: "study", money: 341 },
+  { type: "shop", money: 821 },
+  { type: "transfer", money: 821 },
+  { type: "study", money: 821 },
+];
+bills.reduce((acc, cur) => {
+  // 如果不存在这个键，则设置它赋值 [] 空数组
+  if (!acc[cur.type]) {
+    acc[cur.type] = [];
+  }
+  acc[cur.type].push(cur);
+  return acc;
+}, {});
+// {
+//   "shop": [
+//     {
+//       "type": "shop",
+//       "money": 223
+//     },{
+//       "type": "shop",
+//       "money": 821
+//     }
+//   ],
+//   "study": [
+//     {
+//       "type": "study",
+//       "money": 341
+//     },
+//     {
+//       "type": "study",
+//       "money": 821
+//     }
+//   ],
+//   "transfer": [
+//     {
+//       "type": "transfer",
+//       "money": 821
+//     }
+//   ]
+// }
+```
+
+7. 数组去重
+
+```js
+const testArr = [1, 2, 2, 3, 4, 4, 5, 5, 5, 6, 7];
+testArr.reduce((acc, cur) => {
+  if (!acc.includes(cur)) {
+    acc.push(cur);
+  }
+  return acc;
+}, []);
+// [1, 2, 3, 4, 5, 6, 7]
+```
+
+**总结**：
+
+> **reduce** 在你遇到数组复杂操作的时候，它就能大显身手。
+
 ### 3.2 对象的操作
 
 #### 3.2.1 对象是什么
@@ -603,3 +826,5 @@ _打印结果：_
 --- 持续更新中... ---
 
 ## 参考
+
+[以前我没得选，现在我喜欢用 Array.prototype.reduce](https://mp.weixin.qq.com/s/_S9kiL_bDPHkLg8WS_NJBA)

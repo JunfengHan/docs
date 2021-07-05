@@ -14,11 +14,11 @@ React 所做的努力与尝试都是为了**快速响应**。
 
 ## 2.React 的特征是什么？
 
-- 声明式：与声明式相对应的是“命令式”，声明式只用声明自己想要的 UI，至于插入渲染等交给 React。命令式就像原生 JS 编程，每一步详细的操作命令都要清晰地表达出来。
+- 声明式（**JSX**）：与声明式相对应的是“命令式”，声明式只用声明自己想要的 UI，至于插入渲染等交给 React。命令式就像原生 JS 编程操作 DOM，每一步详细的操作命令都要清晰地表达出来。
 
 - 组件化：组件化解决复用组件的问题。一个个各有状态的组件可以组件出复杂的应用，同时有利于代码管理。
 
-- 一次学习，随处编写：我们用 JSX 构建 React 组件，JSX 可以生成 React “元素”。React “元素”可以用 react-dom 渲染出 web 应用，可以用 React Native 渲染出移动端应用，还可以使用 Node 进行服务器渲染
+- 一次学习，随处编写（**Virtual DOM**）：我们用 JSX 构建 React 组件，JSX 可以生成 React “元素”。React “元素”可以用 react-dom 渲染出 web 应用，可以用 React Native 渲染出移动端应用，还可以使用 Node 进行服务器渲染.
 
 ```javascript
 //  ReactDOM 渲染web应用，<App />是个组件，使用了JSX语法，返回一个React"元素"
@@ -33,14 +33,28 @@ ReactDOM.render(
 );
 ```
 
-## 3.React 是如何做到快速响应的？
+## 3.React 核心理念
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">React</code>的核心理念是：
+
+> 当数据发生变化时，UI 能够自动把变化反映出来。
+
+可以说<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">React</code>的整个设计思路都是围绕着这一理念展开的。
+
+![React理念](./img/react_base_idea.png)
+
+- 使用 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">state</code> 和 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">props</code> 管理状态
+- 使用<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">组件</code>描述 UI
+- 最后交给<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">React</code>帮我们处理更新，并渲染 UI
+
+## 4.React 是如何做到快速响应的？
 
 想知道如何快速响应，就要先知道我们访问 Web 网站和使用 APP 时影响响应速度的关键是什么：
 
 - CPU 性能瓶颈
 - IO
 
-### 3.1 如何解决 CPU 瓶颈
+### 4.1 如何解决 CPU 瓶颈
 
 项目变大，组件变多，需要做大量计算时就容易遇到 CPU 瓶颈。
 
@@ -78,7 +92,7 @@ ReactDOM.render(<App />, rootEl);
 
 可以看出，JS 执行时间为 291.91ms,远远超出了 16.6ms，多于一帧时间后就会出现卡顿现象，ms 级别的卡顿你可能没有察觉，如果改成 30000 次呢？
 
-### 3.2 如何解决卡顿问题？
+### 4.2 如何解决卡顿问题？
 
 > 答案是：在浏览器每一帧的时间中，预留一些时间给 JS 线程，React 利用这部分时间更新组件（源码中可以看到预留时间为 5ms）。
 
@@ -102,7 +116,7 @@ ReactDOM.unstable_createRoot(rootEl).render(<App />);
 
 **时间切片**的关键是：<span style="color: #ff9966">将同步的更新变为可中断的异步更新</span>。
 
-### 3.3 如何解决 IO 瓶颈？
+### 4.3 如何解决 IO 瓶颈？
 
 **网络延迟**是前端开发者无法解决的。
 
