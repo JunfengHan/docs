@@ -19,3 +19,17 @@
 但是，它们，布局往往是一个痛点。
 
 因此，<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">BlockUI</code>的主要目标是解决布局问题，帮助你快速实现页面整体布局工作。
+
+## 2. 开始
+
+### 2.1 初始化项目
+
+```shell
+npx create-react-app legend-ui --template typescript
+```
+
+### 2.2 设置编辑器
+
+> 统一的编辑器设置会大大增加开发效率，同时可以大大减少错误率。
+
+[官方链接--Setting Up Your Editor](https://create-react-app.dev/docs/setting-up-your-editor)

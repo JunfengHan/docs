@@ -799,7 +799,7 @@ _打印结果：_
 
   Object.prototype.constructor === Object;
 
-- hasOwnProperty: 指示对象自身属性中是否具有指定的属性
+- hasOwnProperty: 指示对象**自身属性**(⚠️ 不包含原型链上的属性)中是否具有指定的属性
 
   obj.hasOwnProperty('name'); // true
 
@@ -816,7 +816,7 @@ _打印结果：_
 
 #### Object 构造函数上的方法
 
-- Object.assign(): 分配一个或多个对象到目标对象上
+- Object.assign(target, obj1, obj2): 分配一个或多个对象到目标对象上
 - Object.keys(): 获取给定对象的自身可枚举属性
 - Object.create()：
 - Object.defineProperties(): 直接在一个对象上定义新的属性或修改现有属性，并返回该对象

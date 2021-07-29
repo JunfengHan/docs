@@ -246,13 +246,72 @@ class Greeter {
 let greeter = new Greeter("world");
 ```
 
+## 4.泛型
+
+### 4.1 什么是泛型
+
+> 泛型指的是**类型参数化**，即将原来某种具体的类型进行参数化。
+
+和定义函数参数一样，我们可以给泛型定义若干个类型参数，并在调用时给泛型传入明确的类型参数。
+
+设计泛型的**目的**在于<span style="color: #ff0000; font-size: 16px;">有效约束类型成员之间的关系</span>，比如函数参数和返回值、类或者接口成员和方法之间的关系。
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">泛型</code>最常用的场景是*用来约束函数参数的类型*。
+
+### 4.2 泛型类型参数
+
+当一个函数的参数不确定时，怎么办？用<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">unknown</code>.🤔️
+
+```ts
+function reflect(param: unknown) {
+  return param;
+}
+
+const str = reflect("string"); // str 类型是 unknown
+const num = reflect(1); // num 类型 unknown
+```
+
+显然，上面的函数不能满足我们的需求。
+
+我们想要的是：**参数的类型随着参数的变化而变化**，即<span style="color: #ff0000; font-size: 16px;">类型参数化</span>。
+
+<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">泛型</code>可以满足这样的需求。
+
+_定义一个泛型 P：_
+
+```ts
+<P>
+```
+
+_给函数定义泛型参数 P：_
+
+```ts
+function reflect<P>(param: P) {
+  return param;
+}
+```
+
+_使用函数：_
+
+```ts
+const reflectStr = reflect<string>("string"); // str 类型是 string
+const reflectNum = reflect<number>(1); // num 类型 number
+```
+
+泛型参数的入参可以从参数的类型中进行推断，而无须再显式指定类型（可缺省），因此上边的示例可以简写为如下示例：
+
+```ts
+const reflectStr2 = reflect("string"); // str 类型是 string
+const reflectNum2 = reflect(1); // num 类型 number
+```
+
 ## 参考
+
+[TypeScript for JavaScript Programmers](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
 
 [The TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
 
 [TypeScript 手册中文版](https://www.tslang.cn/docs/handbook/basic-types.html)
-
-[TypeScript for JavaScript Programmers](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
 
 [<<深入理解 TypeScript>>](https://jkchao.github.io/typescript-book-chinese/)
 

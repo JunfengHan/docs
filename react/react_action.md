@@ -68,3 +68,25 @@ module.exports = override(
 
 - **CSS**: 基本原理是往页面插入单独的\<style\>标签
 - **JS**: 利用模块化方案，根据*模块引用*情况来进行打包
+
+## 3. 获取子组件（表单）的数据
+
+> 用户注册、后台数据录入等场景都需要我们获取、设置表单数据，这是一个非常常见的需求。
+
+组件结构示意 ⬇️ ：
+
+```js
+<Card>
+  <Tabs defaultActiveKey="1" onChange={callback}>
+    <TabPane tab="Tab 1" key="1">
+      <Form1></Form1>
+    </TabPane>
+    <TabPane tab="Tab 2" key="2">
+      <Form2></Form2>
+    </TabPane>
+    <TabPane tab="Tab 3" key="3">
+      <Form3></Form3>
+    </TabPane>
+  </Tabs>
+</Card>
+```
