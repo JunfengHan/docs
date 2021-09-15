@@ -18,7 +18,7 @@ _伪代码，处理简单数据：_
 function ComponentA(props) {
   const [dataList] = useEffect(() => {
     fetch("https://XXXX/data", {}).then((err, data) => {
-      setData(data);
+      setState(data);
     });
   }, []);
 
@@ -53,7 +53,7 @@ export default ComponentA;
 
 ![react组件间通信](../img/react_message.png)
 
-Redux 用自己的方式实现了应用的全局状态管理，进而**实现组件间的通信问题**。
+Redux 用自己的方式实现了应用的全局状态管理，进而**实现组件间的通信等问题**。
 
 ![react组件间通信](../img/react_redux_message.png)
 
@@ -69,7 +69,7 @@ Redux 用自己的方式实现了应用的全局状态管理，进而**实现组
 
 **作用**：
 
-- 组件件共享数据（state）
+- 组件间共享数据（state）
 - 某个状态需要在任何地方都可以被随时访问
 - 某个组件需要改变另一个组件的状态的时候
 
@@ -78,18 +78,19 @@ Redux 用自己的方式实现了应用的全局状态管理，进而**实现组
 - 语言切换
 - 黑暗模式切换
 - 用户登录全局数据共享等
+- 组件跨层通信
 
 ## 3. Redux 要点
 
-应用中所有的 state 都以一个对象树的形式储存在一个单一的 store 中。
+- 1. 应用中所有的 state 都以一个<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">对象树</code>的形式储存在一个单一的 store 中。
 
-惟一改变 state 的办法是触发 action，它是一个描述发生什么的对象。
+- 2. 改变 state 的惟一办法是触发 action，它是一个描述发生什么的对象。
 
-为了描述 action 如何改变 state 树，你需要编写 reducers。
+- 3. 为了描述 action 如何改变 state 树，你需要编写 reducers。
 
 **Redux 工作流程：**
 
-![react组件间通信](../img/react_redux_flow.png)
+![react工作流程](../img/react_redux_flow.png)
 
 _工作流程：_
 
@@ -103,7 +104,7 @@ _工作流程：_
 
 **项目中的 Redux 架构：**
 
-![react组件间通信](../img/react_redux_flow_project.png)
+![Redux 架构](../img/react_redux_flow_project.png)
 
 ## 3. 何时需要 Redux？
 
@@ -471,9 +472,15 @@ export default Func;
 
 ## 7. Redux 工具
 
-写 Redux 代码会产生
+> Redux 的”强约束“保障了<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">状态</code>的**可控**，同时，”强约束“也带来了更多**模板代码**，需要使用工具来提高开发效率。
 
 ### 7.1 React Redux
+
+**核心卖点：**
+
+- Redux 团队维护，紧跟 React 和 Redux 更新
+- 以可预测的方式，管理**组件**与**state**
+- 
 
 ## 8. 使用 Redux 的取舍
 
@@ -481,7 +488,7 @@ Redux 官网里写的很清楚了，看这里或许能解决你很多疑惑 👉
 
 **舍：**
 
-- 由于其特殊架构（柯里化的函数式编程、State 不可变），需要写很多繁琐的**模式代码**
+- 由于其特殊架构（柯里化的函数式编程、State 不可变），需要写很多繁琐的**模板代码**
 - state 的管理会不太清晰（如：所有的 state 都放在 store，比放在各个组件更难管理）
 
 **得：**
