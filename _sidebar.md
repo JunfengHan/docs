@@ -89,6 +89,13 @@
   - [webpack 概念与原理](/projectBuild/webpack.md "webpack")
   - [Webpack 实战与配置详解](/projectBuild/webpack_case.md "webpack")
 
+- [可视化](/visual/ "前端可视化 visual")
+
+  - [认识可视化](/visual/base.md "可视化基础")
+  - [图表可视化](/visual/base.md "图表可视化")
+  - [ECharts](/visual/ECharts.md "ECharts 源码")
+  - [地图可视化](/visual/map.md "地图可视化")
+
 - [技术方案](/scheme/ "技术方案")
 
   - [无状态登录 JWT](/scheme/JWT.md "无状态登录")
