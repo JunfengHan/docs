@@ -122,3 +122,8 @@
   - [HTTP](/ask1000/6http.md "http 面试题")
   - [前端工程化](/ask1000/7project.md "project 面试题")
   - [算法](/ask1000/8algorithm.md "algorithm 面试题")
+
+- [视频制作](/video/ "视频制作")
+
+  - [视频基础知识](/video/base.md "视频的基本概念")
+  - [AE](/video/ae.md "视频动效 AE")
