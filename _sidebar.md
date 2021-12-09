@@ -84,8 +84,15 @@
 
 - [DevOps](/devops/ "DevOps")
 
+  - [DevOps简介](/devops/devOps.md "devops")
+  - [jenkins实战](/devops/jenkins.md "jenkins 实战")
   - [Docker](/devops/docker.md "docker")
-  - [k8s](/devops/k8s.md "kubernets k8s")
+  - [Kubernetes](/devops/k8s.md "kubernets k8s")
+  - [阿里云ECS实战](/devops/aliyunEcs.md "aliyun ECS 阿里云")
+  - [k8s cli常用命令](/devops/k8sCli.md "kubernets k8s cli")
+  - [从0到1使用K8s部署](/devops/deploy.md "k8s部署")
+  - [helm使用技巧](/devops/helm.md "helm")
+  - [PM2部署一个Node.js 应用](/devops/deployNode.md "Node.js应用部署 PM2")
 
 - [工程化与模块化](/projectBuild/ "前端工程化 webpack")
 
