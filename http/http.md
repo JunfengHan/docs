@@ -130,7 +130,7 @@ _三次握手详情图：_
 
 - 发送端把**HTTP 报文（包含请求头、或者有请求体）**发送到接收端
 - 接收端 TCP 会排序这些**HTTP 报文**，然后**HTTP 协议**在中携带的信息可以被接收端处理（如：Node.js 的 http 模块）。
-- **接收端**<span style="color: #ff0000; font-size: 16px;">根据**HTTP 报文**中携带的信息做出相应</span>。
+- **接收端**<span style="color: #ff0000; font-size: 16px;">根据**HTTP 报文**中携带的信息做出响应</span>。
 
 ---
 

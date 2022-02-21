@@ -34,7 +34,7 @@
   - [React 生命周期（含源码分析）](/react/react_lifecycle.md "react 生命周期")
   - [深入理解 Hooks](/react/react_hooks.md "react Hooks")
   - [Hooks 实战](/react/react_hooksInAction.md "react Hooks 实战")
-  - [React 工作流程（含源码分析）](/react/react_workFlow.md "react 源码 初始化 渲染流程")
+  - [React 源码阅读（一）](/react/react_codeBase1.md "react 源码 初始化 渲染流程")
   - [一次搞懂 React Router（含源码分析）](/react/react_router.md "react router 路由 源码")
   - [一次搞懂 Redux（含源码分析）](/react/react_redux.md "react redux 状态管理")
   - [React 项目中的样式处理](/react/react_style.md "react CSS Modules 样式 模块化")
@@ -62,36 +62,33 @@
   <!-- - [本地存储](/browser/storage.md "浏览器 本地存储") -->
 
 - [网络与 HTTP](/http/ "HTTP")
-
   - [HTTP 与网络基础](/http/http.md "网络 HTTP")
   - [Ajax 对比 fetch](/http/ajaxVsFetch.md "Ajax、fetch")
   - [axios 深度解析](/http/axios.md "axios")
   - [跨域](/http/cors.md "HTTP 跨域 CORS JSONP")
-
-- [服务器与数据库](/server/ "服务器")
-
-  - [restful 对比 GraphQL](/server/restfulVsGraphql.md "restful 对比 GraphQL")
-  - [MongoDB 入门](/server/mongo.md "MongoDB 入门")
-  - [MongoDB Shell](/server/mongo_shell.md "MongoDB 入门")
-  - [MongoDB User](/server/mongo_user.md "MongoDB 入门")
-  - [MongoDB 常用命令](/server/mongo_command.md "MongoDB 入门")
+  
+- [数据库](/database/ "数据库")
+  - [restful 对比 GraphQL](/database/restfulVsGraphql.md "restful 对比 GraphQL")
+  - [MongoDB 入门](/database/mongo.md "MongoDB 入门")
+  - [MongoDB Shell](/database/mongo_shell.md "MongoDB 入门")
+  - [MongoDB User](/database/mongo_user.md "MongoDB 入门")
+  - [MongoDB 常用命令](/database/mongo_command.md "MongoDB 入门")
 
 - [Serverless](/serverless/ "severless")
-
   - [Serverless 起步](/serverless/start.md "serverless 概念 基础")
   - [阿里云 Serverless](/serverless/aliServerless.md "aliyun 阿里云 serverless 使用")
   - [Docker](/serverless/docker.md "docker 简介 容器 镜像")
-
+  
 - [DevOps](/devops/ "DevOps")
 
-  - [DevOps简介](/devops/devOps.md "devops")
-  - [jenkins实战](/devops/jenkins.md "jenkins 实战")
-  - [Docker](/devops/docker.md "docker")
-  - [Kubernetes](/devops/k8s.md "kubernets k8s")
-  - [阿里云ECS实战](/devops/aliyunEcs.md "aliyun ECS 阿里云")
-  - [k8s cli常用命令](/devops/k8sCli.md "kubernets k8s cli")
-  - [从0到1使用K8s部署](/devops/deploy.md "k8s部署")
-  - [helm使用技巧](/devops/helm.md "helm")
+  - [DevOps简介](/devops/01devOps.md "devops")
+  - [Docker](/devops/02docker.md "docker")
+  - [Kubernetes](/devops/03k8s.md "kubernets k8s")
+  - [helm使用技巧](/devops/04helm.md "helm")
+  - [阿里云ECS实战](/devops/05aliyunEcs.md "aliyun ECS 阿里云")
+  - [K8s部署实战](/devops/06deploy.md "k8s部署")
+  - [jenkins实战](/devops/07jenkins.md "jenkins 实战")
+  - [k8s cli常用命令](/devops/08k8sCli.md "kubernets k8s cli")
   - [PM2部署一个Node.js 应用](/devops/deployNode.md "Node.js应用部署 PM2")
 
 - [工程化与模块化](/projectBuild/ "前端工程化 webpack")
@@ -143,6 +140,5 @@
   - [算法](/ask1000/8algorithm.md "algorithm 面试题")
 
 - [视频制作](/video/ "视频制作")
-
   - [视频基础知识](/video/base.md "视频的基本概念")
   - [AE](/video/ae.md "视频动效 AE")

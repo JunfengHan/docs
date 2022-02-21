@@ -177,3 +177,5 @@ function deepClone(value) {
 [理解 JS 浅拷贝与深拷贝](https://juejin.im/post/5d235d1ef265da1b855c7b5d)
 
 [深拷贝的终极探究](https://segmentfault.com/a/1190000016672263)
+
+[一文读懂 javascript 深拷贝与浅拷贝](https://mp.weixin.qq.com/s/PgNcEvmLUlrBiAWdeKNCSw)

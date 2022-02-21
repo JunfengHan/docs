@@ -190,7 +190,7 @@ docker run -d `
 > **查看容器** docker ps
 > -a 查看所有
 >
-> **重启、停止、删除** docker stop/restar/rm [ContainerName]
+> **重启、停止、删除** docker stop/restart/rm [ContainerName]
 
 列出所有运行的 container
 

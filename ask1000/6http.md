@@ -75,3 +75,32 @@ Keep-Alive: timeout=5, max=1000
 问 ❓：知道哪些常见的状态码？
 
 > [答案在此]()
+
+问 ❓：Ajax发送的JSON数据和form-data发送数据有啥区别？
+
+>1、Ajax发送数据时，浏览器不知道数据来自哪里，默认设置成 HTTP的请求体（即：payload body），此时设置 Content-Type: application/json;
+>
+>请求体如下：
+>
+>```
+>POST /some-path HTTP/1.1
+>Content-Type: application/json
+>
+>{ "foo" : "bar", "name" : "John" }
+>```
+>
+>2、Html的表单POST方法，且设置了 Content-Type: application/x-www-form-urlencoded 或 multipart/form-data，请求体如下：
+>
+>```
+>POST /some-path HTTP/1.1
+>Content-Type: application/x-www-form-urlencoded
+>
+>foo=bar&name=John
+>```
+>
+>两者区别：
+>
+>- multipart/form-data：既可以上传文件等二进制数据，也可以上传表单键值对，只是最后会转化为一条信息；
+>- application/x-www-form-urlencoded：只能上传键值对，并且键值对都是间隔分开的；
+>
+><span style="color: #ff6600; font-size: 14px;">后端解析时使用的方法不同</span>
