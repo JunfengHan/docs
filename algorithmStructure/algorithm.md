@@ -1,4 +1,4 @@
-# 算法 (Algorithms)
+# 算法基础
 
 > 从广义上讲，数据结构就是指**一组数据的存储结构**。算法就是**操作数据的一组方法**。
 
@@ -113,14 +113,14 @@ T(n) = O(f(n));
       for (; i < m; ++i) {
         sum_1 = sum_1 + i;
       }
-  
+    
       int sum_2 = 0;
       int j = 1;
       <!-- 时间复杂度为 O(n) -->
       for (; j < n; ++j) {
         sum_2 = sum_2 + j;
       }
-  
+    
       return sum_1 + sum_2;
     }
     ```
@@ -286,7 +286,7 @@ function walkTree(node) {
 }
 ```
 
-事实上，<span style="color: #ff0000; font-size: 16px;">递归函数使用了**函数堆栈**</span>。
+实际上，递归函数的难点在于<span style="color: #ff0000; font-size: 16px;">堆栈</span>过程比较复杂。
 
 ```js
 function foo(i) {
@@ -317,10 +317,10 @@ _执行动画演示：_
 
 执行过程：
 
-- 1. 从上面的动画中右侧的【Call Stack】可以看出：递归调用的过程就是往【Call Stack】添加 foo 的过程
+- 1. 从上面的动画中右侧的【Call Stack】可以看出：<span style="color: #ff0000; font-size: 16px;">递</span>的过程就是往【Call Stack】**添加** foo 的过程
 - 2. 往【Call Stack】添加 foo 的过程中会执行 第 2、3、4、5 行代码，控制栏不断输出打印结果，begin: 3,2,1,0
-- 3. 当 foo(0)时递归终止
-- 4. 递归调用终止后，从【Call Stack】中取出执行 foo，按照栈的执行顺序 LIFO(后进先出)，所以一次打印 end: 0,1,2,3
+- 3. 当 foo(0)时递的过程终止
+- 4. 递的过程终止后，开始执行【Call Stack】上的 foo函数，即开始<span style="color: #ff0000; font-size: 16px;">归</span>的过程，按照栈的执行顺序 LIFO(后进先出)，所以一次打印 end: 0,1,2,3
 - 5. 【Call Stack】清空，执行结束
 
 ### 3.1 调用栈
@@ -443,6 +443,8 @@ fact(3);
 
 写递归代码最关键的是**写出递推公式**和**找到终止条件**。
 
+#### 3.2.1 展平多层数组
+
 _🌰 展平数组_：
 
 > 问题：请写一个函数把多层数组展平为一维数组。
@@ -482,6 +484,66 @@ _执行过程演示：_
 
 - 不要在脑子里想像递归的整个过程，往往越想越糊涂，建议直接在控制台执行，看调用 Chrome 栈执行的整个大致流程
 - 即便仔细研究了一下递归，但是复杂一点的递归感觉还是难以理解，唯有多写了
+
+#### 3.2.2 处理树形数据
+
+```javascript
+// 根据 roleList 过滤 routerConfig
+// routerConfig: 树形结构数组
+//[
+//    {
+//        name: '大气环境质量',
+//        title: '大气环境质量',
+//        path: '/Air/OneMap',
+//        id: '1',
+//        routes: [
+//            {
+//                name: '一张图',
+//                path: '/Air/OneMap',
+//                id: '101',
+//                icon: <img src={Onemap} alt="" />,
+//                activeIcon: <img src={Onemap_selected} alt="" />,
+//                component: AirOneMap,
+//            },
+//            {
+//                name: '监测数据',
+//                path: '',
+//                id: '102',
+//                icon: <img src={Monitor} alt="" />,
+//                activeIcon: <img src={Monitor_selected} alt="" />,
+//                routes: [
+//                    {
+//                        name: '监测数据查询',
+//                        path: '/Air/MonitoringData/MonitoringQuery',
+//                        id: '10201',
+//                        component: MonitoringQuery,
+//                        openKeys: ['102'],
+//                    }
+//                ]
+//            }
+//		]
+//	}
+//]
+// roleList: 角色数组,如：["1,"10","102","10201"]
+
+filterRouter = (routerConfig, roleList) => {
+    if (routerConfig && roleList) {
+        return routerConfig.filter((item) => {
+            // 找出递归公式，处理递归
+            if (item.routes && roleList.indexOf(item.id) > -1) {
+                item.routes = filterRouter(item.routes, roleList);
+                return item;
+            } else if (!item.routes && roleList.indexOf(item.id) > -1) { // 递归终止条件
+                return true;
+            }
+        });
+    } else {
+        return [];
+    }
+};
+```
+
+
 
 ## 4. 常见算法分类
 
@@ -547,11 +609,11 @@ _冒泡排序：_
 // 冒泡排序--正序排列
 function sortBubble(num) {
   if (num.length <= 1) return num;
-  let swapped = false;
 
   // step1: 循环排序所有元素
   for (let i = 0; i < num.length; i++) {
     // step2: 循环未排序的元素
+    let swapped = false;
     for (let j = 0; j < num.length - i - 1; j++) {
       // step3: 未排序元素数据交换
       if (num[j] > num[j + 1]) {

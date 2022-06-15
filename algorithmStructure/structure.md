@@ -459,7 +459,7 @@ _不是二叉搜索树：_
   ```js
   const postOrder = (root) => {
     if (!root) return;
-
+  
     // 先遍历左节点
     postOrder(root.left);
     // 然后遍历右节点
