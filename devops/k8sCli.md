@@ -1,6 +1,6 @@
 # Kubernetes 命令
 
-> K8s的命令行工具是 kubectl，它可以对我们的**集群进行管理**。
+> K8s 的命令行工具是 kubectl，它可以对我们的**集群进行管理**。
 
 老规矩，任何不熟悉的命令行工具，都应该使用 `--help` 查看一下帮助信息：(里面的注释是我添加的，便于理解)
 
@@ -78,16 +78,35 @@ Use "kubectl <command> --help" for more information about a given command.
 Use "kubectl options" for a list of global command-line options (applies to all commands).
 ```
 
+## 1. 基础初始化命令集合
 
+> Basic Commands (Beginner)：
 
-## 1. 安装
+- create 创建资源
+- expose 将资源作为 k8s 服务导出
+- run 在集群中运行一个指定的镜像
+- set
 
-```bash
-# 安装服务
+## 2. 基础使用命令集合
 
+> Basic Commands (Intermediate):
+
+- explain Get documentation for a resource
+- get 显示一个或更多 resources
+- edit 在服务器上编辑一个资源
+- delete Delete resources
+
+例如：
+
+```shell
+# 查看集群所有节点
+kubectl get nodes
+# 查看某个节点
+kubectl get nodes node1
+
+# 查看集群所有pod
+kubectl get pods
 ```
-
-
 
 ## 2. 查看资源信息--get
 
@@ -104,10 +123,57 @@ kubectl get [TYPE(资源类型如：node/service/pod/deployment等) -l label] [-
 
 ## 3. 删除资源--delete
 
-> 如果某个pod 安装错了❌，可以把它的 deployment、pod 和 service 都删除，然后重新安装。
+> 如果某个 pod 安装错了 ❌，可以把它的 deployment、pod 和 service 都删除，然后重新安装。
 
 ```bash
 # 删除某个deployment
 kubectl delete deployment DEPLOYMENT_NAME -n NAMESPACE_NAME
 ```
 
+## 4. 常用命令
+
+- **节点（node）相关：**
+
+```shell
+# 在Master 查看所有节点
+kubectl get nodes
+
+# 在Master 查看某个节点的状态
+kubectl describe node [NodeName]
+
+# 查看当前主机节点的 kubelet 状态
+systemctl status kubelet
+
+# 给node节点添加标签
+kubectl label nodes [NODENAME] [LABEL_KEY=VALUE]
+
+```
+
+- **Pod 相关：**
+
+> 查看：
+
+```shell
+# 查看默认命名空间下的 pod
+kubectl get pods
+
+# 查看所有命名空间下的 pod
+kubectl get pods --all-namespace
+kubectl get pods -A
+
+# 查看所有命名空间的某个pod
+kubectl get pods --all-namespaces -o wide | grep [NODENAME]
+```
+
+> 新增：
+
+```shell
+# 根据yaml文件创建pod
+kubectl apply -f [XXX.yaml]
+  # -f 是 --filename=[] 简写
+
+# 如何将pod创建到具体的node，而不是由k8s来随机创建？
+# 使用 spec/affinity 配置项，在 yaml文件中设置相应node的label即可。
+
+#
+```

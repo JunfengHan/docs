@@ -84,8 +84,11 @@
 
 - [DevOps](/devops/ "DevOps")
 
+  - [DevOps 入门](/devops/docker.md "docker")
   - [Docker](/devops/docker.md "docker")
-  - [k8s](/devops/k8s.md "kubernets k8s")
+  - [kubernetes 核心概念](/devops/k8sConcept.md "kubernetes k8s 学习 入门")
+  - [从 0 到 1 部署实战](/devops/deploy.md "kubernetes 学习 部署")
+  - [k8s 踩坑集锦](/devops/k8sError.md "kubernetes 踩坑 error")
 
 - [工程化与模块化](/projectBuild/ "前端工程化 webpack")
 

@@ -2,7 +2,7 @@
 
 ### 1. 设置 SSH 客户端连接保持回话时间
 
-[Linux实例如何设置SSH客户端的会话连接保持时间--aliyun](https://help.aliyun.com/document_detail/38055.html)
+[Linux 实例如何设置 SSH 客户端的会话连接保持时间--aliyun](https://help.aliyun.com/document_detail/38055.html)
 
 ```bash
 # 编辑/etc/ssh/sshd_config配置文件
@@ -15,15 +15,15 @@ vim /etc/ssh/sshd_config
 systemctl restart sshd.service
 ```
 
-### 2. 安装 zsh
+### 2. 安装 zsh 和 ohmyzsh
 
-再好的Blog也没有官方文档香啊：👉 (ohmyzsh)[https://github.com/ohmyzsh/ohmyzsh]
+再好的 Blog 也没有官方文档香啊：👉 (ohmyzsh)[https://github.com/ohmyzsh/ohmyzsh]
 
 概括一下官网的安装过程：
 
 1. 安装条件
 
-   - Zsh 已经被安装，毕竟 ohmyzsh 是为 Zsh 服务的，不能用于Bash；`zsh --version` 查看是否安装；
+   - 先安装 Zsh。ohmyzsh 是为 Zsh 服务的；`zsh --version` 查看是否安装；
 
      如果没安装，看官方介绍，[install zsh](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH#how-to-install-zsh-on-many-platforms)
 
@@ -31,8 +31,6 @@ systemctl restart sshd.service
      # Cent OS 安装
      sudo yum update && sudo yum -y install zsh
      ```
-
-     
 
    - `curl` 或 `wget`要安装，不然怎么下载资源呢？
 
@@ -61,7 +59,7 @@ systemctl restart sshd.service
    		# 在 plugins 中查看相关插件,插件使用空格隔开；如下，添加 autojump插件
    		plugins=(git autojump)
    		[[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && . ~/.autojump/etc/profile.d/autojump.sh
-   
+
    # 3. 执行一下 .zshrc , 使修改生效
    source ~/.zshrc
    ```
@@ -79,9 +77,8 @@ systemctl restart sshd.service
    source ~/.zshrc
    ```
 
-   一个很不错的Blog，[[zsh+on-my-zsh配置教程指南](https://segmentfault.com/a/1190000013612471)](https://segmentfault.com/a/1190000013612471)
+   一个很不错的 Blog，[zsh+on-my-zsh 配置教程指南](https://segmentfault.com/a/1190000013612471)
 
-### 3. 安装Docker
+### 3. 安装 Docker
 
-[阿里云ECS安装Docker](https://help.aliyun.com/document_detail/187598.html)
-
+[阿里云 ECS 安装 Docker](https://help.aliyun.com/document_detail/187598.html)

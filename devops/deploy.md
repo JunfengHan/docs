@@ -1,4 +1,4 @@
-# Deploy（部署）
+# 部署小白的 Kubernetes 学习之路
 
 ## 1. 购买服务器
 
@@ -24,13 +24,13 @@
 
 ### 2.1 关闭防火墙
 
-> 为了Master 和 Node间通信方便，暂时关闭。
+> 为了 Master 和 Node 间通信方便，暂时关闭。
 
 ```bash
 systemctl disable firewalld
 ```
 
-### 2.2 禁用 SELinux 
+### 2.2 禁用 SELinux
 
 > 让容器可以访问宿主机文件系统。
 
@@ -45,13 +45,11 @@ vim /etc/sysconfig/selinux
 swapoff -a
 ```
 
-
-
 ## 3. 给服务器安装软件
 
 ### 3.1 安装 Docker
 
-准备工作：给yum配置源(一定要做，不然下载速度慢，且包的版本可能比较旧)。详情可以看下方链接1
+准备工作：给 yum 配置源(一定要做，不然下载速度慢，且包的版本可能比较旧)。详情可以看下方链接 1
 
 ```bash
 # 安装 wget,用于下载文件
@@ -75,9 +73,7 @@ vim CentOS-Base.repo
 yum update
 ```
 
-
-
-*配置Docker CE 镜像源站*
+_配置 Docker CE 镜像源站_
 
 > 如果不配置可能会下载测试版等。
 
@@ -91,23 +87,23 @@ sudo yum makecache fast
 sudo yum -y install docker-ce
 ```
 
-*安装Docker*
+_安装 Docker_
 
 ```bash
 yum install docker-ce -y
 ```
 
-安装docker-ce会自动安装相关依赖，如下：
+安装 docker-ce 会自动安装相关依赖，如下：
 
 ![docker-ce及依赖](./img/docker_ce.png)
 
-*查看Docker是否安装成功*
+_查看 Docker 是否安装成功_
 
 ```bash
 docker version
 ```
 
-*后台启动docker*
+_后台启动 docker_
 
 ```bash
 systemctl start docker
@@ -115,9 +111,9 @@ systemctl start docker
 systemctl enable docker
 ```
 
-### 3.2 安装 K8s Master节点
+### 3.2 安装 K8s Master 节点
 
-#### 3.2.1 *配置K8s源：*
+#### 3.2.1 _配置 K8s 源：_
 
 ```bash
 cat >>/etc/yum.repos.d/kubernetes.repo <<EOF
@@ -131,7 +127,7 @@ gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors
 EOF
 ```
 
-#### 3.2.2 *使用 systemd 作为 docker 的驱动（和K8s保持一致），同时设置 Docker 镜像代理*
+#### 3.2.2 _使用 systemd 作为 docker 的驱动（和 K8s 保持一致），同时设置 Docker 镜像代理_
 
 ```bash
 # 创建或进入 /etc/docker 目录
@@ -149,7 +145,7 @@ systemctl restart docker
 systemctl enable docker
 ```
 
-#### 3.2.3 *安装相关软件*
+#### 3.2.3 _安装相关软件_
 
 ```bash
 yum install -y kubelet kubeadm kubectl
@@ -157,9 +153,9 @@ yum install -y kubelet kubeadm kubectl
 
 - Kubeadm : k8s 包管理程序
 - Kubelet: Pod 管理服务组件
-- Kubectl: K8s命令行程序，用于集群管理
+- Kubectl: K8s 命令行程序，用于集群管理
 
-#### 3.2.4 *启动应用*
+#### 3.2.4 _启动应用_
 
 ```bash
 # 先启动 kubelet, kubeadm要用它
@@ -168,17 +164,17 @@ systemctl start kubelet
 systemctl enable kubelet
 ```
 
-*查看k8s已经安装的镜像：*
+_查看 k8s 已经安装的镜像：_
 
 ```bash
 kubeadm config images list
 ```
 
-*如图：*
+_如图：_
 
 ![已安装的k8s镜像服务](./img/k8sConfImages.png)
 
-#### 3.2.5 *初始化 K8s的 Master节点（控制平面）*
+#### 3.2.5 _初始化 K8s 的 Master 节点（控制平面）_
 
 ```bash
 # ⚠️ 版本一定要注意，否则 Node节点可能无法加入
@@ -186,10 +182,10 @@ kubeadm init --kubernetes-version=1.22.2 \
 --apiserver-advertise-address=172.16.164.42 \
 --image-repository registry.aliyuncs.com/google_containers \
 --service-cidr=10.1.0.0/16 \
---pod-network-cidr=192.168.0.0/16 # 指定CNI网络插件（calico）的特殊地址 
+--pod-network-cidr=192.168.0.0/16 # 指定CNI网络插件（calico）的特殊地址
 ```
 
-😄初战告捷：
+😄 初战告捷：
 
 ```bash
 .....
@@ -212,7 +208,7 @@ To start using your cluster, you need to run the following as a regular user:
 You should now deploy a pod network to the cluster.
 Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
   https://kubernetes.io/docs/concepts/cluster-administration/addons/
-  
+
   ##########
 	## 下面是token,用于Node节点加入集群
 	##########
@@ -224,7 +220,7 @@ kubeadm join 172.1X.XX.XX:6443 --token jheyp2.y7ye53nsjrzi0709 \
 [root@master ~]#
 ```
 
-#### 3.2.6 *为kubeadm配置证书，否则不能使用 kubectl*
+#### 3.2.6 _为 kubeadm 配置证书，否则不能使用 kubectl_
 
 ```bash
 # 为非root用户配置证书
@@ -235,7 +231,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> ~/.bash_profile
 ```
 
-*试试kubectl 可以用不，查看一下 kube-system中的 ConfigMap列表：*
+_试试 kubectl 可以用不，查看一下 kube-system 中的 ConfigMap 列表：_
 
 ```bash
 kubectl -n kube-system get configmap
@@ -250,9 +246,9 @@ kubelet-config-1.19                  1      15m
 
 🎉🎉🎉
 
-### 3.3 给Master 安装 CNI 网络插件
+### 3.3 给 Master 安装 CNI 网络插件
 
-> K8s默认没有安装 CNI 网络插件。
+> K8s 默认没有安装 CNI 网络插件。
 
 ```bash
 # 安装 CNI 插件前，状态时 NoReady
@@ -261,13 +257,13 @@ NAME     STATUS     ROLES    AGE   VERSION
 master   NotReady   master   51m   v1.19.3
 ```
 
-*安装 CNI 插件 -- calico*
+_安装 CNI 插件 -- calico_
 
 ```bash
 kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
 ```
 
-*查看一下节点运行情况：*
+_查看一下节点运行情况：_
 
 ```bash
 # 安装 CNI 插件后，状态变为 Ready
@@ -276,28 +272,26 @@ NAME     STATUS   ROLES    AGE   VERSION
 master   Ready    master   52m   v1.19.3
 ```
 
+### 3.4 安装 K8s Node 节点
 
-
-### 3.4 安装 K8s Node节点
-
->  安装过程和安装 K8s Master 一样，重复 3.2.1 ～ 3.2.2，然后安装软件，Node 节点不需要 kubectl，3.2.3 的执行步骤如下：
+> 安装过程和安装 K8s Master 一样，重复 3.2.1 ～ 3.2.2，然后安装软件，Node 节点不需要 kubectl，3.2.3 的执行步骤如下：
 
 ```bash
 yum install kubelet kubeadm --disableexcludes=kubernetes
 ```
 
-*安装完成提示：*
+_安装完成提示：_
 
 ![安装完成](./img/node_install.png)
 
-运行 kubelet服务：
+运行 kubelet 服务：
 
 ```
 systemctl start kubelet
 systemctl enable kubelet
 ```
 
-#### 3.5 ‼️关键步骤：将Node节点添加到集群，执行 3.2.5 步骤中的加入集群提示，如下：
+### 3.5 ‼️ 关键步骤：将 Node 节点添加到集群，执行 3.2.5 步骤中的加入集群提示，如下：
 
 ```bash
 kubeadm join 172.16.164.42:6443 --token p6kt93.yu984oesojqq8ut9 \
@@ -348,13 +342,9 @@ kubectl get service --all-namespaces
 kubectl describe pod coredns-7f6cbbb7b8-78xng -n kube-system
 ```
 
-
-
-#### 3.6 故障排查：
+### 3.6 故障排查：
 
 1. Iptables 没有设为 1，手动设置为 1 即可：
-
-   
 
    > ```
    > [preflight] Running pre-flight checks
@@ -371,11 +361,9 @@ kubectl describe pod coredns-7f6cbbb7b8-78xng -n kube-system
    echo 1 > /proc/sys/net/bridge/bridge-nf-call-ip6tables
    ```
 
-   
-
 2. token 过期
 
-   在 Master节点 init 时会生成一个 token 和 证书号，token 会在一定时间后过去，导致加入到Master 失败。可以在Maser 重新生成token:
+   在 Master 节点 init 时会生成一个 token 和 证书号，token 会在一定时间后过去，导致加入到 Master 失败。可以在 Maser 重新生成 token:
 
    ```bash
    # 先看一下Master 有没有有效的token
@@ -392,7 +380,7 @@ kubectl describe pod coredns-7f6cbbb7b8-78xng -n kube-system
    > error execution phase preflight: unable to fetch the kubeadm-config ConfigMap: this version of kubeadm only supports deploying clusters with the control plane version >= 1.21.0. Current version: v1.19.2
    > To see the stack trace of this error execute with --v=5 or higher
 
-   解决办法：给Node 节点的 kubeadm 配置文件，设置到指定的版本，然后使用配置文件加入集群：
+   解决办法：给 Node 节点的 kubeadm 配置文件，设置到指定的版本，然后使用配置文件加入集群：
 
    ```bash
    # 复制一份配置文件到用户目录
@@ -464,7 +452,7 @@ kubectl describe pod coredns-7f6cbbb7b8-78xng -n kube-system
    		# --> 报错信息如下图
    ```
 
-   ![](./img/describe_pod.png)
+   ![查看pod详情](./img/describe_pod.png)
 
 告诉我们说是“cni”插件出问题了！
 
@@ -478,7 +466,7 @@ kubectl describe pod coredns-7f6cbbb7b8-78xng -n kube-system
    The connection to the server localhost:8080 was refused - did you specify the right host or port?
    ```
 
-   这是说明，我们 Work节点 没有相应的配置，是变量环境导致的；
+   这是说明，我们 Work 节点 没有相应的配置，是变量环境导致的；
 
    解决办法：
 
@@ -490,13 +478,9 @@ kubectl describe pod coredns-7f6cbbb7b8-78xng -n kube-system
    source ~/.bash_profile
    ```
 
-   
+### 3.7 使用 kubeadm 升级集群
 
-
-
-### 3.5 使用 kubeadm 升级集群
-
-> 注意：kubeadm提供的升级只能按版本升级，不可以跨版本，如：1.19 -> 1.20 是可以的，1.19-> 1.21 是不行的。
+> 注意：kubeadm 提供的升级只能按版本升级，不可以跨版本，如：1.19 -> 1.20 是可以的，1.19-> 1.21 是不行的。
 
 1. 首先升级 kubeadm
 
@@ -518,21 +502,19 @@ kubectl describe pod coredns-7f6cbbb7b8-78xng -n kube-system
    kubeadm upgrade apply 1.20.11
    ```
 
-   *升级成功提示：*
+   _升级成功提示：_
 
    ```bash
    ......
    [addons] Applied essential addon: CoreDNS
    [addons] Applied essential addon: kube-proxy
-   
+
    [upgrade/successful] SUCCESS! Your cluster was upgraded to "v1.20.11". Enjoy!
-   
+
    [upgrade/kubelet] Now that your control plane is upgraded, please proceed with upgrading your kubelets if you haven't already done so.
    ```
 
-   
-
-   *最后一行提示我们，别忘了升级 kubelets，否则我们下次升级到更新的版本时会报错啊*:
+   _最后一行提示我们，别忘了升级 kubelets，否则我们下次升级到更新的版本时会报错啊_:
 
    ```bash
    # 查看升级后 kubectl 版本
@@ -546,7 +528,7 @@ kubectl describe pod coredns-7f6cbbb7b8-78xng -n kube-system
    kubectl version
    ```
 
-   *查看升级后的k8s集群信息：*
+   _查看升级后的 k8s 集群信息：_
 
    ```bash
    [root@master ~]# kubeadm config images list
@@ -569,11 +551,9 @@ kubectl describe pod coredns-7f6cbbb7b8-78xng -n kube-system
    
    ```
 
-   
+### 3.8 安装 MySql
 
-### 3.5 安装 MySql
-
-首先要新建mysql相关目录和配置文件，**Docker启动mysql容器时要用到**：
+首先要新建 mysql 相关目录和配置文件，**Docker 启动 mysql 容器时要用到**：
 
 ```bash
 # 创建mysql 安装目录
@@ -584,7 +564,7 @@ mkdir /opt/mysql/conf.d
 mkdir /opt/mysql/data/
 ```
 
-创建mysql启动时需要的配置文件：
+创建 mysql 启动时需要的配置文件：
 
 ```bash
 # 创建配置文件
@@ -606,7 +586,7 @@ default-character-set=utf8
 default-character-set=utf8
 ```
 
-启动mysql 容器：
+启动 mysql 容器：
 
 ```
 docker run \
@@ -619,7 +599,7 @@ docker run \
  -d registry.cn-beijing.aliyuncs.com/qingfeng666/mysql:5.7 --default-authentication-plugin=mysql_native_password
 ```
 
-安装mysql客户端（记住这里客户端，用来操作mysql服务的，我们已经通过docker启动了mysql服务）：
+安装 mysql 客户端（记住这里客户端，用来操作 mysql 服务的，我们已经通过 docker 启动了 mysql 服务）：
 
 ```bash
 # 安装mysql客户端
@@ -630,9 +610,7 @@ mysql -uroot -h127.0.0.1 -ppassword
 > CREATE DATABASE `blogDB` CHARACTER SET utf8 COLLATE utf8_general_ci;
 ```
 
-
-
-### 3.6 安装MongoDB
+### 3.9 安装 MongoDB
 
 ```bash
 # 配置MongoDB安装源
@@ -648,11 +626,11 @@ gpgkey=https://www.mongodb.org/static/pgp/server-5.0.asc
 
 ## 4. 安装 Dashboard 可视化插件部署
 
-> Dashboard 是基于web的用户界面，可以管理 K8s集群。
+> Dashboard 是基于 web 的用户界面，可以管理 K8s 集群。
 
-[dashboard官方地址](https://github.com/kubernetes/dashboard)
+[dashboard 官方地址](https://github.com/kubernetes/dashboard)
 
-*用 kubectl apply xxx.yaml 命令， 以 yaml 创建一个 Service 资源：*
+_用 kubectl apply xxx.yaml 命令， 以 yaml 创建一个 Service 资源：_
 
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
@@ -733,19 +711,25 @@ docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/metrics-scraper:v
 kubectl apply -f k8s-dashboard.yaml
 ```
 
+### 4.1 如何访问 Dashboard
 
+1. Https://节点IP:port 
+
+2. Chrome浏览器会报错，说Https证书有问题，此时需要点击页面任意位置，然后输入“thisisunsafe”即可跳转
+
+3. 访问Dashboard需要token，通过以下命令可以获取：
+
+   `kubectl -n kube-system describe $(kubectl -n kube-system get secret -n kube-system -o name | grep namespace) | grep token`
 
 ## 5. 搭建私有仓库
 
 > 私有仓库可以更方便管理我们自己的镜像。
 
-## 6. 使用 Helm 管理 K8s的包
-
-
+## 6. 使用 Helm 管理 K8s 的包
 
 ### 5.1 安装 Helm
 
-**安装helm**
+**安装 helm**
 
 ```bash
 # CentOs 直接执行安装脚本
@@ -763,27 +747,21 @@ tar -zxvf helm-v3.0.0-linux-amd64.tar.gz
 mv linux-amd64/helm /usr/local/bin/helm
 ```
 
+### 5.2 使用 Helm 安装服务
 
-
-### 5.2 使用Helm 安装服务
-
-*安装 Prometheus*
-
-
+_安装 Prometheus_
 
 ## 参考
 
-[链接1：CentOS 7- yum配置阿里镜像源](https://developer.aliyun.com/article/704987)
+[链接 1：CentOS 7- yum 配置阿里镜像源](https://developer.aliyun.com/article/704987)
 
-[链接2: Docker CE 镜像源站](https://developer.aliyun.com/article/110806)
-
-
+[链接 2: Docker CE 镜像源站](https://developer.aliyun.com/article/110806)
 
 ## Learn Imooc Docker
 
 ### 1-2 项目演示
 
-*架构示意图*
+_架构示意图_
 
 ![架构示意图](./img/schema.png)
 

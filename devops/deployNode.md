@@ -1,3 +1,7 @@
+# 部署一个 node 应用
+
+> 本文记录imooc学习部署node应用。
+
 ## <span style="color:#ffcc99">1. 生产环境要哪些工作</span>
 
 - 域名/备案
@@ -65,7 +69,11 @@ http
 
 win 系统可以使用 XShell, macOS 只能使用终端了，Royal 还不错吧。
 
-在 Royal TSX 里可以创建一个文档，然后使用安装插件，使用 Terminal 插件，配置并进行 SSH 连接，使用 File Transfer 进行 FTP 连接。
+ Royal TSX 如何连接主机？
+
+- "创建一个文档"，然后使用安装插件，
+- 使用 Terminal 插件，配置并进行 SSH 连接
+- 使用 File Transfer 进行 FTP 连接。
 
 也可以使用 macOS 自带的终端：
 
