@@ -90,7 +90,7 @@ npm start
 
 ## 3. 一张必看的 React 渲染流程图
 
-F2 打开浏览器的开发者工具（DevTools）;
+F12 打开浏览器的开发者工具（DevTools）;
 
 找到 Performance 面板，点击刷新。
 

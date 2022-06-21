@@ -81,9 +81,36 @@ _nest 启动成功：_
 
 ![nest启动成功](../img/nest_start.png)
 
-在浏览器输入 http://localhost:3999，可以看到输出：
+使用 curl 等HTTP请求工具，可以看到Nest接口的输出：
 
-![nest前端请求](../img/nest_start_hello.png)
+```bash
+# 默认端口3000
+curl http://localhost:3000
+
+# 输出结果
+StatusCode        : 200
+StatusDescription : OK
+Content           : Hello World!
+RawContent        : HTTP/1.1 200 OK
+                    Connection: keep-alive
+                    Keep-Alive: timeout=5
+                    Content-Length: 12
+                    Content-Type: text/html; charset=utf-8
+                    Date: Tue, 28 Dec 2021 01:42:52 GMT
+                    ETag: W/"c-Lve95gjOVATpfV8EL5X4nxwjKHE"...
+Forms             : {}
+Headers           : {[Connection, keep-alive], [Keep-Alive, timeout=5], [Content-Length, 12], [Content-Type, text/html; char
+                    set=utf-8]...}
+Images            : {}
+InputFields       : {}
+Links             : {}
+ParsedHtml        : mshtml.HTMLDocumentClass
+RawContentLength  : 12
+```
+
+使用浏览器访问，可以看到接口返回结果：
+
+![hello](D:\project-personal\docs\node\imgs\hello.PNG)
 
 ## 5. 深入了解 NestJs
 
@@ -93,7 +120,7 @@ _nest 启动成功：_
 
 安装成功后的 src 目录是我们的主要工作目录：
 
-_初始化的 src 目录结构：_
+_初始化的 src 目录结构如 4.1中的图，以下详细介绍：_
 
 - main.ts: 项目入口文件，它使用 NestFactory 用来创建 Nest 应用实例
 
@@ -252,7 +279,7 @@ export class AppModule {}
 - 2. 在 cats.controller.ts 中 CatsController 声明了一个依赖于 CatsService 令牌(token)的构造函数注入:
 
   ```js
-  constructor(private readonly catsService: CatsService)
+  constructor(private readonly catsService: CatsService){}
   ```
 
 - 3. 在 app.module.ts 中，我们将标记 CatsService 与 cats.service.ts 文件中的 CatsService 类相关联。 我们将在下面确切地看到这种关联（也称为注册）的发生方式。
