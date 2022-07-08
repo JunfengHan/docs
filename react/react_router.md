@@ -192,9 +192,9 @@ _URL 切换流程图：_
 
   \<StaticRouter\>: 静态路由
 
-  <!-- <BrowserRouter>:  history 模式路由（基于 HTML5 的 history）
+  \<BrowserRouter\>:  history 模式路由（基于 HTML5 的 history）
 
-  <HashRouter>: hash 模式路由 -->
+  \<HashRouter\>: hash 模式路由 
 
 - \<Route\> : 这应该是 React Router 最核心的功能组件，<span style="color: #ff0000; font-size: 16px;">基本职责是在其路径与当前 URL 匹配时呈现某些 UI</span>
 
@@ -225,7 +225,7 @@ app.listen();
 
 **动态路由：**
 
-**应用渲染时进行路由**，这意味着**React Router 内的应用都是 React Router 的组件而已。**
+**应用渲染时进行路由**。这意味着**React Router 内的应用都是 React Router 的组件而已。**
 
 ### 6.2 React Router 的简单使用
 

@@ -81,30 +81,27 @@
   
 - [DevOps](/devops/ "DevOps")
 
-<<<<<<< HEAD
-  - [DevOps 入门](/devops/docker.md "docker")
-  - [Docker](/devops/docker.md "docker")
-  - [kubernetes 核心概念](/devops/k8sConcept.md "kubernetes k8s 学习 入门")
-  - [从 0 到 1 部署实战](/devops/deploy.md "kubernetes 学习 部署")
-  - [k8s 踩坑集锦](/devops/k8sError.md "kubernetes 踩坑 error")
-=======
-  - [DevOps简介](/devops/01devOps.md "devops")
-  - [Docker](/devops/02docker.md "docker")
-  - [Kubernetes](/devops/03k8s.md "kubernets k8s")
-  - [helm使用技巧](/devops/04helm.md "helm")
-  - [阿里云ECS实战](/devops/05aliyunEcs.md "aliyun ECS 阿里云")
-  - [K8s部署实战](/devops/06deploy.md "k8s部署")
-  - [jenkins实战](/devops/07jenkins.md "jenkins 实战")
-  - [k8s cli常用命令](/devops/08k8sCli.md "kubernets k8s cli")
-  - [PM2部署一个Node.js 应用](/devops/deployNode.md "Node.js应用部署 PM2")
->>>>>>> 96e8da8f645a90e479f5c0774e43866eae71f3d5
-
-- [工程化与模块化](/projectBuild/ "前端工程化 webpack")
-
-  - [前端工程化](/projectBuild/build.md "webpack")
-  - [模块化](/projectBuild/modules.md "JS module")
-  - [webpack 概念与原理](/projectBuild/webpack.md "webpack")
-  - [Webpack 实战与配置详解](/projectBuild/webpack_case.md "webpack")
+    - [DevOps 入门](/devops/docker.md "docker")
+    - [Docker](/devops/docker.md "docker")
+    - [kubernetes 核心概念](/devops/k8sConcept.md "kubernetes k8s 学习 入门")
+    - [从 0 到 1 部署实战](/devops/deploy.md "kubernetes 学习 部署")
+    - [k8s 踩坑集锦](/devops/k8sError.md "kubernetes 踩坑 error")
+    - [DevOps简介](/devops/01devOps.md "devops")
+    - [Docker](/devops/02docker.md "docker")
+    - [Kubernetes](/devops/03k8s.md "kubernets k8s")
+    - [helm使用技巧](/devops/04helm.md "helm")
+    - [阿里云ECS实战](/devops/05aliyunEcs.md "aliyun ECS 阿里云")
+    - [K8s部署实战](/devops/06deploy.md "k8s部署")
+    - [jenkins实战](/devops/07jenkins.md "jenkins 实战")
+    - [k8s cli常用命令](/devops/08k8sCli.md "kubernets k8s cli")
+    - [PM2部署一个Node.js 应用](/devops/deployNode.md "Node.js应用部署 PM2")
+    
+- [项目构建](/projectBuild/ "前端项目构建")
+    - [工程化与模块化](/projectBuild/ "前端工程化 webpack")
+    - [前端工程化](/projectBuild/build.md "webpack")
+    - [模块化](/projectBuild/modules.md "JS module")
+    - [webpack 概念与原理](/projectBuild/webpack.md "webpack")
+    - [Webpack 实战与配置详解](/projectBuild/webpack_case.md "webpack")
 
 - [可视化](/visual/ "前端可视化 visual")
 

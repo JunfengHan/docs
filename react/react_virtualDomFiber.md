@@ -86,7 +86,7 @@ ReactDOM.render(<App />, document.getElementById("root"));
 
 **父节点通过 child 属性连接子节点；**
 
-**父节点通过 return 属性连接子节点；**
+**子节点通过 return 属性连接父节点；**
 
 为何用 return，而不用 parent 呢？是不是有点奇怪？
 
