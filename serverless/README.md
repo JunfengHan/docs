@@ -1,11 +1,12 @@
 # Serverless
 
-> Serverless 相关。
+> Serverless 为应用脱离部署提供一个新的方案，让你可以多出很多经历去做业务，而不是运维。
 
-部署对于前端来说是比较困难的，
+### 首先应该了解什么是Serverless
 
-Serverless 打开了另一条通道，
+[认识Serverless]: https://www.shushuo.me/#/serverless/start
 
-一条对前端友好的部署通道，
+### 接着来认识一下阿里云Severless及其使用
 
-还不试试？
+[入门阿里云Serverless]: https://www.shushuo.me/#/serverless/aliServerless
+
