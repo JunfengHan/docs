@@ -112,6 +112,10 @@ _[使用流程](https://help.aliyun.com/document_detail/73329.html?spm=a2c4g.111
 
   **服务（Service）**是函数计算的基本资源单位。我们可以在服务级别上授权、配置日志和创建函数等。
 
+  可以把**服务**理解为一个微服务，它有很多用来执行任务的函数。**函数**可以使用不同的语言，可以占有不同的内存。
+
+  ![服务](./imgs/ali_function_service.png)
+
 - 2. **创建函数，编写代码，将应用部署到函数中**
 
   **函数（Function）**是调度与运行的基本单位，更是一段代码的处理逻辑。
@@ -188,7 +192,15 @@ Node.js 项目的依赖一般放在项目文件的 <code style="color: #708090; 
 
 但是，<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">node_modules</code>通常依赖较为复杂，包的体积通常很大，需要使用 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">Webpack</code> 等进行打包优化，只打包需要的模块。
 
-## 3. 性能优化
+## 3. 开发与发布流程
+
+![应用的开发流程](./imgs/ali_serverless_codeFlow.png)
+
+![应用的开发流程](./imgs/ali_serverless_versionAlias.png)
+
+- 别名可以指向多个版本号，然后给不同的版本号不同的流量，实现*灰度发布*
+
+## 4. 性能优化
 
 _函数的调用链路用时：_
 
@@ -216,4 +228,6 @@ _函数的调用链路用时：_
 
 ## 参考
 
-[Serverless 技术公开课 - 阿里云](https://developer.aliyun.com/lesson_2024_18991?spm=5176.10731542.0.0.2fe1cda8c6B96V#_18991)
+[阿里云函数计算文档](https://help.aliyun.com/product/50980.html)
+
+[Serverless 技术公开课 -- 介绍的很仔细，老师讲课节奏很好](https://developer.aliyun.com/lesson_2024_18991?spm=5176.10731542.0.0.2fe1cda8c6B96V#_18991)

@@ -1,4 +1,4 @@
-# Docker
+# Docker概念
 
 > Docker 要解决软件运行环境配置的难题。
 
@@ -105,11 +105,32 @@ _Docker architecture_:
 
 ## 5. Docker 核心概念
 
-### 5.1 image（镜像）
+### 5.1 container（容器）
 
-**镜像**是一个只读的模板，带有创建 Docker 容器的说明。
+> container 是 image 的运行实体，为**应用程序**提供运行环境。同时，container 是被隔离的，无法看到主机的进程、环境变量等信息。
+
+[What is a container?](https://docs.docker.com/get-started/#what-is-a-container)
+
+**容器是您机器上的沙盒进程，与主机上的所有其他进程隔离。这种隔离正是利用了Linux 上的技术，如 Namespace、cgroups等。**
+
+总结就是：
+
+- 容器是*镜像*的运行实例
+- 容器可以运行在本地、虚拟机和云
+- 容器是可移植的（可运行在任何OS）
+- 容器是相互隔离的，它们执行着自己的软件、二进制文件或配置文件
+
+### 5.2 container image（容器镜像）
+
+> "镜像"是“容器镜像”的简称。
+
+**镜像**是一个只读的模板，带有创建 **container**的说明。
 
 **镜像**包括你运行一个应用程序所需要的一切 —— *代码*或*二进制文件*、_运行时_、_依赖性和任何其他所需的文件系统对象_。
+
+所以，image 和 container 的关系是：
+
+> 当运行一个 container，它就是一个隔离的文件系统。image 就是这个文件系统的描述。
 
 _镜像常见操作_：
 
@@ -119,10 +140,6 @@ _镜像常见操作_：
   1. docker commit 命令创建
   2. Dockerfile 方式构建
 - 上传镜像：docker push
-
-### 5.2 container（容器）
-
-> container 是 image 的运行实体，为**应用程序**提供运行环境。同时，container 是被隔离的，无法看到主机的进程、环境变量等信息。
 
 ### 5.3 repository（仓库）
 
@@ -147,6 +164,7 @@ _镜像常见操作_：
    > docker COMMAND --help
 
 3. 命令使用方法
+   
    > docker [OPTIONS] COMMAND
 
 **示例**：
@@ -292,86 +310,12 @@ ADD . $FOO       # ADD . /bar
 COPY \$FOO /quux # COPY $FOO /quux
 ```
 
-## 8. 容器编排
+## 8. Docker 容器间通信
 
-### 8.1 Docker Compose
+> 有时我们的应用依赖另一个应用，可以使用 --link 来关联两个容器。
 
-> Docker 命令的声明式标记语言。
-
-[Docker Compose](https://docs.docker.com/get-started/08_using_compose/)帮助构建*多容器应用*。
-
-什么是*多容器应用*？
-
-我们的应用往往会用到很多容器，如：一个网站可能会用**node 容器**来构建后端，会用**mysql**容器来做存储，会用。。。
-
-我们需要一个一个的来设置这些容器，然后启动它们。所以，容器管理麻烦的问题逐渐凸显。
-
-**Docker Compose**就是帮我们解决*多容器的管理问题*。
-
-#### Docker Compose 是如何工作的
-
-如果你安装了 Windows/Mac 版的 Docker Desktop/Toolbox,**Docker Compose**已经默认安装。
-
-_使用 Docker Compose:_
-
-> 1. 在文件根目录新增 XXX.yml 文件
-> 2. 给 yml 文件配置版本，如：version: "3.8"
-> 3. 定义应用用到的服务/容器,如下
-
-```yml
-version: "3.8"
-
-services:
-  app:
-    image: node:12-alpine
-    command: sh -c "yarn install && yarn run dev"
-    ports:
-      - 3000:3000
-    working_dir: /app
-    volumes:
-      - ./:/app
-    environment:
-      MYSQL_HOST: mysql
-        MYSQL_USER: root
-        MYSQL_PASSWORD: secret
-        MYSQL_DB: todos
-
-  mysql:
-    image: mysql:5.7
-    volumes:
-      - todo-mysql-data:/val/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: todos
-
-  volumes:
-    todo-mysql-data:
+```sh
+# 运行 kubeblog 镜像，关联 mysql57镜像（如果mysql57没有启动，则kubeblog无法启动）
+docker run --name kubeblog -d -p 5000:5000  --link mysql57 -e MYSQL_SERVER="mysql57"  registry.cn-beijing.aliyuncs.com/qingfeng666/kubeblog:1.3
 ```
 
-> 4. 启动应用
-
-```shell
-# -d 代表后台运行
-docker-compose up -d
-```
-
-此时，会看到所有所有的任务被执行。
-
-![docker-compose启动应用](./img/docker-compose-up.png)
-
-> 5. 关闭应用并清除 volumes
-
-```shell
-# -d 代表后台运行
-docker-compose down --volumes
-```
-
-## Docker Build
-
-> 我们开发的应用被构建成 image(镜像)，然后可以在任何地方部署/运行。
-
-## 构建一个 node 应用
-
-[构建 node 应用](https://nodejs.org/zh-cn/docs/guides/nodejs-docker-webapp/)
-
-[如何写 node 应用的 Dockerfile](http://bitjudo.com/blog/2014/03/13/building-efficient-dockerfiles-node-dot-js/)

@@ -79,7 +79,7 @@ K8s 下，这种模式如何实施？
 
 *Helm优点*
 
-![helm](/Users/han/Desktop/code/docs/devops/helm.png)
+![helm](./img/helm.png)
 
 ### 2.1 Helm 架构
 

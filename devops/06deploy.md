@@ -725,9 +725,155 @@ kubectl apply -f k8s-dashboard.yaml
 
 > 私有仓库可以更方便管理我们自己的镜像。
 
+### 5.1 常见的镜像分类
+
+- 公有镜像（docker hub、aliyun镜像）
+- 私有镜像 （哈勃、JFrog）
+
+### 5.2 安装JFrog
+
+> JFrog 帮我们搭建私有镜像。
+
+- 创建文件夹
+```shell
+# 创建目录
+mkdir -p /etc/artifactory/var/etc/
+# 进入目录
+cd /etc/artifactory/var/etc/
+# 创建文件
+touch system.yaml
+# 修改权限等
+chown -R 1030:1030 /etc/artifactory/var/
+chmod -R 777 /etc/artifactory/var/
+# 运行jcr镜像
+docker run --name artifactory-jcr -v /etc/artifactory/var:/var/opt/jfrog/artifactory -d -p 8081:8081 -p 8082:8082 registry.cn-beijing.aliyuncs.com/qingfeng666/artifactory-jcr:latest
+# 查看一下运行的容器
+docker ps |grep jcr
+```
+
+如果容器名称 *artifactory-jcr*已经被占用，可以先删除该容器，然后再创建。或者重启该容器：
+
+```shell
+# 删除容器
+docker rm /artifactory-jcr
+# 重启容器
+docker start artifactory-jcr
+```
+
+### 5.3 配置私有镜像中心
+
+#### 5.3.1 在 Master，node 节点上分别配置 JCR 的本地域名解析
+
+配置域名解析，我们可以通过 art.local 访问JCR服务。
+
+```sh
+vim /etc/hosts
+# 输入如下信息，分别对应各个节点的内网IP和域名
+172.16.164.41	work1
+172.16.164.43	work2
+172.16.164.42	master	art.local
+```
+
+#### 5.3.2 配置一个不安全的registry(注册表)
+
+配置Docker insecure registry。
+
+```sh
+vi /etc/docker/daemon.json
+```
+
+*配置如下信息：*
+
+```json
+{
+  "registry-mirrors": [
+    "https://registry.docker-cn.com",
+    "https://dockerhub.azk8s.cn",
+    "https://reg-mirror.qiniu.com",
+    "http://hub-mirror.c.163.com",
+    "https://docker.mirrors.ustc.edu.cn"
+  ],
+  "insecure-registries": ["art.local:8081"]
+}
+```
+
+#### 5.3.4 登陆到自己配置的注册表
+
+1. 执行下方命令，登陆注册表
+
+```sh
+docker login art.local:8081
+```
+
+如果忘记密码，可以到 /root/.cocker/config.json去查看。
+
+![docker login](./img/docker_login.png)
+
+### 5.4 配置JCR仓库
+
+一般我们需要至少有三个镜像仓库：
+
+- docker-local: 开发环境仓库，给开发人员来用
+- docker-test: 测试环境，给测试团队来用
+- docker-release: 发布用的包，运维部署用
+- docker-remote: 代理远程的仓库，如阿里云
+- docker-virtual: 虚拟仓库，用来客户端和上面的4个仓库通信
+
+*私有仓库架构：*
+
+![registry_architecture](./img/docker_registrys.png)
+
+*给admin用户新建仓库：*
+
+![新建仓库](./img/new_docker_repo.png)
+
+*把新建的仓库添加到virtual Repository:*
+
+![](./img/virtual_repo.png)
+
+![](./img/virtual_repo1.png)
+
+此时，我们的虚拟仓库有了5个docker镜像仓库，分别用来存储我们不同种类的镜像。
+
+### 5.5 将镜像推送到私有镜像中心
+
+#### 5.5.1 上传代码到gitlab，然后在服务器拉取代码
+
+到服务器相关目录，拉起代码
+
+#### 5.5.2 把本地代码打包成镜像
+
+*在项目执行：*
+
+```sh
+docker build -t art.local:8081/yyweb:v0.1 .
+```
+
+#### 5.5.3 启动容器
+
+```sh
+docker run -d --name yyweb  -p 80:80 art.local:8081/yyweb:v0.1
+```
+
+**至此，我们的应用可以在浏览器中访问了。**
+
+#### 5.5.4 重新给镜像打个tag，添加仓库名称 docker-local
+
+```sh
+docker tag art.local:8081/yyweb:v0.1 art.local:8081/docker-local/yyweb:0.1
+```
+
+#### 5.5.5 推送镜像到私有仓库
+
+```sh
+docker push art.local:8081/docker-local/yyweb:0.1
+```
+
+
+
 ## 6. 使用 Helm 管理 K8s 的包
 
-### 5.1 安装 Helm
+### 6.1 安装 Helm
 
 **安装 helm**
 
@@ -757,35 +903,3 @@ _安装 Prometheus_
 
 [链接 2: Docker CE 镜像源站](https://developer.aliyun.com/article/110806)
 
-## Learn Imooc Docker
-
-### 1-2 项目演示
-
-_架构示意图_
-
-![架构示意图](./img/schema.png)
-
-### 4-2 创建 MySQL 集群
-
-> 建议是 5.7.21 版本 PXC 镜像
-> 很多同学反映，最新版本的 PXC 镜像创建集群的时候会出现问题，所以建议同学们使用最稳定的 PXC 镜像 5.7.21 版本。
-
-```shell
-docker pull percona/percona-xtradb-cluster:5.7.21
-docker tag percona/percona-xtradb-cluster:5.7.21 pxc
-docker rmi percona/percona-xtradb-cluster:5.7.21
-```
-
-关于 PXC 集群的相关问题整理
-必须主节点能连接上，再去创建其他节点
-因为主节点创建之后，它需要初始化 PXC 集群环境，生成各种配置文件，所以消耗的时间比较长，你等待一分钟左右的时间，然后用客户端连接主节点，如果能连接上，说明主节点已经创建成功。这时候再去创建其他 PXC 节点。
-
-如果你刚创建完主节点，就去创建其他节点。因为主节点还不能正常访问，其他从节点连接不上主节点，无法加入 PXC 集群，所以你创建的所有从节点都处在闪退的状态。正确的做法是每创建一个节点，能用客户端访问了，再去创建下一个节点。
-
-为什么前几个 PXC 节点都好用，创建到最后一个节点的时候，所有 PXC 节点都不能用了？
-这是因为你的虚拟机内存太小了，建议你设置更大的内存，因为 PXC 集群比较占用内存，如果内存不够，PXC 集群就会罢工。
-
-为什么重启电脑之后，重新运行 PXC 容器，都处在闪退的状态
-这个问题的原因在本课程 git 项目中的脚本文档里面写的很清楚，建议大家去看一下，只要修改 grastate 文件即可。
-
-注意，一定是从课程 git 里面下载课程脚本文档，而不是云盘上下载文档。云盘上面的资料比较旧，git 上面的资料是更新之后的，切记！

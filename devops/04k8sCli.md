@@ -110,6 +110,8 @@ kubectl get pods
 
 ## 2. 查看资源信息--get
 
+> 注意，如果get 时不加命名空间，则会获取默认命名空间下的资源。
+
 ```bash
 # 获取一个活多个资源的概要信息
 kubectl get [TYPE(资源类型如：node/service/pod/deployment等) -l label] [--watch 监听] [--sort-by 排序]
@@ -119,6 +121,9 @@ kubectl get [TYPE(资源类型如：node/service/pod/deployment等) -l label] [-
 		kubectl get service -n kube-system
 		# 查看*kubernetes-dashboard*命名空间下所有 service
 		kubectl get service -n kubernetes-dashboard
+
+# 查看有哪些类型的资源
+kubectl api-resources
 ```
 
 ## 3. 删除资源--delete
