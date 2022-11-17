@@ -1,19 +1,27 @@
 # CSS 常见面试题
 
-## 1. 概念
+## 1. 概念与属性
 
 ### 1.1 选择器
 
 > 选择器优先级？
 
-_优先级从高到低排序：_
 
-- 1. !important：这个不算 CSS 选择器
-- 2. 内联样式（权重 1000）：严格来说也不算选择器
-- 3. ID 选择器（权重 100）
-- 4. 类选择器 (例如，.example)，属性选择器（例如，[type="radio"]）和伪类（例如，:hover）=> （权重 10）
-- 5. 类型选择器（例如，h1）和伪元素（例如，::before）=> 1
-- 6. 通配选择符（universal selector）（\*）关系选择符（combinators）（+, >, ~, ' ', ||）, 对优先级没影响（权重 0）
+
+一个选择器的优先级可以说是由四个部分相加 (分量)，可以认为是个十百千 — 四位数的四个位数：
+
+1. **千位**： 如果声明在 [`style`](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Global_attributes#attr-style) 的属性（内联样式）则该位得一分。这样的声明没有选择器，所以它得分总是 1000。
+2. **百位**： 选择器中包含 ID 选择器则该位得一分。
+3. **十位**： 选择器中包含类选择器、属性选择器或者伪类则该位得一分。
+4. **个位**：选择器中包含元素、伪元素选择器则该位得一分。
+
+（本段内容来自MDN:[选择器优化级计算方式](https://developer.mozilla.org/zh-CN/docs/Learn/CSS/Building_blocks/Cascade_and_inheritance)
+
+
+
+!important：这个不算 CSS 选择器，但拥有最高的优先级；
+
+通配选择符（universal selector）（\*）关系选择符（combinators）（+, >, ~, ' ', ||）, 对优先级没影响（权重 0）；
 
 ### 1.2 盒模型
 
@@ -267,11 +275,66 @@ _z-index 分层：_
 
 > 伪类与伪元素的区别
 
-**伪类**一般用于选择**特殊状态的元素**，如：<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">:hover</code>、<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">:first-child</code>。
+**伪类**选择器一般用于选择**特殊状态的元素**，如：<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">:hover</code>、<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">:first-child</code>。
 
-**伪元素**一般用于处理**元素的某些部分**，如：<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">::after</code>、<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">::first-letter</code>
+**伪元素**一般用于处理**元素的某些部分，而不是整个元素**，如：<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">::after</code>、<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">::first-letter</code>
 
-更多[伪类与伪元素](https://www.shushuo.me/#/css/pseudo)
+#### 伪类
+
+<code style="color: #708090; background-color: #F5F5F5;">CSS 伪类</code> 是添加到选择器的关键字，指定要选择的元素的<span style="color: #ff0000; font-size: 16px;">特殊状态</span>。
+
+**伪类有哪些:**
+
+- :active
+- :link
+- :checked
+- :focus
+- :hover
+- :last-child 代表**父元素**的最后一个子元素
+- :first-child 表示在一组**兄弟元素**中的第一个元素
+- :nth-child() 首先找到所有当前元素的**兄弟元素**，然后按照位置先后顺序从 1 开始排序，选中匹配到的元素集合
+- :first -> 打印文档第一页
+- :right -> 打印文档右页
+- ...
+
+#### 伪元素
+
+<code style="color: #708090; background-color: #F5F5F5;">伪元素</code>是一个附加至选择器末的关键词，允许你修改被选择元素的<span style="color: #ff0000; font-size: 16px;">特定部分样式</span>。
+
+**伪元素有哪些:**
+
+"::"是 CSS3 写法，“:”是 CSS2 写法。
+
+- ::after -> 用来在选择元素**后面**创建一个伪元素，**content** 可以指定这个伪元素的内容
+- ::before -> 用来在选择元素**前面**创建一个伪元素
+- ::first-letter -> 被选择的**块级元素的第一个字符**
+- ::first-line -> 被选择的**块级元素的第行**
+- ::selection -> 应用于文档中被用户高亮的部分
+- ...
+
+#### 区别
+
+- **伪类**用于选择元素的<span style="color: #ff0000; font-size: 16px;">特殊状态</span>
+
+- **伪元素**用于处理<span style="color: #ff0000; font-size: 16px;">被选择元素的特定部分</span>
+
+#### 注意 ⚠️
+
+- 一个选择器中只能使用一个伪元素。
+
+- 伪元素必须紧跟在语句中的简单选择器/基础选择器之后。
+
+- 伪类一般写双冒号(:)，伪元素一般写单冒号(::)
+
+## 示例链接
+
+[pseudo-classes && pseudo-elements](https://jsfiddle.net/legendHan/5tzjb3r1/)
+
+## 参考
+
+[伪类 - MDN](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Pseudo-classes)
+
+[伪元素 - MDN](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Pseudo-elements)
 
 ## 2. 布局实战
 

@@ -267,3 +267,11 @@ _方案 2:使用视口单位 vh + transform_
   display: inline-block;
 }
 ```
+
+### 1.4 单位问题：rem、em、vh、vw、100%
+
+问 ❓：rem与em区别？
+
+问 ❓：vw、vh包含不包含标签栏？
+
+问 ❓：100%是相对于谁？

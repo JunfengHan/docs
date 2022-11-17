@@ -276,9 +276,11 @@ npm i
 
 - package.json: NPM 管理的前端项目，必须先看它的 package.json 文件是怎样的
 
-```
 
 ## 5. 自己实现一个 ECharts
+
+实现的主要功能：
+- 可以画一个pipe图
 
 ## 6. ECharts 新特性
 
