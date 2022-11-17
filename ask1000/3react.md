@@ -12,7 +12,7 @@
 >
 > <1> **组件之间难以复用状态逻辑**：(例如只能使用高阶组件做登陆状态判断)，Hook 使用**自定义 Hook**可以解决*状态复用*。
 >
-> <2> **复杂的组件变得难以理解**：(如：componentDidMount 集成了很多互不相关的副作用)，**useState**可以解决。
+> <2> **复杂的组件变得难以理解**：(如：componentDidMount 集成了很多互不相关的副作用)，**useEffect**可以解决。
 >
 > <3> JS 的 Class 和 this 不好理解，特别是对于非前端开发者；Hook 更符合**函数式编程**。
 
@@ -60,7 +60,7 @@ const Button = React.memo((props) => {
 >
 > 可以给它传递第二个参数“[]”，控制它只在**第一次挂载时**执行；
 >
-> 可以给他传递第二个参数“\[stateA, prop1\]”，则 stateA 或 prop1 发生变化后执行；
+> 可以给他传递第二个参数“\[stateA, prop1\]”，则会在**第一次挂载时**和 stateA 、 prop1 发生变化后执行；
 
 问 ❓：[useEffect 做了什么？有什么用？](https://zh-hans.reactjs.org/docs/hooks-effect.html#example-using-hooks)
 
@@ -99,6 +99,10 @@ function Fn(props) {
 问 ❓：使用 useEffect 要注意什么？（腾讯一面原题）
 
 > 答：
+
+问 ❓：useEffect 和 useLayoutEffect的区别是什么？
+
+> 答：执行时间不同。useLayoutEffect 会在 render之后执行，此时还无法获取Dom；useEffect 是在组件Dom渲染到屏幕之后执行。
 
 ## 2. React Router
 
