@@ -4,7 +4,6 @@
   - [CSS 布局--响应式布局](/css/response_style.md "css 响应式布局 Flex")
   <!-- - [CSS 布局--网格布局](/css/grid.md "css 网格布局 Grid") -->
   - [伪类与伪元素](/css/pseudo.md "CSS 伪类 伪元素")
-
 - [JavaScript](/js/ "原生JavaScript")
 
   - [JS 基本概念](/js/concept.md "JavaScript 基础概念")
@@ -18,11 +17,9 @@
   - [Event Loop (事件循环)](/js/event_loop.md "JavaScript event loop 事件循环")
   - [正则](/js/regexp.md "JavaScript regexp 正则表达式")
   - [内存管理](/js/memory.md "JavaScript 内存管理")
-
 - [TypeScript](/ts/ "TypeScript 学习")
 
   - [TypeScript 基础](/ts/base.md "TypeScript 学习笔记")
-
 - [React](/react/ "react 学习 教程 源码")
 
   - [React 理念](/react/react_base.md "react 理念")
@@ -41,7 +38,6 @@
   - [Antd 分析](/react/react_antd.md "react antd")
   - [React 开源组件库 -- legend-ui](/react/react_legendUi.md "react 组件库 legendUi")
   - [React 常见问题](/react/react_interview.md "react 面试题")
-
 - [NodeJS](/node/ "nodeJs")
 
   - [深入了解 NodeJs](/node/base.md "认识 Node.js")
@@ -53,82 +49,70 @@
   - [Express -- NodeJs 使用最广泛的 Web 框架](/node/express.md "express")
   <!-- - [Koa -- 下一代 Node.js Web 框架](/node/koa.md "koa") -->
   - [Nest -- 真正的 NodeJs 框架](/node/nest.md "nest")
-
 - [浏览器](/browser/ "浏览器")
 
   - [从输入 URL 到页面显示的过程](/browser/urlToView.md "浏览器 从URL到页面显示")
   - [DOM 操作与重排(reflow)、重绘(repaint)](/browser/reflow_repaint.md "浏览器 重排 reflow 重绘 repaint")
   - [缓存](/browser/cache.md "浏览器 缓存")
   <!-- - [本地存储](/browser/storage.md "浏览器 本地存储") -->
-
 - [网络与 HTTP](/http/ "HTTP")
   - [HTTP 与网络基础](/http/http.md "网络 HTTP")
   - [Ajax 对比 fetch](/http/ajaxVsFetch.md "Ajax、fetch")
   - [axios 深度解析](/http/axios.md "axios")
   - [跨域](/http/cors.md "HTTP 跨域 CORS JSONP")
-  
 - [数据库](/database/ "数据库")
   - [restful 对比 GraphQL](/database/restfulVsGraphql.md "restful 对比 GraphQL")
   - [MongoDB 入门](/database/mongo.md "MongoDB 入门")
   - [MongoDB Shell](/database/mongo_shell.md "MongoDB 入门")
   - [MongoDB User](/database/mongo_user.md "MongoDB 入门")
   - [MongoDB 常用命令](/database/mongo_command.md "MongoDB 入门")
-
 - [Serverless](/serverless/ "severless")
   - [Serverless 起步](/serverless/start.md "serverless 概念 基础")
   - [阿里云 Serverless](/serverless/aliServerless.md "aliyun 阿里云 serverless 使用")
   - [Docker](/serverless/docker.md "docker 简介 容器 镜像")
-  
 - [DevOps](/devops/ "DevOps")
 
     - [DevOps简介](/devops/01devOps.md "devops")
     - [Docker基础](/devops/02docker.md "docker")
-    - Docker进阶(/devops/02docker.md "docker")
-    - [Kubernetes](/devops/03k8s.md "kubernets k8s")
-    - [helm使用技巧](/devops/04helm.md "helm")
+    - [Docker进阶](/devops/02docker2.md "docker")
+    - [Kubernetes 核心概念](/devops/03k8s.md "kubernets k8s")
+    - [k8s cli常用命令](/devops/04k8sCli.md "kubernets k8s cli")
+    - [helm使用技巧](/devops/07helm.md "helm")
+    - [jenkins实战](/devops/07jenkins.md "jenkins 实战")
     - [阿里云ECS实战](/devops/05aliyunEcs.md "aliyun ECS 阿里云")
     - [K8s部署实战](/devops/06deploy.md "k8s部署")
-    - [jenkins实战](/devops/07jenkins.md "jenkins 实战")
-    - [k8s cli常用命令](/devops/08k8sCli.md "kubernets k8s cli")
     - [PM2部署一个Node.js 应用](/devops/deployNode.md "Node.js应用部署 PM2")
-    
 - [项目构建](/projectBuild/ "前端项目构建")
     - [工程化与模块化](/projectBuild/ "前端工程化 webpack")
     - [前端工程化](/projectBuild/build.md "webpack")
     - [模块化](/projectBuild/modules.md "JS module")
     - [webpack 概念与原理](/projectBuild/webpack.md "webpack")
     - [Webpack 实战与配置详解](/projectBuild/webpack_case.md "webpack")
-
 - [可视化](/visual/ "前端可视化 visual")
 
   - [认识可视化](/visual/base.md "可视化基础")
   - [图表可视化](/visual/base.md "图表可视化")
   - [ECharts](/visual/ECharts.md "ECharts 源码")
   - [地图可视化](/visual/map.md "地图可视化")
-
 - [技术方案](/scheme/ "技术方案")
 
   - [无状态登录 JWT](/scheme/JWT.md "无状态登录")
   <!-- - [文件上传](/scheme/upload.md "文件上传 upload") -->
   - [阿里云 OSS 文件上传](/scheme/oss.md "阿里云文件上传 upload OSS")
   - [阿里云视频点播（OSS）](/scheme/vod.md "视频点播")
-
 - [算法与数据结构](/algorithmStructure/ "算法 数据结构")
 
   - [数据结构](/algorithmStructure/structure.md "数据结构")
   - [算法基础](/algorithmStructure/algorithm.md "算法")
   - [算法实战](/algorithmStructure/algorithms.md "算法实战")
-
 - [计算机基础知识](/base/ "计算机基础知识")
 
   - [计算机基础知识](/base/computerBase.md "计算机 基础知识")
   - [进程与线程](/base/thread.md "进程 线程")
-
 - [综合](/synthesize/ "综合")
 
   - [url 处理](/synthesize/url.md "url")
   - [安全](/synthesize/security.md "前端安全")
-
 - [1000 问](/ask1000/ "前端1000问")
 
   - [CSS](/ask1000/1css.md "CSS 面试题")
@@ -139,7 +123,6 @@
   - [HTTP](/ask1000/6http.md "http 面试题")
   - [前端工程化](/ask1000/7project.md "project 面试题")
   - [算法](/ask1000/8algorithm.md "algorithm 面试题")
-
 - [视频制作](/video/ "视频制作")
   - [视频基础知识](/video/base.md "视频的基本概念")
   - [AE](/video/ae.md "视频动效 AE")

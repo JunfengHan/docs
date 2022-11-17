@@ -177,12 +177,22 @@ _如图：_
 #### 3.2.5 _初始化 K8s 的 Master 节点（控制平面）_
 
 ```bash
+# 先安装 iproute-tc
+dnf install iproute-tc
+# 从1.24之后，k8s去除了容器运行时，需要我们手动安装一个，这里选了 
+dnf install containerd.io # 下载
+rm /etc/containerd/config.toml
+systemctl restart containerd
 # ⚠️ 版本一定要注意，否则 Node节点可能无法加入
-kubeadm init --kubernetes-version=1.22.2 \
+kubeadm init --kubernetes-version=1.25.2 \
 --apiserver-advertise-address=172.16.164.42 \
 --image-repository registry.aliyuncs.com/google_containers \
 --service-cidr=10.1.0.0/16 \
 --pod-network-cidr=192.168.0.0/16 # 指定CNI网络插件（calico）的特殊地址
+# ⚠️⚠️#
+# --apiserver-advertise-address 是内网IP，否则无法启动master
+##
+
 ```
 
 😄 初战告捷：
@@ -215,8 +225,8 @@ Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
 
 Then you can join any number of worker nodes by running the following on each as root:
 
-kubeadm join 172.1X.XX.XX:6443 --token jheyp2.y7ye53nsjrzi0709 \
-    --discovery-token-ca-cert-hash sha256:d63aaebc4fbc8f92e504a029e9baa4dc84c0520d42e0178d3f737bcf5d7d18dd
+kubeadm join 172.16.164.42:6443 --token o723qd.dxenmgzslxcb6vo9 \
+	--discovery-token-ca-cert-hash sha256:1f3a7c2006110cfbfbaa10c1a9fef5d697c716707eef59ee49225d2afa93fd4c
 [root@master ~]#
 ```
 
@@ -261,6 +271,7 @@ _安装 CNI 插件 -- calico_
 
 ```bash
 kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+# 注意 安装之后需要等一会儿才能生效
 ```
 
 _查看一下节点运行情况：_
@@ -294,8 +305,8 @@ systemctl enable kubelet
 ### 3.5 ‼️ 关键步骤：将 Node 节点添加到集群，执行 3.2.5 步骤中的加入集群提示，如下：
 
 ```bash
-kubeadm join 172.16.164.42:6443 --token p6kt93.yu984oesojqq8ut9 \
-	--discovery-token-ca-cert-hash sha256:5d05b26d9649467e05ccf1a779a7655c83d2527bd7622182e0ac80f293d83aca
+kubeadm join 172.16.164.42:6443 --token o723qd.dxenmgzslxcb6vo9 \
+	--discovery-token-ca-cert-hash sha256:1f3a7c2006110cfbfbaa10c1a9fef5d697c716707eef59ee49225d2afa93fd4c
 # 输出如下，表示加入成功
 [preflight] Running pre-flight checks
 [preflight] Reading configuration from the cluster...
@@ -839,7 +850,7 @@ docker login art.local:8081
 
 #### 5.5.1 上传代码到gitlab，然后在服务器拉取代码
 
-到服务器相关目录，拉起代码
+到服务器相关目录，拉起代码。
 
 #### 5.5.2 把本地代码打包成镜像
 
@@ -869,7 +880,9 @@ docker tag art.local:8081/yyweb:v0.1 art.local:8081/docker-local/yyweb:0.1
 docker push art.local:8081/docker-local/yyweb:0.1
 ```
 
+至此，我们可以在自己的镜像仓库看到我们的镜像了。
 
+你可以把他的链接发给任何人，它就能部署你的应用了。🎉🎉
 
 ## 6. 使用 Helm 管理 K8s 的包
 
@@ -902,4 +915,6 @@ _安装 Prometheus_
 [链接 1：CentOS 7- yum 配置阿里镜像源](https://developer.aliyun.com/article/704987)
 
 [链接 2: Docker CE 镜像源站](https://developer.aliyun.com/article/110806)
+
+[Kubernetes 1.25 安装](https://juejin.cn/post/7139395357015801864)
 

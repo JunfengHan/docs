@@ -32,7 +32,6 @@ COPY --from=build /app/build .
 ```
 
 3. 添加 .dockerignore 文件，毕竟我们有些东西不需要放到容器中
-4. 
 
 ## 2. 构建一个 node 镜像
 
@@ -254,3 +253,5 @@ docker-compose down --volumes
 [构建 node 应用](https://nodejs.org/zh-cn/docs/guides/nodejs-docker-webapp/)
 
 [如何写 node 应用的 Dockerfile](http://bitjudo.com/blog/2014/03/13/building-efficient-dockerfiles-node-dot-js/)
+
+[用 docker 部署 create-react-app 构建的应用](https://www.modb.pro/db/388651)

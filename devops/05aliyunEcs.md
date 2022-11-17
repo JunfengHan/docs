@@ -9,7 +9,7 @@
 vim /etc/ssh/sshd_config
 		# 修改连接回话保持时间（以s为单位）
 		ClientAliveInterval 60
-		# 修改允许超时次数
+		# 设置参数，单位：分钟
 		ClientAliveCountMax 300
 # 保存退出后，重启 sshd 配置服务
 systemctl restart sshd.service
@@ -34,7 +34,15 @@ systemctl restart sshd.service
 
    - `curl` 或 `wget`要安装，不然怎么下载资源呢？
 
+     ```bash
+     yum install -y wget
+     ```
+
    - `git`也要安装，推荐 V2.4.11 及以上
+
+     ```bash
+     yum install -y git
+     ```
 
 2. 基本安装（安装后就可以使用 on-my-zsh 了）
 
@@ -53,22 +61,25 @@ systemctl restart sshd.service
 
    ```bash
    # 1. yum安装 autojump 插件
-   yum install autojump-zsh
+   dnf install autojump-zsh
+   # 如果没dnf先安装一下
+   yum install epel-release
+   yum install dnf
    # 2. 编辑 zsh配置文件
    vi ~/.zshrc
    		# 在 plugins 中查看相关插件,插件使用空格隔开；如下，添加 autojump插件
    		plugins=(git autojump)
    		[[ -s ~/.autojump/etc/profile.d/autojump.sh ]] && . ~/.autojump/etc/profile.d/autojump.sh
-
+   
    # 3. 执行一下 .zshrc , 使修改生效
    source ~/.zshrc
    ```
-
+   
    Git 方式安装：
-
+   
    ```bash
    # 1. 安装插件 zsh-autosuggestions （自动补全命令，非常好用）
-   git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+   git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
    # 2. 编辑 zsh
    vi ~/.zshrc
    		# 在 plugins 中查看相关插件,插件使用空格隔开；如下，添加 autojump插件
@@ -76,9 +87,10 @@ systemctl restart sshd.service
    # 3. 使修改生效
    source ~/.zshrc
    ```
-
+   
    一个很不错的 Blog，[zsh+on-my-zsh 配置教程指南](https://segmentfault.com/a/1190000013612471)
 
 ### 3. 安装 Docker
 
 [阿里云 ECS 安装 Docker](https://help.aliyun.com/document_detail/187598.html)
+

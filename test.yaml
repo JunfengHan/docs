@@ -1,0 +1,6 @@
+imagePullSecrets:
+    - name: jcr-secret
+image:
+  registry: art.local:8081
+  repository: docker-local/yyfront
+  tag: 0.1
