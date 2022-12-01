@@ -463,7 +463,7 @@ p {
 
 _布局结果_
 
-![布局结果](./img/css_interview_textAlign.png)
+![布局结果](./img/interview_css_textAlign.png)
 
 - 2. 块级元素
 

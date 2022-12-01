@@ -63,44 +63,13 @@ Redux 用自己的方式实现了应用的全局状态管理，进而**实现组
 - 应用中的 state 需要有一个单一可靠数据来源
 - 你觉得把所有 state 放在最顶层组件中已经无法满足需要了
 
-## 2. Redux 作用
-
-<span style="color: #ff0000; font-size: 16px;">Redux 统一保存状态数据，在隔离了数据与 UI 的同时，负责处理数据的绑定</span>。
-
-**作用**：
-
-- 组件间共享数据（state）
-- 某个状态需要在任何地方都可以被随时访问
-- 某个组件需要改变另一个组件的状态的时候
-
-**应用场景：**
-
-- 语言切换
-- 黑暗模式切换
-- 用户登录全局数据共享等
-- 组件跨层通信
-
-## 3. Redux 要点
+## 2. Redux 要点
 
 - 1. 应用中所有的 state 都以一个<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">对象树</code>的形式储存在一个单一的 store 中。
 
 - 2. 改变 state 的惟一办法是触发 action，它是一个描述发生什么的对象。
 
 - 3. 为了描述 action 如何改变 state 树，你需要编写 reducers。
-
-**Redux 工作流程：**
-
-![react工作流程](../img/react_redux_flow.png)
-
-_工作流程：_
-
-- 首先有个 Store，用来存储 state
-- state 可以由 Reducer 初始化
-- 然后 UI 组件订阅需要的 state
-- state 的改变只能通过 Reducer 根据 旧的 state 和 Action 来完成，然后生成新的 state
-- UI 组件通过 dispatch 方法发送 action 给 store
-- store 会把 旧的 state 和 Action 发送给 Reducer
-- 红色箭头代表数据传递方向
 
 **项目中的 Redux 架构：**
 
@@ -199,9 +168,9 @@ _工作流程描述：_
 - 用户登录全局数据共享等
 - 全局数据联动
 
-## 6. 使用 Redux
+## 5. 使用 Redux
 
-### 6.1 简单的使用 Redux
+### 5.1 简单的使用 Redux
 
 ```js
 import { createStore } from "redux";
@@ -236,7 +205,7 @@ store.dispatch(actions.decremented);
 store.subscribe(() => console.log(store.getState())); // store.getState() 获取 state
 ```
 
-### 6.2 严格遵守 Redux 原则
+### 5.2 严格遵守 Redux 原则
 
 Redux 原则中说了具体要遵守的规则。
 
@@ -246,7 +215,7 @@ Redux 原则中说了具体要遵守的规则。
 
 **方案:**
 
-- 使用 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">[Immutable.js](https://immutable-js.github.io/immutable-js/)</code>
+- 使用[Immutable.js](https://immutable-js.github.io/immutable-js/)
 
 _使用 immutable 定义 state：_
 

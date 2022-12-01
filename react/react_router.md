@@ -198,6 +198,8 @@ _URL 切换流程图：_
 
 - \<Route\> : 这应该是 React Router 最核心的功能组件，<span style="color: #ff0000; font-size: 16px;">基本职责是在其路径与当前 URL 匹配时呈现某些 UI</span>
 
+- [\<Outlet\>](https://reactrouter.com/en/main/components/outlet) : 应当在Route中的element里使用，匹配子路由path时呈现子路由嵌套 UI
+
 - Redirect: 重定向
 
 - Switch: 匹配 url，使特定的 Route 生效

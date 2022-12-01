@@ -36,7 +36,7 @@ _打印看看 XMLHttpRequest 是什么：_
 >
 > 由于 JSON 的许多优势，比如更加轻量以及作为 Javascript 的一部分，目前 JSON 的使用比 XML 更加普遍。
 
-AJAX 这种”新“方法，包括：HTML、XML、CSS、DOM、JavaScript，以及 XMLHttpRequest.
+AJAX 这种”新“方法，包括：HTML、XML、CSS、DOM、JavaScript，以及 XMLHttpRequest.使用了该技术模型后网页应用能够快速地将增量更新呈现在用户界面上，而不需要重载（刷新）整个页面。
 
 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">XMLHttpRequest</code>是 Ajax 的核心，Ajax 利用它可以做这些工作：
 
@@ -248,7 +248,7 @@ fetch("http://example.com/movies.json")
 
 - 1. 二者不在一个纬度
 
-  这样对比是不公平的，Ajax 是利用 XML、HTML 和 XMLHttpRequest 来进行异步资源获取的一种技术方案；
+  这样对比是不公平的，Ajax 是利用 XMLHttpRequest 来进行异步资源获取的一种技术方案；
 
   Fetch 和 XMLHttpRequest 一样，都是浏览器提供的 API；
 

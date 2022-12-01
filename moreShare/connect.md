@@ -1,1 +1,1 @@
-![wechat](../_media/wechat.jpeg)
+![wechat](../img/wechat.jpeg)

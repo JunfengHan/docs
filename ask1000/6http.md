@@ -74,7 +74,13 @@ Keep-Alive: timeout=5, max=1000
 
 问 ❓：知道哪些常见的状态码？
 
-> [答案在此]()
+> [答案在此](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status)
+
+## 2. Ajax 和 Fetch
+
+问 ❓：Ajax和Fetch有何区别？
+
+>
 
 问 ❓：Ajax发送的JSON数据和form-data发送数据有啥区别？
 
@@ -103,4 +109,6 @@ Keep-Alive: timeout=5, max=1000
 >- multipart/form-data：既可以上传文件等二进制数据，也可以上传表单键值对，只是最后会转化为一条信息；
 >- application/x-www-form-urlencoded：只能上传键值对，并且键值对都是间隔分开的；
 >
-><span style="color: #ff6600; font-size: 14px;">后端解析时使用的方法不同</span>
+>注意⚠️，不同的**Content-Type**<span style="color: #ff6600; font-size: 14px;">后端解析时使用的方法不同</span>,很容易出现获取不到数据的情况。
+
+## 

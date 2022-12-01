@@ -248,7 +248,7 @@ _Object.prototype 心智模型_：
 
 ![Object prototype心智模型](./img/prototype_mental_model.png)
 
-- 2. <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">\_\_proto\_\_\</code>没什么神奇的地方，就是一个对象而已，我们通常不会直接使用它，但是访问对象属性时，浏览器会在对象不存在某个属性时去<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">\_\_proto\_\_\</code>上面查找
+- 2. <code style="color: #708090; background-color: #F5F5F5; font-size:18px">\_\_proto\_\_\</code>没什么神奇的地方，就是一个对象而已，我们通常不会直接使用它，但是访问对象属性时，浏览器会在对象不存在某个属性时去<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">\_\_proto\_\_\</code>上面查找
 
 ## 参考
 

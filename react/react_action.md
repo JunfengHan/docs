@@ -4,7 +4,7 @@
 
 ## 1. 创建一个 React App
 
-最简单的方法是使用 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">[Create React App](https://zh-hans.reactjs.org/docs/create-a-new-react-app.html#create-react-app)</code>脚手架来创建。
+最简单的方法是使用 <code style="color: #404090; background-color: #cccccc; font-size: 18px">[Create React App](https://zh-hans.reactjs.org/docs/create-a-new-react-app.html#create-react-app)</code>脚手架来创建。
 
 ```shell
 npx create-react-app my-app

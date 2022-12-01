@@ -1,6 +1,6 @@
 # webpack 基础
 
-![webpack](../img/webpack1.png)
+![webpack](./img/webpack1.png)
 
 ## 1. 前端模块化
 
@@ -35,7 +35,7 @@
 - 模块合并：需要将模块化的文件合并为一个文件，减少请求
 - 自动刷新：监听本地源代码变化，自动重新构建、刷新浏览器
 - 代码校验：代码提交到仓库前需要校验代码是否符合规范，以及单元测试是否通过
-- 自动发布：更新代码后，自动构件出线上发布代码并传输给发布系统
+- 自动发布：更新代码后，自动构建出线上发布代码并传输给发布系统
 
 ## 2. 前端构建工具
 
@@ -95,9 +95,9 @@ Gulp 优点是好用又不失灵活，既可以单独完成构建，也可以和
 
 _Grunt & Gulp 工作流_
 
-![webpack](../img/projectBuild_webpack_gruntGulp.png)
+![webpack](./img/projectBuild_webpack_gruntGulp.png)
 
-Grunt 和 Gulp 是基于 **任务**的，会自动执行指定的任务.projectBuild_webpack_gruntGulp
+Grunt 和 Gulp 是基于 **任务**的，会自动执行指定的任务;
 
 可以看到它们打包的策略通常是 _All in one_，最后页面还是引用 css、img、js，开发流程与徒手开发相比并无差异。
 
@@ -265,7 +265,7 @@ webpack 根据构建目标(build target)为这些选项提供了合理的默认�
 
 任何时候，一个文件依赖于另一个文件，webpack 就把此视为文件之间有依赖关系。这使得 webpack 可以接收非代码资源(non-code asset)（例如图像或 web 字体），并且可以把它们作为*依赖*提供给你的应用程序。
 
-从这些入口起点开始，webpack 递归地构建一个依赖图，这个依赖图包含着应用程序所需的每个模块，然后将所有这些模块打包为少量的 bundle - 通常只有一个 - 可由浏览器加载。
+从这些入口起点开始，webpack 递归地构建一个依赖图，这个依赖图包含着应用程序所需的每个模块，然后将所有这些模块打包为少量的 bundle - 不做代码分割时只有一个 - 可由浏览器加载。
 
 ## 6. manifest (清单)
 
@@ -279,16 +279,14 @@ webpack 根据构建目标(build target)为这些选项提供了合理的默认�
 
 &#8195; 主要是指：在浏览器运行时，webpack 用来连接模块化的应用程序的所有代码。runtime 包含：在模块交互时，连接模块所需的加载和解析逻辑。包括浏览器中的已加载模块的连接，以及懒加载模块的执行逻辑。
 
-**什么是 Manifest？**
+**什么是 Mainfest？**
 
-&#8195; 那么，一旦你的应用程序中，形如 index.html 文件、一些 bundle 和各种资源加载到浏览器中，你精心安排的 /src 目录的文件结构现在已经不存在，所以 webpack 如何管理所有模块之间的交互呢？这就需要一个 manifest. <font color=#FF7F50>webpack 把代码从 node_modules 中的模块抽离出来，那些基本固定不变的叫做 vendor； 所以把会重复跟随变动的部分抽离出来作为 manifest 文件。注意：每次重新构建 vendor 和 mainfest 都会重新构建</font>
+&#8195; 那么，一旦你的应用程序中，形如 index.html 文件、一些 bundle 和各种资源加载到浏览器中，你精心安排的 /src 目录的文件结构现在已经不存在，所以 webpack 如何管理所有模块之间的交互呢？这就需要一个 mainfest. <font color=#FF7F50>webpack 把代码从 node_modules 中的模块抽离出来，那些基本固定不变的叫做 vendor； 所以把会重复跟随变动的部分抽离出来作为 mainfest 文件。注意：每次重新构建 vendor 和 mainfest 都会重新构建</font>
 
 <table><tr><td bgcolor=#7FFFD4>
 &#8195; 当编译器(compiler)开始执行、解析和映射应用程序时，它会保留所有模块的详细要点。这个数据集合称为 "Manifest"，当完成打包并发送到浏览器时，会在运行时通过 Manifest 来解析和加载模块。无论你选择哪种模块语法，那些 import 或 require 语句现在都已经转换为 __webpack_require__ 方法，此方法指向模块标识符(module identifier)。通过使用 manifest 中的数据，runtime 将能够查询模块标识符，检索出背后对应的模块. <br>
 
 &#8195; <font color=yellowgreen> 通过使用 bundle 计算出内容散列(content hash)作为文件名称，这样在内容或文件修改时，浏览器中将通过新的内容散列指向新的文件，从而使缓存无效。一旦你开始这样做，你会立即注意到一些有趣的行为。即使表面上某些内容没有修改，计算出的哈希还是会改变。这是因为，runtime 和 manifest 的注入在每次构建都会发生变化。</font>
-
-</td></tr></table>
 
 ## 7. Hot Module Replacement (HMR) 模块热替换
 
@@ -313,10 +311,10 @@ webpack 根据构建目标(build target)为这些选项提供了合理的默认�
 
 "update" 由两部分组成：
 
-1. 更新后的 manifest(JSON)
+1. 更新后的 mainfest(JSON)
 2. 一个或多个更新后的 chunk (JavaScript)
 
-manifest 包括新的编译 hash 和所有的待更新 chunk 目录。每个更新 chunk 都含有对应于此 chunk 的全部更新模块（或一个 flag 用于表明此模块要被移除）的代码。
+mainfest 包括新的编译 hash 和所有的待更新 chunk 目录。每个更新 chunk 都含有对应于此 chunk 的全部更新模块（或一个 flag 用于表明此模块要被移除）的代码。
 
 编译器确保模块 ID 和 chunk ID 在这些构建之间保持一致。通常将这些 ID 存储在内存中（例如，使用 webpack-dev-server 时），但是也可能将它们存储在一个 JSON 文件中。
 
@@ -335,8 +333,6 @@ HMR 是可选功能，只会影响包含 HMR 代码的模块。当一个模块�
 > 查看更多详细的配置信息[webpack 官方配置详解](https://webpack.docschina.org/configuration/#use-different-configuration-file)
 
 webpack 开箱即用，但是会假定项目的入口起点为 src/index，然后会在 dist/main.js 输出结果，并且在 <font color=#FF7F50>生产环境开启压缩和优化</font>。项目需要继续扩展能力，那就需要再项目根目录创建一个 webpack.config.js 文件，webpack 会自动使用它。
-
-<br>
 
 ## 10. webpack 的工作流程
 

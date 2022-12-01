@@ -159,11 +159,12 @@ function getType(data) {
 console.log(getType("abc"));
 console.log(getType(1));
 console.log(getType(console));
+console.log(getType(console.log));
 console.log(getType([]));
 
 // string
 // number
-// console
+// object
 // array
 ```
 

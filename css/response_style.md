@@ -282,7 +282,7 @@ _效果如下：_
 
 #### 3.6.3 align-items
 
-- **align-items: 控制交叉轴 Flex 元素 对齐**
+- **align-items: 控制Flex 元素交叉轴对齐**
 
   stretch: （默认值）Flex 元素拉伸为 Flex 容器高度，这就是为什么 🌰 1 中，item1 的高度会拉伸到 400px
 

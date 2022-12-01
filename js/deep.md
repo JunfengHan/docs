@@ -16,7 +16,7 @@
 - Python
 - PHP
 
-> 和**动态语言**语言相对的是**静态语言**，也称作**编译型**语言，这些语言是不能直接运行的，需要用编译器，先将代码编译为**机器代码**，再加以运行。
+> 和**动态语言**相对的是**静态语言**，也称作**编译型**语言，这些语言是不能直接运行的，需要用编译器，先将代码编译为**机器代码**，再加以运行。
 
 **常见的编译型语言**：
 
@@ -387,7 +387,7 @@ foo();
 
 > 答案是： “b”、"极客时间"。
 
-> 为什么？打印出“b”比价好理解，因为*bar*在**foo**中执行，所以**bar**里的<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">this</code>指向
+> 为什么？打印出“b”比较好理解，因为*bar*在**foo**中执行，所以**bar**里的<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">this</code>指向 **foo函数执行上下文**。
 >
 > 但是为什么没有打印出“极客邦”，而是打印出“极客时间”呢？因为**作用域链**。
 
@@ -405,15 +405,33 @@ _查找过程图示：_
 
 这条变量查找的链条就称作<span style="color: #ff0000; font-size: 16px;">作用域链</span>。
 
-🤔️ 疑问 🤔️：
-
-> 在 bar 中调用了 foo,为什么 foo 的执行上下文中的 outer 没有指向 bar 的执行上下文，而是指向全局上下文？？？
-
 #### 3.4.3 词法作用域
 
 <span style="color: #ff0000; font-size: 16px;">**作用域链**是词法作用域决定的</span>。🌟🌟
 
 **词法作用域**是在编译时决定的，即：由代码中**变量声明的位置决定**。🌟🌟
+
+记住，是**声明**时决定的，而不是**执行**时决定。
+
+```javascript
+function bar() {
+  console.log(this.b);
+  console.log(myName);
+}
+function foo() {
+  // 这里的this在声明时决定了，永远指向window
+  this.b = "b";
+  var myName = "极客邦";
+  bar();
+  
+  // 这里和上面👆bar()中打印的不一样，恰好说明了作用域链是编译时决定的，变量声明由位置决定
+  console.log(this.b);
+  console.log(myName);
+}
+var b = "B";
+var myName = "极客时间";
+foo();
+```
 
 ![词法作用域](./img/js_deep_scope3.png)
 
@@ -467,11 +485,11 @@ _先来看看执行结果：_
 // 极客邦
 ```
 
-可以看到，虽然 foo 函数执行完了，当 setName 方法还是改变了 foo 中的变量 myName;
+可以看到，虽然 foo 函数执行完了，但 setName 方法还是改变了 foo 中的变量 myName;
 
 _执行过程分析：_
 
-1. 执行到 var = foo() 时的调用栈
+1. 执行到 var bar = foo() 时的调用栈
 
 ![闭包1](./img/js_deep_closure1.png)
 
@@ -483,7 +501,7 @@ _执行过程分析：_
 
 按照正常逻辑的话，foo 执行结束，它的执行上下文（包含变量、作用域链等）都会被清除。
 
-可是，由于 foo 的返回值是 innerBar 是全局作用域中的变量，且他的方法 getName 和 setName 引用了 foo 中的变量“test1” 和 “myName”；
+可是，由于 foo 的返回值 innerBar 是全局作用域中的变量，且他的方法 getName 和 setName 引用了 foo 中的变量“test1” 和 “myName”；
 
 导致，<span style="color: #ff0000; font-size: 16px;">foo 的执行上下文被清除时，变量“test1” 和 “myName”未被清除</span>。
 
