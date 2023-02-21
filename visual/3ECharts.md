@@ -1,4 +1,4 @@
-# ECharts
+# 深入ECharts
 
 > ECharts 应该是应用最广泛的图表库，我们一起来探究下。
 
@@ -6,13 +6,13 @@
 
 _官网首页：_
 
-![echarts简介](./img/echarts.png)
+![echarts简介](./imgs/echarts.png)
 
 从 <code style="color: #708090; background-color: #F5F5F5; font-size: 18px">ECharts</code> 官网首页可以看出，<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">ECharts</code> 是一个基于 JavaScript 的开图表源库。
 
 _官网给我们总结好了 ECharts 的特性：_
 
-![echarts特性](./img/echarts_feature.png)
+![echarts特性](./imgs/echarts_feature.png)
 
 ## 2. ECharts 怎么用
 
@@ -125,13 +125,13 @@ _官网给我们总结好了 ECharts 的特性：_
 
 3. 系列数据（series.data）描述了要展示的**图表内容**
 
-![系列（series）](./img/echarts_series.jpg)
+![系列（series）](./imgs/echarts_series.jpg)
 
 ### 3.3 组件（component）
 
 > echarts 中各种内容，被抽象为<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">组件（component）</code>，<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">系列（series）</code>也是一种<code style="color: #708090; background-color: #F5F5F5; font-size: 18px">组件（component）</code>。
 
-![系列（series）](./img/echarts_components.jpg)
+![系列（series）](./imgs/echarts_components.jpg)
 
 ### 3.4 选项（options）
 
@@ -139,7 +139,7 @@ _官网给我们总结好了 ECharts 的特性：_
 
 ECharts 官网有一篇关于**ECharts 论文**的介绍：
 
-![ECharts论文](./img/echarts_paper.png)
+![ECharts论文](./imgs/echarts_paper.png)
 
 论文的题目是：[ECharts: A Declarative Framework for Rapid Construction of Web-based Visualization](http://www.cad.zju.edu.cn/home/vagblog/VAG_Work/echarts.pdf)
 
@@ -222,7 +222,7 @@ graph（关系图）等，既能独立存在，也能布局在坐标系中。
 
   _echarts 暗自为他们创建了 grid 并关联起 xAxis 和 yAxis:_
 
-  ![直角坐标系](./img/coord1.jpg)
+  ![直角坐标系](./imgs/coord1.jpg)
 
 - 极坐标系
 - 地理坐标系（GEO）
@@ -243,7 +243,7 @@ graph（关系图）等，既能独立存在，也能布局在坐标系中。
 
 - 绝对定位：**grid 组件**（也就是直角坐标系的底板）设置 left、right、height、bottom
 
-  ![直角坐标系](./img/locate.jpg)
+  ![直角坐标系](./imgs/locate.jpg)
 
 - 中心半径定位
 
@@ -272,7 +272,7 @@ npm i
 
 **》Step3: 目录结构分析**
 
-![ECharts 目录结构](./img/echarts_directory.png)
+![ECharts 目录结构](./imgs/echarts_directory.png)
 
 - package.json: NPM 管理的前端项目，必须先看它的 package.json 文件是怎样的
 

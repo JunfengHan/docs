@@ -99,8 +99,8 @@ src
 
 无刷新改变路由的方式有两种：
 
-- 1. 通过 hash 改变路由
-- 2. 通过 history 改变路由
+1. 通过 hash 改变路由
+2. 通过 history 改变路由
 
 #### 3.1.1 通过 hash 改变路由
 
@@ -181,8 +181,8 @@ _URL 切换流程图：_
 
 从官网首页的介绍我们可以看到两点主要信息：
 
-- 1. React Router 支持 **Web 和 Native**
-- 2. React Router 是一个 **navigational components（导航组件）**
+- React Router 支持 **Web 和 Native**
+- React Router 是一个 **navigational components（导航组件）**
 
 ## 5. React Router 核心概念
 
@@ -242,9 +242,9 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 ReactDOM.render(
   // 2. 使用 BrowserRouter 包裹整个应用，使其成为 React Router 的一个组件
-  <BrowserRouter>
+  <Router>
     <App />
-  </BrowserRouter>,
+  </Router>,
   el
 );
 
@@ -262,12 +262,12 @@ const App = () => (
 );
 ```
 
-React Router 的全部大概就是这些：
+React Router Dom 的使用大致流程就是这些：
 
-- 1. 引入 React Router (react-router-dom 封装了 React Router)
-- 2. 使用 BrowserRouter 包裹整个应用，使其成为 React Router 的一个组件
-- 3. 使用 Link 组件，链接到新的地址 "/dashboard"
-- 4. 当用户访问 "/dashboard"时，使用 Route 组件 展示 UI（组件 Dashboard）
+- 引入 React Router (react-router-dom 封装了 React Router)
+- 使用 BrowserRouter 包裹整个应用，使其成为 React Router 的一个组件
+- 使用 Link 组件，链接到新的地址 "/dashboard"
+- 当用户访问 "/dashboard"时，使用 Route 组件 展示 UI（组件 Dashboard）
 
 详情请看[react-router-dom 基本使用示例](https://reactrouter.com/native/example/Basic)
 

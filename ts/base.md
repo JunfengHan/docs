@@ -1,6 +1,6 @@
 # TypeScript 入门
 
-> TypeScript 的严谨比 JavaScript 更适合写 NodeJS 项目。
+> TypeScript 的严谨比 JavaScript 更适合写大型项目，好处：减少犯错，方便维护。
 
 "Typed JavaScript at Any Scale."这是官网的宣传语，翻译一下应该是“<span style="color: #ff0000; font-size: 16px;">类型化任何规模的 JavaScript</span>”.
 
