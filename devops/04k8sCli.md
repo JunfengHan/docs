@@ -127,3 +127,31 @@ kubectl apply -f [XXX.yaml]
 # 删除某个deployment
 kubectl delete deployment [DEPLOYMENT_NAME] -n NAMESPACE_NAME
 ```
+
+```none
+docker run \ 
+       --name chatgpt-web \ 
+       -p 3002:3002 \ 
+       --env OPENAI_API_KEY=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 \ 
+       --restart always \ 
+       -d chenzhaoyu94/chatgpt-web:latest
+```
+
+```bash
+docker run --name chatgpt-web --rm -it -p 3002:3002 --env OPENAI_API_KEY=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 chatgpt-web
+```
+
+```bash
+docker run --name chatgpt-web -d -p 3002:3002 --env OPENAI_API_KEY=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 chatgpt-web
+```
+
+```bash
+curl https://api.openai.com/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer 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 chatgpt-web" \
+  -d '{
+     "model": "gpt-3.5-turbo",
+     "messages": [{"role": "user", "content": "Say this is a test!"}],
+     "temperature": 0.7
+   }'
+```

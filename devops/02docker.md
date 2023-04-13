@@ -32,8 +32,7 @@
 
 ## 3.Linux 容器
 
-**Linux 容器（Linux Containers，缩写为 LXC）**不是模拟一个完整的操作系统，而是
-<span style="color: #ff0000; font-size: 16px;">对进程进行隔离</span>。
+**Linux 容器（Linux Containers，缩写为 LXC）**不是模拟一个完整的操作系统，而是<span style="color: #ff0000; font-size: 16px;">对进程进行隔离</span>。
 
 或者说，这是在正常进程的外面套了一个保护层。对于容器里面的进程来说，它接触到的各种资源都是虚拟的，从而实现与底层系统的隔离。
 
