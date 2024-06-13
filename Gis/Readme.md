@@ -28,3 +28,11 @@
 [知识图谱](https://cnkgraph.com/) -- [以地图的形式收集了唐宋中国诗词](https://www.ditushu.com/book/27/)
 
 [OSGeo](https://www.osgeo.cn/map/) -- 汇集了历史地图等地图资源
+
+
+
+转正答辩资料---------：
+
+[地图常见算法](https://zhuanlan.zhihu.com/p/124232080)
+
+[坐标系转换算法](https://juejin.cn/post/7187233814400221245)
