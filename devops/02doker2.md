@@ -12,7 +12,7 @@
 2. 在应用的根目录创建一个 .Dockerfile文件
 
 ```sh
-# 使用 node 镜像
+# 使用 node 镜像构建项目
 FROM node:16 AS build
 # 设置容器内的目录，通常我们会使用 app 目录
 WORKDIR /app
